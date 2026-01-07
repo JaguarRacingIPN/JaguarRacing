@@ -293,3 +293,15 @@
         max-height: 70dvh;
     }
 }
+
+/* --- 9. ESTILOS PARA LINKS DENTRO DEL CHAT --- */
+.chat-link {
+    color: var(--jaguar-gold, #A67C00); /* Color dorado Jaguar */
+    text-decoration: underline;
+    font-weight: bold;
+    word-break: break-all; /* Importante: Si el link es muy largo, que baje de línea */
+}
+
+.chat-link:hover {
+    color: #fff; /* Blanco al pasar el mouse */
+}
