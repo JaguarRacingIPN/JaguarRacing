@@ -1,5 +1,5 @@
 /* =============================================================================
-   JAGUAR RACING - CORE STYLES v3.0 (Refactor BEM)
+   JAGUAR RACING - CORE STYLES v3.1 (Fix Cronograma & Patrocinios)
    ============================================================================= */
 
 :root {
@@ -13,7 +13,7 @@
 }
 
 /* =============================================================================
-   1. SECCIÓN: IDENTIDAD
+   1. SECCIÓN: IDENTIDAD (About)
    ============================================================================= */
 .about-section {
     display: flex;
@@ -25,14 +25,12 @@
     gap: 60px;
 }
 
-/* Contenido de texto */
 .about-section__content {
     flex: 1;
     color: var(--color-text-white);
     position: relative;
 }
 
-/* TÍTULOS CON DEGRADADO E IMPACTO */
 .about-section__content h2 {
     font-family: 'Impact', sans-serif;
     font-size: 3.5rem;
@@ -40,16 +38,12 @@
     text-transform: uppercase;
     letter-spacing: 2px;
     line-height: 1.1;
-
-    /* Degradado Dorado */
     background: linear-gradient(135deg, #fff 0%, #A67C00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
-/* PÁRRAFOS ELEGANTES */
 .about-section__content p {
     font-family: 'Segoe UI', system-ui, sans-serif;
     font-size: 1.25rem;
@@ -57,13 +51,10 @@
     line-height: 1.8;
     color: #e0e0e0;
     text-align: justify;
-
-    /* Línea decorativa lateral */
     border-left: 3px solid #A67C00;
     padding-left: 20px;
 }
 
-/* LOGOTIPOS */
 .about-section__logo {
     flex: 1;
     max-width: 450px;
@@ -72,29 +63,23 @@
 }
 
 /* =============================================================================
-   SECCIÓN: JOIN TEAM 
+   2. SECCIÓN: ÚNETE (Join CTA)
    ============================================================================= */
 .join-cta {
     position: relative;
     width: 100%;
-    /* Min-height para evitar cortes en móvil */
     min-height: 500px;
     display: flex;
     align-items: center;
-
     background-image:
         linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
         url('/img/page/Registro.webp');
     background-size: cover;
     background-position: center;
-
-    /* Parallax elegante en PC */
-    background-attachment: fixed;
-
+    background-attachment: fixed; /* Parallax en PC */
     will-change: transform;
 }
 
-/* Texto del CTA */
 .join-cta__text {
     color: var(--color-text-white);
     max-width: 500px;
@@ -110,7 +95,6 @@
     margin-bottom: 20px;
     text-transform: uppercase;
     font-family: 'Impact', sans-serif;
-
     background: linear-gradient(135deg, #ffffff 0%, #e2b263 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -142,32 +126,135 @@
 }
 
 /* =============================================================================
-   4. SECCIÓN: CONTADOR
+   3. SECCIÓN: PATROCINADORES (FIX MÓVIL)
    ============================================================================= */
+.sponsors-section {
+    padding: 60px 0;
+    text-align: center;
+    background-color: #050505;
+    /* FIX: Asegura que el contenedor no se desborde horizontalmente */
+    width: 100%;
+    max-width: 100vw; 
+    overflow: hidden; 
+    position: relative;
+}
 
-.events-section h2{
+.titulo-seccion {
+    font-family: 'Impact', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--jaguar-gold);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.sponsors-section__desc {
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    color: #ccc;
+    padding: 0 20px;
+    font-size: 1rem;
+}
+
+/* El Marquee (animación) debe estar en su propio CSS, pero esto asegura 
+   que el contenedor padre lo maneje bien */
+.sponsors-marquee {
+    display: flex;
+    width: max-content; /* Deja que crezca lo necesario */
+    /* La animación se define en carruselPatrocinios.css, 
+       pero aquí aseguramos el layout flex */
+}
+
+/* =============================================================================
+   4. SECCIÓN: CRONOGRAMA OPERATIVO (FIX CENTRADO)
+   ============================================================================= */
+.events-section {
+    padding: 80px 20px;
+    /* FIX: Centra todo el texto dentro de la sección */
+    text-align: center; 
+    background-color: var(--color-bg-dark);
+}
+
+.events-section h2 {
     font-family: 'Impact', sans-serif;
     font-size: 3.5rem;
-    margin-bottom: 25px;
+    margin-bottom: 50px;
     text-transform: uppercase;
     letter-spacing: 10px;
-
-    /* Degradado Dorado */
+    /* Centrado explícito por si acaso */
+    display: block; 
+    width: 100%; 
+    
     background: linear-gradient(135deg, #caa43c 0%, #A67C00 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-    }
+}
+
+/* Contenedor de las tarjetas */
+.events-grid {
+    display: flex;
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    gap: 40px;
+    flex-wrap: wrap; /* Permite que bajen en móvil */
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.event-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 15px;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px; /* Ancho máximo por tarjeta */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-accent-gold);
+}
+
+.event-card__info {
+    text-align: left; /* El texto dentro de la tarjeta se ve mejor alineado a la izquierda */
+    flex: 1;
+}
+
+.event-card__info h3 {
+    color: var(--color-accent-gold);
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.countdown-timer {
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.event-card__img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
 
 /* =============================================================================
-   5. RESPONSIVE DESIGN
+   5. RESPONSIVE DESIGN (MÓVIL)
    ============================================================================= */
 @media (max-width: 768px) {
+    /* Identidad */
     .about-section {
         flex-direction: column;
         text-align: center;
         margin: 60px auto;
+        padding: 0 20px;
         gap: 40px;
     }
 
@@ -187,18 +274,18 @@
 
     .about-section__logo {
         margin-top: 20px;
-        max-width: 80%;
+        max-width: 70%;
     }
 
+    /* Join CTA */
     .join-cta {
-        background-attachment: scroll;
-        background-position: center center;
+        background-attachment: scroll; /* Desactiva parallax en móvil para rendimiento */
         justify-content: center;
+        min-height: 400px;
     }
 
     .join-cta__text {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding: 0 20px;
         text-align: center;
         max-width: 100%;
     }
@@ -207,27 +294,36 @@
         font-size: 2.2rem;
     }
 
-    .sponsor-card {
-        width: 280px;
-        height: 180px;
+    /* Patrocinadores - Ajustes Móvil */
+    .sponsors-section {
+        padding: 40px 0;
+    }
+    
+    .sponsors-marquee {
+        /* Aseguramos que la animación corra suave */
+        gap: 20px; 
     }
 
-    .sponsors-marquee {
+    /* Cronograma - Ajustes Móvil */
+    .events-section h2 {
+        font-size: 1.8rem; /* Reducimos tamaño */
+        letter-spacing: 3px; /* Reducimos espaciado */
+        word-wrap: break-word; /* Evita desbordamiento si la palabra es larga */
+    }
+
+    .events-grid {
+        flex-direction: column;
+        align-items: center;
         gap: 20px;
     }
 
-    .events-section h2{
-    font-family: 'Impact', sans-serif;
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    letter-spacing: 5px;
-
-    /* Degradado Dorado */
-    background: linear-gradient(135deg, #caa43c 0%, #A67C00 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    .event-card {
+        flex-direction: column; /* Tarjeta vertical en móvil */
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .event-card__info {
+        text-align: center; /* Centrar texto dentro de tarjeta en móvil */
     }
 }

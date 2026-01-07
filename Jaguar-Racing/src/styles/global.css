@@ -503,7 +503,7 @@ img {
     white-space: normal;
     text-align: center;
     overflow-wrap: break-word; /* Seguridad por si acaso */
-}s
+}
 }
 
 @media (max-width: 480px) {
