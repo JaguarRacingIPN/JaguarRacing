@@ -10,34 +10,23 @@
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Cesar Ponce",
+        "nombre": "Ing. Torres Pimentel Rodrigo",
+        "rol": "Advisor",
+        "carrera": "Docente ESIME",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Ignacio Jacob García Sanchez",
         "rol": "Capitán",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      }
-    ]
-  },
-  {
-    "categoria": "LÍDERES DE ÁREA",
-    "integrantes": [
-      {
-        "nombre": "Karyme Palma",
-        "rol": "Líder de Relaciones Públicas",
-        "carrera": "Estudiante de Ing. Mecánica",
+        "carrera": "Estudiante de Ing. Robótica Industrial",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
+      
       {
-        "nombre": "Rubén González",
-        "rol": "Líder de Diseño",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Roberto Vilchis",
-        "rol": "Líder de Manufactura",
+        "nombre": "Lina Fernanda Torres Castro",
+        "rol": "Capitán",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
@@ -48,57 +37,111 @@
     "categoria": "LÍDERES DE DISEÑO",
     "integrantes": [
       {
-        "nombre": "Roberto Martínez",
-        "rol": "Líder de Suspensión",
+        "nombre": "Gonzalez Evangelista Angel Ruben",
+        "rol": "Líder de Diseño",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Jacob García",
-        "rol": "Líder de Dirección",
-        "carrera": "Ing. Robótica Industrial",
+        "nombre": "Zárate Ordoño Carlos Gabrie",
+        "rol": "Líder de Diseño",
+        "carrera": "Estudiante de Ing. Robótica Industrial",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      }
+    ]
+  },
+  {
+    "categoria": "LÍDERES DE ÁREA",
+    "integrantes": [
+      {
+        "nombre": "Brandon Guadalupe Vargas Velázquez",
+        "rol": "Líder de Redes, Neogocios y Patrocinios",
+        "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Gustavo Rivero",
+        "nombre": "Rojas Sánchez Itzel Estrella",
+        "rol": "Líder de Costos",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Chavez Lugo Juan Angel",
+        "rol": "Líder de Dirección",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Pierdant Gómez Yaretzi Angélica",
         "rol": "Líder de Frenos",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Luis Blanco",
-        "rol": "Líder de Ergonomía",
-        "carrera": "Ing. Robótica Industrial",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Máximo Sanchez",
-        "rol": "Líder de CAE",
+        "nombre": "Martinez Ordoñez Roberto",
+        "rol": "Líder de Suspensión",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Christopher Santiago",
-        "rol": "Líder de Powertrain",
+        "nombre": "Guerrero Martinez Juan Benigno",
+        "rol": "Líder de Powertraint",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Carlos Zarate",
+        "nombre": "Perez Garcia German",
         "rol": "Líder de Chasis",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Gustavo Ambia",
+        "nombre": "Sanchez Toledo Maximo Jorge Arturo",
+        "rol": "Líder de CAE",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Ambia Virgen Gustavo",
         "rol": "Líder de Instrumentación",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Blanco Valtierra Luis Angel",
+        "rol": "Líder de Ergonomía",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Alcalá León Julio",
+        "rol": "Líder de Manufactura CNC",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Guerrero Martinez Juan Benigno",
+        "rol": "Líder de Manufactura General",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Vilchis Maceda Roberto Angel",
+        "rol": "Líder de Almacén",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
@@ -109,159 +152,80 @@
     "categoria": "MIEMBROS ACTIVOS",
     "integrantes": [
       {
-        "nombre": "Jair Ponciano",
-        "rol": "Suspensión",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Ángel Chávez",
+        "nombre": "Abolnik Avila Héctor",
         "rol": "Dirección",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Jonatan Nava",
-        "rol": "Powertrain",
-        "carrera": "Ing. Sist. Automotrices",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Yaretzi Pierdant",
-        "rol": "Frenos",
+        "nombre": "Gustavo Andres Rivero Arellano",
+        "rol": "Dirección",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Germán Pérez",
+        "nombre": "Pérez Ruiz Victor Efrén",
+        "rol": "Frenos",
+        "carrera": "Estudiante de Ing. Sist. Automotrices",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Morales Rayo Emaus",
+        "rol": "Suspensión",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },
+      {
+        "nombre": "Nava Mendez Jonatan Jesús",
+        "rol": "Powertraint",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },{
+        "nombre": "Gonzalez Evangelista Angel Ruben",
+        "rol": "Powertraint",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },{
+        "nombre": "Ponce Ruiz Cesar Achmed",
         "rol": "Chasis",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
-      }
-    ]
-  },
-  {
-    "categoria": "EQUIPO CAE",
-    "integrantes": [
-      {
-        "nombre": "Julio Alcalá",
-        "rol": "Analista CAE",
+      },{
+        "nombre": "Sofia",
+        "rol": "Chasis",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },{
+        "nombre": "Pablo Adonai",
+        "rol": "CAE",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },{
+        "nombre": "Alcalá León Julio",
+        "rol": "CAE",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "/img/page/JaguarLogoPestania.webp",
+        "linkedin": "https://linkedin.com"
+      },{
+        "nombre": "Rosas Gomez Rene Leonardo",
+        "rol": "Ergonomía",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Brandon Vargas",
-        "rol": "Analista CAE",
+        "nombre": "Nava Méndez Jonatan Jesus",
+        "rol": "Manufactura CNC",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Adonai Yescas",
-        "rol": "Analista CAE",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Razziel",
-        "rol": "Analista CAE",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      }
-    ]
-  },
-  {
-    "categoria": "SENIORS",
-    "integrantes": [
-      {
-        "nombre": "Jacob Varela",
-        "rol": "Senior",
-        "carrera": "Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Mauricio Manjarrez",
-        "rol": "Senior",
-        "carrera": "Ing. Robótica Industrial",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Rubén González",
-        "rol": "Senior",
-        "carrera": "Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Julio Alcalá",
-        "rol": "Senior",
-        "carrera": "Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Jacob García",
-        "rol": "Senior",
-        "carrera": "Ing. Robótica Industrial",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Brandon Vargas",
-        "rol": "Senior",
-        "carrera": "Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Luis Blanco",
-        "rol": "Senior",
-        "carrera": "Ing. Robótica Industrial",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Yarosliv",
-        "rol": "Senior",
-        "carrera": "Ing. Sistemas Automotrices",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Jean Rodriguez",
-        "rol": "Senior",
-        "carrera": "Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Dorian Ramos",
-        "rol": "Senior",
-        "carrera": "Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Luis Velazquez",
-        "rol": "Senior",
-        "carrera": "Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Christian",
-        "rol": "Senior",
-        "carrera": "Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
       }

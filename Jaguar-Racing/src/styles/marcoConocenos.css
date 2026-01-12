@@ -1,256 +1,200 @@
 /* =============================================================================
-   SECCIÓN ÉPICA: HALO RUNNER - OPTIMIZADO PERFORMANCE v3.2
+   SECCIÓN: HALO "TRAVELING LIGHT" (Sin esquinas + Botones integrados)
    ============================================================================= */
 
-/* Contenedor Principal */
-.team-showcase {
-    padding: 6rem 1rem;
-    background-color: #050505;
-    background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 30px 30px; 
-    text-align: center;
-    overflow: hidden;
+/* 1. ESTRUCTURA LATERAL */
+.about-section__side-content {
+    flex: 1;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
+    margin-top: 20px;
+    position: relative;
 }
 
-/* Título */
-.team-showcase__title {
-    font-family: 'Arial Black', sans-serif; 
-    font-size: 2.8rem;
-    color: #fff;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
-}
-
-/* Subtítulo*/
-.team-showcase__subtitle {
-    color: var(--jaguar-dark-gold, #A67C00); 
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 5rem;
-    text-transform: uppercase;
-    letter-spacing: 3px; 
-}
-
-/* --- CONTENEDOR DEL HALO ANIMADO --- */
+/* 2. CONTENEDOR DEL MARCO (La base del efecto) */
 .marco-halo-container {
     position: relative;
-    display: inline-block;
-    padding: 4px; 
-    margin-bottom: 4rem;
-    background: rgba(255, 255, 255, 0.05);
-    overflow: hidden; 
-    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Este padding define el grosor de la línea de luz que gira */
+    padding: 3px; 
+    margin-bottom: 2rem; /* Espacio antes de los botones */
+    background: #1a1a1a; 
+    overflow: hidden; /* Corta la luz para que se quede dentro del marco */
+    border-radius: 8px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-/* Efecto de Halo (Optimizado) */
+/* 3. EFECTO PC: LUZ GIRATORIA (Snake Light) */
 .marco-halo-container::before {
     content: '';
     position: absolute;
-    width: 150%;
-    height: 150%;
+    width: 250%; /* Debe ser mucho más grande que el contenedor */
+    height: 250%;
+    
+    /* El degradado cónico crea el "rayo" */
     background: conic-gradient(
         transparent, 
-        rgba(166, 124, 0, 0.2), 
-        #A67C00, 
-        #FFE878, 
+        transparent, 
+        transparent, 
+        var(--jaguar-gold, #A67C00) 20%, /* Cola dorada oscura */
+        #FFE878 25%,                    /* Cabeza blanca/brillante */
         transparent 30%
     );
-    top: -25%;
-    left: -25%;
     
-    /* Solo animamos en desktop/tablets potentes */
-    animation: rotate-halo 3s linear infinite;
-    will-change: transform; /* Aviso a la GPU */
-    z-index: -1;
+    /* Animación de giro constante */
+    animation: traveling-light 4s linear infinite;
+    z-index: 0; 
 }
 
-@keyframes rotate-halo {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@keyframes traveling-light {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
+/* 4. MÁSCARA INTERNA (Tapa el centro del degradado) */
 .halo-inner-shadow {
     position: relative;
-    background: #050505;
-    padding: 10px;
+    background: #0e0e0e; /* Debe ser igual al color de fondo de tu web */
+    z-index: 1; 
+    width: 100%;
+    height: 100%;
+    border-radius: 6px; /* Ligeramente menor que el contenedor padre */
     display: block;
 }
 
 .foto-equipo-cad {
     display: block;
-    max-width: 900px;
-    width: 90vw;
+    width: 100%;
     height: auto;
-    filter: none; 
-    transform: none; 
+    object-fit: cover;
+    border-radius: 6px;
+    position: relative;
+    z-index: 2;
 }
 
-/* --- ESQUINEROS TÉCNICOS --- */
-.bracket {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    border-color: var(--jaguar-dark-gold, #A67C00);
-    border-style: solid;
-    z-index: 3;
-    pointer-events: none;
-    transition: all 0.4s ease-in-out;
-}
-
-.top-left { top: -10px; left: -10px; border-width: 4px 0 0 4px; }
-.bottom-right { bottom: -10px; right: -10px; border-width: 0 4px 4px 0; }
-
-.marco-halo-container:hover .bracket {
-    width: calc(100% + 20px);
-    height: calc(100% + 20px);
-    border-color: #FFE878;
-}
+/* Seguridad: Ocultar brackets si quedaron en el HTML */
+.bracket { display: none !important; }
 
 /* =============================================================================
-   BOTONES DE ACCIÓN (INDUSTRIAL BLOCK)
+   ESTILOS DE BOTONES Y REDES (Requerido)
    ============================================================================= */
-.acciones-equipo {
+
+.social-buttons-container {
     display: flex;
-    justify-content: center;
+    align-items: center;
     gap: 20px;
-    margin-top: 30px;
     width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 5;
 }
 
-.btn-tech {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 45px;
-    min-width: 200px;
-    
-    background-color: #000;
-    border: 2px solid var(--jaguar-gold, #FFE878);
-    border-radius: 0;
-    
-    color: var(--jaguar-gold, #FFE878);
-    font-family: var(--font-main, sans-serif);
-    font-weight: 800;
-    font-size: 1rem;
+/* Botón "CONOCER EQUIPO" */
+.btn-mini-primary {
+    padding: 10px 24px;
+    background-color: transparent;
+    border: 1px solid var(--jaguar-gold, #A67C00);
+    color: var(--jaguar-gold, #A67C00);
+    font-size: 0.9rem;
+    font-weight: 700;
     text-transform: uppercase;
     text-decoration: none;
     letter-spacing: 1px;
-    
-    cursor: pointer;
-    transition: all 0.2s ease-out;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
-.btn-tech:active {
-    background-color: var(--jaguar-gold, #FFE878);
+.btn-mini-primary:hover {
+    background-color: var(--jaguar-gold, #A67C00);
     color: #000;
-    transform: scale(0.96);
+    box-shadow: 0 0 15px rgba(166, 124, 0, 0.4);
 }
 
-@media (hover: hover) {
-    .btn-tech:hover {
-        background-color: rgba(255, 232, 120, 0.1); 
-        box-shadow: 0 0 20px rgba(166, 124, 0, 0.5);
-        transform: translateY(-2px);
-    }
+/* Línea separadora vertical */
+.social-separator {
+    width: 1px;
+    height: 25px;
+    background-color: #444;
 }
 
-/* --- RESPONSIVIDAD (MÓVIL) - OPTIMIZADO CON EFECTO --- */
+/* Iconos de redes */
+.social-icons-row {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.social-icons__link {
+    display: block;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.social-icons__link:hover {
+    transform: scale(1.15);
+    filter: brightness(1.3);
+}
+
+.social-icons__img {
+    width: 30px;
+    height: 30px;
+    display: block;
+}
+
+/* =============================================================================
+   RESPONSIVIDAD: EFECTO RESPIRACIÓN EN MÓVIL (Sin Luz Giratoria)
+   ============================================================================= */
 @media (max-width: 768px) {
-    .team-showcase {
-        padding: 4rem 1rem;
-    }
-
-    .team-showcase__title {
-        font-size: 1.8rem;
-        line-height: 1.2;
-        margin-bottom: 0.8rem;
-    }
-
-    .team-showcase__subtitle {
-        font-size: 0.9rem;
-        margin-bottom: 3rem;
-    }
-
-    .marco-halo-container {
-        width: 95%; 
-        max-width: 450px;
-        margin-left: auto;  
-        margin-right: auto; 
-        margin-bottom: 2.5rem;
-        padding: 2px;
-        display: block; 
-    }
-
-    .marco-halo-container::before {
-        /* Usamos la animación nueva */
-        animation: pulse-gold 2.5s ease-in-out infinite !important; /* Un poco más rápido (2.5s) para más intensidad */
-        
-        will-change: opacity, transform, filter;
-        
-        /* EL SECRETO DEL BRILLO: */
-        /* Un gradiente radial que va de Transparente -> Oro -> BLANCO en los bordes */
-        background: radial-gradient(
-            circle, 
-            transparent 30%, 
-            #A67C00 60%, 
-            #FFE878 85%, 
-            #FFFFFF 100% /* <--- Este blanco final crea el efecto de luz pura */
-        );
-        
-        /* Modo de fusión para que el brillo "queme" sobre el fondo oscuro */
-        mix-blend-mode: screen; 
-    }
-
-    .foto-equipo-cad {
-        width: 100%;   
-        height: auto;
-    }
-
-    .halo-inner-shadow { padding: 5px; }
-    .bracket { width: 25px; height: 25px; }
-
-    /* BOTONES MÓVIL */
-    .acciones-equipo {
-        flex-direction: column;
-        gap: 15px;
+    
+    .about-section__side-content {
+        max-width: 100%;
         width: 100%;
-        align-items: center;
-        padding: 0 20px; 
+        margin-top: 30px;
     }
 
-    .btn-tech {
-        width: 100%;      
-        max-width: 280px;
-        padding: 14px 0;
-        font-size: 1rem;
+    .social-separator { 
+        display: none; /* Ocultamos el palito separador en móvil */
+    }
+
+    /* 1. Desactivamos el rayo giratorio */
+    .marco-halo-container::before {
+        display: none; 
+    }
+
+    /* 2. Activamos la respiración en el contenedor */
+    .marco-halo-container {
+        padding: 0; /* Quitamos el espacio del rayo */
+        overflow: visible; /* Permitimos que el brillo salga */
+        background: transparent;
+        border: 1px solid rgba(166, 124, 0, 0.3); /* Borde base tenue */
+        
+        /* Animación: Solo afecta luz y borde, la imagen NO se mueve */
+        animation: light-breathing 3s ease-in-out infinite;
+    }
+    
+    /* Ajuste de botones en móvil */
+    .social-buttons-container {
+        gap: 15px;
     }
 }
 
-/* --- ANIMACIÓN MÓVIL "REACTOR NUCLEAR" (GPU SAFE) --- */
-@keyframes pulse-gold {
+/* --- KEYFRAMES: RESPIRACIÓN DE LUZ (SOLO LUZ) --- */
+@keyframes light-breathing {
     0% {
-        opacity: 0.6; /* Empieza visible, no tan apagado */
-        transform: scale(0.95);
-        filter: brightness(1);
+        box-shadow: 0 0 10px rgba(166, 124, 0, 0.2);
+        border-color: rgba(166, 124, 0, 0.3);
     }
     50% {
-        opacity: 1; 
-        transform: scale(1.05); /* Se expande más */
-        /* TRUCO: Brillo al 170% + Contraste alto hace que los colores "exploten" */
-        filter: brightness(1.7) contrast(1.2); 
+        /* El brillo sube, pero no hay 'transform: scale' */
+        box-shadow: 0 0 35px rgba(255, 232, 120, 0.5); 
+        border-color: rgba(255, 232, 120, 0.8);
     }
     100% {
-        opacity: 0.6;
-        transform: scale(0.95);
-        filter: brightness(1);
+        box-shadow: 0 0 10px rgba(166, 124, 0, 0.2);
+        border-color: rgba(166, 124, 0, 0.3);
     }
 }
