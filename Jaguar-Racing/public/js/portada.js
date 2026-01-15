@@ -1,40 +1,36 @@
-class HeroSlider extends HTMLElement {
-    constructor() {
-        super();
-        this.interval = null;
-        this.slides = [];
-        this.currentIndex = 0;
-    }
+document.addEventListener('astro:page-load', () => {
+    // 1. Encontrar el contenedor
+    const wrapper = document.querySelector('.slideshow-wrapper');
+    if (!wrapper) return;
 
-    connectedCallback() {
-        this.slides = this.querySelectorAll('.bg-slide');
-        if (this.slides.length <= 1) return;
-        this.startSlider(4000);
-    }
+    // 2. Encontrar las imágenes
+    const slides = wrapper.querySelectorAll('.bg-slide');
+    if (slides.length <= 1) return;
 
-    disconnectedCallback() {
-        this.stopSlider();
-    }
+    let currentIndex = 0;
+    const intervalTime = 4000; // 4 segundos
 
-    startSlider(time) {
-        this.stopSlider();
-        this.interval = setInterval(() => this.nextSlide(), time);
-    }
-
-    stopSlider() {
-        if (this.interval) {
-            clearInterval(this.interval);
-            this.interval = null;
+    // 3. Función de cambio
+    const interval = setInterval(() => {
+        // Seguridad: si cambiamos de página, parar
+        if (!document.contains(wrapper)) {
+            clearInterval(interval);
+            return;
         }
-    }
 
-    nextSlide() {
-        this.slides[this.currentIndex].classList.remove('active');
-        this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-        this.slides[this.currentIndex].classList.add('active');
-    }
-}
+        // Quitar active actual
+        slides[currentIndex].classList.remove('active');
 
-if (!customElements.get('hero-slider')) {
-    customElements.define('hero-slider', HeroSlider);
-}
+        // Calcular siguiente
+        currentIndex = (currentIndex + 1) % slides.length;
+
+        // Poner active siguiente
+        slides[currentIndex].classList.add('active');
+
+    }, intervalTime);
+
+    // 4. Limpieza al salir de la página
+    document.addEventListener('astro:before-swap', () => {
+        clearInterval(interval);
+    }, { once: true });
+});

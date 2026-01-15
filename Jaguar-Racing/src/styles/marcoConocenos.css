@@ -1,5 +1,6 @@
 /* =============================================================================
-   SECCIÓN: HALO "TRAVELING LIGHT" (Sin esquinas + Botones integrados)
+   SECCIÓN: MARCO CONÓCENOS - v5.1 (Rounded & Minimalist)
+   Nota: Requiere global.css cargado previamente.
    ============================================================================= */
 
 /* 1. ESTRUCTURA LATERAL */
@@ -11,82 +12,74 @@
     align-items: center;
     margin-top: 20px;
     position: relative;
+    z-index: 2;
 }
 
-/* 2. CONTENEDOR DEL MARCO (La base del efecto) */
+/* 2. CONTENEDOR DEL MARCO (El Borde Dorado) */
 .marco-halo-container {
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* Este padding define el grosor de la línea de luz que gira */
-    padding: 3px; 
-    margin-bottom: 2rem; /* Espacio antes de los botones */
-    background: #1a1a1a; 
-    overflow: hidden; /* Corta la luz para que se quede dentro del marco */
-    border-radius: 8px; 
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-/* 3. EFECTO PC: LUZ GIRATORIA (Snake Light) */
-.marco-halo-container::before {
-    content: '';
-    position: absolute;
-    width: 250%; /* Debe ser mucho más grande que el contenedor */
-    height: 250%;
+    display: block;
+    width: 100%;
+    margin-bottom: 2rem;
     
-    /* El degradado cónico crea el "rayo" */
-    background: conic-gradient(
-        transparent, 
-        transparent, 
-        transparent, 
-        var(--jaguar-gold, #A67C00) 20%, /* Cola dorada oscura */
-        #FFE878 25%,                    /* Cabeza blanca/brillante */
-        transparent 30%
-    );
+    /* Borde Fino y Elegante */
+    border: 1px solid rgba(166, 124, 0, 0.4);
+    background: transparent;
+    padding: 10px;
     
-    /* Animación de giro constante */
-    animation: traveling-light 4s linear infinite;
-    z-index: 0; 
+    /* CAMBIO: Bordes redondeados (Coincide con Sponsors/Eventos) */
+    border-radius: 16px;
+    
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-@keyframes traveling-light {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* 4. MÁSCARA INTERNA (Tapa el centro del degradado) */
+/* 3. MÁSCARA INTERNA */
 .halo-inner-shadow {
     position: relative;
-    background: #0e0e0e; /* Debe ser igual al color de fondo de tu web */
-    z-index: 1; 
     width: 100%;
-    height: 100%;
-    border-radius: 6px; /* Ligeramente menor que el contenedor padre */
+    height: auto; 
+    background: transparent;
+    z-index: 1;
     display: block;
 }
 
+/* 4. LA FOTO */
 .foto-equipo-cad {
     display: block;
     width: 100%;
     height: auto;
     object-fit: cover;
-    border-radius: 6px;
-    position: relative;
-    z-index: 2;
+    
+    /* CAMBIO: Redondeado interno para encajar en el marco */
+    /* (16px del marco - 10px de padding = 6px matemáticos, usamos 8px para suavidad) */
+    border-radius: 8px;
+    
+    filter: none;
+    opacity: 1;
+    
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 
-/* Seguridad: Ocultar brackets si quedaron en el HTML */
+/* 5. EFECTO HOVER (Solo borde) */
+@media (hover: hover) {
+    .marco-halo-container:hover {
+        /* El borde se ilumina */
+        border-color: var(--jaguar-gold, #A67C00);
+        box-shadow: 0 0 20px rgba(166, 124, 0, 0.1);
+    }
+}
+
+/* Limpieza */
+.marco-halo-container::before { display: none; }
 .bracket { display: none !important; }
 
 /* =============================================================================
-   ESTILOS DE BOTONES Y REDES (Requerido)
+   ESTILOS DE BOTONES Y REDES
    ============================================================================= */
-
 .social-buttons-container {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
     width: 100%;
     justify-content: center;
     flex-wrap: wrap;
@@ -96,105 +89,92 @@
 
 /* Botón "CONOCER EQUIPO" */
 .btn-mini-primary {
-    padding: 10px 24px;
+    padding: 12px 30px;
     background-color: transparent;
-    border: 1px solid var(--jaguar-gold, #A67C00);
-    color: var(--jaguar-gold, #A67C00);
-    font-size: 0.9rem;
-    font-weight: 700;
+    border: 1px solid #fff; 
+    color: #fff;
+    
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
     text-transform: uppercase;
     text-decoration: none;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    
+    /* También redondeamos un poco el botón */
     border-radius: 4px;
+    
     transition: all 0.3s ease;
 }
 
 .btn-mini-primary:hover {
-    background-color: var(--jaguar-gold, #A67C00);
-    color: #000;
-    box-shadow: 0 0 15px rgba(166, 124, 0, 0.4);
+    border-color: var(--jaguar-gold, #A67C00);
+    color: var(--jaguar-gold, #A67C00);
+    box-shadow: 0 0 10px rgba(166, 124, 0, 0.2);
 }
 
-/* Línea separadora vertical */
+/* Línea separadora */
 .social-separator {
     width: 1px;
-    height: 25px;
+    height: 20px;
     background-color: #444;
 }
 
 /* Iconos de redes */
 .social-icons-row {
     display: flex;
-    gap: 15px;
+    gap: 20px;
     align-items: center;
 }
 
 .social-icons__link {
     display: block;
-    transition: transform 0.2s ease, filter 0.2s ease;
+    opacity: 0.8;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .social-icons__link:hover {
-    transform: scale(1.15);
-    filter: brightness(1.3);
+    opacity: 1;
+    transform: translateY(-2px);
 }
 
 .social-icons__img {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     display: block;
+    filter: none;
 }
 
-/* =============================================================================
-   RESPONSIVIDAD: EFECTO RESPIRACIÓN EN MÓVIL (Sin Luz Giratoria)
-   ============================================================================= */
+/* RESPONSIVIDAD MÓVIL */
 @media (max-width: 768px) {
-    
-    .about-section__side-content {
-        max-width: 100%;
-        width: 100%;
-        margin-top: 30px;
-    }
-
-    .social-separator { 
-        display: none; /* Ocultamos el palito separador en móvil */
-    }
-
-    /* 1. Desactivamos el rayo giratorio */
-    .marco-halo-container::before {
-        display: none; 
-    }
-
-    /* 2. Activamos la respiración en el contenedor */
     .marco-halo-container {
-        padding: 0; /* Quitamos el espacio del rayo */
-        overflow: visible; /* Permitimos que el brillo salga */
-        background: transparent;
-        border: 1px solid rgba(166, 124, 0, 0.3); /* Borde base tenue */
-        
-        /* Animación: Solo afecta luz y borde, la imagen NO se mueve */
-        animation: light-breathing 3s ease-in-out infinite;
+        padding: 0;
+        border: none;
+        border-radius: 0; /* En móvil quitamos el radio porque es solo una línea */
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--jaguar-gold, #A67C00);
     }
     
-    /* Ajuste de botones en móvil */
-    .social-buttons-container {
-        gap: 15px;
+    /* En móvil la foto pierde el radio para alinearse al borde inferior */
+    .foto-equipo-cad {
+        border-radius: 4px 4px 0 0; 
     }
-}
 
-/* --- KEYFRAMES: RESPIRACIÓN DE LUZ (SOLO LUZ) --- */
-@keyframes light-breathing {
-    0% {
-        box-shadow: 0 0 10px rgba(166, 124, 0, 0.2);
-        border-color: rgba(166, 124, 0, 0.3);
+    .social-separator { display: none; }
+    
+    .social-buttons-container {
+        flex-direction: column;
+        gap: 20px;
     }
-    50% {
-        /* El brillo sube, pero no hay 'transform: scale' */
-        box-shadow: 0 0 35px rgba(255, 232, 120, 0.5); 
-        border-color: rgba(255, 232, 120, 0.8);
+    
+    .btn-mini-primary {
+        width: 100%;
+        text-align: center;
+        border-color: var(--jaguar-gold, #A67C00);
+        color: var(--jaguar-gold, #A67C00);
     }
-    100% {
-        box-shadow: 0 0 10px rgba(166, 124, 0, 0.2);
-        border-color: rgba(166, 124, 0, 0.3);
+    
+    .social-icons__img {
+        width: 28px;
     }
 }

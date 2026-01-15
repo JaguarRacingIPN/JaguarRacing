@@ -1,72 +1,75 @@
-// Variable global persistente entre navegaciones de Astro
-let intervalosActivos = [];
-
-// Función de limpieza separada para mayor orden
-const limpiarIntervalos = () => {
-    intervalosActivos.forEach(id => clearInterval(id));
-    intervalosActivos = [];
-};
-
 document.addEventListener('astro:page-load', () => {
-    // 1. LIMPIEZA: Matamos contadores previos
-    limpiarIntervalos();
+    // --- 1. ANIMACIÓN NÚMEROS (Estadísticas 0 -> 30) ---
+    const statsSection = document.getElementById('stats-section');
+    const counters = document.querySelectorAll('.stat-number');
+    let started = false;
 
-    // 2. CONFIGURACIÓN DE FECHAS (2026)
-    // Nota: Usamos Date.UTC o timestamps directos si es posible para evitar líos de zona horaria,
-    // pero tu método actual funciona bien para local.
-    const fechaIPN = new Date(2026, 1, 3, 7, 0, 0).getTime();
-    const fechaAnoNuevo = new Date(2026, 0, 1, 0, 0, 0).getTime();
+    function startCounters() {
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            const duration = 2000; 
+            const increment = target / (duration / 16); 
+            let current = 0;
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    counter.innerText = Math.ceil(current) + (target > 100 ? '+' : ''); 
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.innerText = target + '+';
+                }
+            };
+            updateCounter();
+        });
+    }
 
-    // 3. INICIALIZAR
-    iniciarContador('timer-usa', fechaIPN);      
-    iniciarContador('timer-mexico', fechaAnoNuevo); 
-});
+    if (statsSection) {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && !started) {
+                startCounters();
+                started = true;
+            }
+        }, { threshold: 0.5 });
+        observer.observe(statsSection);
+    }
 
-// Limpieza extra por seguridad antes de cambiar de página (Astro View Transitions)
-document.addEventListener('astro:before-swap', limpiarIntervalos);
-
-function iniciarContador(idElemento, fechaLimite) {
-    const elemento = document.getElementById(idElemento);
-    if (!elemento) return; 
-
-    // Función de actualización extraída para poder llamarla inmediatamente
-    // y no esperar 1 segundo al primer render
-    const actualizar = () => {
-        // OPTIMIZACIÓN: Date.now() es más rápido que new Date().getTime()
-        const ahora = Date.now(); 
-        const distancia = fechaLimite - ahora;
-
-        if (distancia < 0) {
-            // Buscamos el intervalo en el array para limpiarlo específicamente
-            // (aunque la limpieza global se encarga, esto es buena práctica)
-            elemento.innerHTML = "¡FINALIZADO!";
-            elemento.style.color = "var(--jaguar-gold)";
-            return false; // Indicamos que terminó
-        }
-
-        const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
-        const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
-        const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
-
-        // Formateo simple
-        const d = dias < 10 ? "0" + dias : dias;
-        const h = horas < 10 ? "0" + horas : horas;
-        const m = minutos < 10 ? "0" + minutos : minutos;
-        const s = segundos < 10 ? "0" + segundos : segundos;
-
-        // OPTIMIZACIÓN: textContent es ligeramente más rápido que innerHTML si no hay tags HTML dentro
-        elemento.textContent = `${d}d ${h}h ${m}m ${s}s`;
-        return true;
+    // --- 2. CUENTAS REGRESIVAS (Timers con Segundos) ---
+    // Fechas objetivo (Ajusta según las fechas reales de 2026)
+    const dates = {
+        mexico: new Date('2026-11-05T00:00:00').getTime(), // Ejemplo Noviembre
+        usa: new Date('2026-05-15T00:00:00').getTime()     // Ejemplo Mayo
     };
 
-    // Ejecutar una vez al inicio para evitar que se vea vacío por 1 segundo
-    if (actualizar()) {
-        const intervalo = setInterval(() => {
-            const continua = actualizar();
-            if (!continua) clearInterval(intervalo);
-        }, 1000);
+    function updateTimers() {
+        const now = new Date().getTime();
         
-        intervalosActivos.push(intervalo);
+        ['mexico', 'usa'].forEach(key => {
+            const el = document.getElementById(`timer-${key}`);
+            if (!el) return;
+
+            const distance = dates[key] - now;
+
+            if (distance < 0) {
+                el.innerText = "COMPLETED";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Formato con ceros a la izquierda: 00d 00h 00m 00s
+            const d = days < 10 ? `0${days}` : days;
+            const h = hours < 10 ? `0${hours}` : hours;
+            const m = minutes < 10 ? `0${minutes}` : minutes;
+            const s = seconds < 10 ? `0${seconds}` : seconds;
+
+            el.innerText = `${d}d ${h}h ${m}m ${s}s`;
+        });
     }
-}
+
+    // Actualizar cada segundo
+    setInterval(updateTimers, 1000);
+    updateTimers(); // Ejecutar inmediatamente
+});

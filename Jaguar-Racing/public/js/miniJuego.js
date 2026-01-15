@@ -8,12 +8,11 @@ document.addEventListener('astro:page-load', () => {
     // --- DOM ---
     const lights = document.querySelectorAll('.light');
     const resultDisplay = document.getElementById('reaction-result');
-    const btnText = btn.querySelector('.btn-text');
     const bestTimeDisplay = document.getElementById('best-time-display');
     const rankDisplay = document.getElementById('player-rank');
 
     // --- ESTADO ---
-    let gameState = 'idle'; // idle, waiting, green, result, fault
+    let gameState = 'idle'; 
     let startTime = 0;
     
     // --- LIMPIEZA INICIAL ---
@@ -31,68 +30,67 @@ document.addEventListener('astro:page-load', () => {
     }
 
     function updateBestDisplay(time) {
-        if (time) {
+        if (time && time < 9999) {
             personalBest = parseFloat(time);
-            bestTimeDisplay.textContent = `${personalBest} ms`;
-            bestTimeDisplay.style.color = "#A67C00";
+            if (bestTimeDisplay) {
+                bestTimeDisplay.textContent = `${personalBest} ms`;
+                bestTimeDisplay.style.color = "#FFE878";
+            }
         } else {
             personalBest = 9999;
-            bestTimeDisplay.textContent = "--";
+            if (bestTimeDisplay) bestTimeDisplay.textContent = "--";
         }
     }
 
     function resetVisuals() {
         lights.forEach(l => l.classList.remove('red', 'green'));
+        
         btn.classList.remove('penalty');
-        btn.style.backgroundColor = '#A67C00'; 
+        btn.style.backgroundColor = 'transparent'; 
         btn.style.transform = 'scale(1)';
-        resultDisplay.style.color = '#A67C00';
-    }
-
-    function fullReset() {
-        resetAllTimeouts();
-        resetVisuals();
-        gameState = 'idle';
-        resultDisplay.textContent = '0.000 ms';
-        rankDisplay.textContent = "---";
-        rankDisplay.className = "rank-badge";
-        btnText.textContent = "INICIAR MOTOR";
+        resultDisplay.style.color = '#FFE878';
+        
+        // CORRECCIÓN: Limpiar cualquier color residual del rango
+        rankDisplay.style.color = ""; 
+        rankDisplay.style.opacity = "0";
     }
 
     function triggerFault() {
         gameState = 'fault';
-        resetAllTimeouts(); // Cancelamos la luz verde pendiente
+        resetAllTimeouts(); 
         resetVisuals();
         
         resultDisplay.textContent = "¡SALIDA EN FALSO!";
         resultDisplay.style.color = "#ff4444";
         
-        btn.classList.add('penalty');
-        btnText.textContent = "REINTENTAR";
+        btn.innerText = "REINTENTAR"; 
         
         rankDisplay.textContent = "DESCALIFICADO 🚫";
-        rankDisplay.className = "rank-badge rank-slow";
+        rankDisplay.className = "reaction-rank rank-slow";
+        // CORRECCIÓN: Forzar el color rojo aquí también para sobreescribir el verde anterior
+        rankDisplay.style.color = "#ff4444"; 
+        rankDisplay.style.opacity = "1";
     }
 
     function startGameSequence() {
         gameState = 'waiting';
-        resetVisuals();
-        btnText.textContent = "ESPERA...";
-        resultDisplay.textContent = "PREPARADO...";
+        resetVisuals(); // Esto limpia el color verde anterior
+        
+        btn.innerText = "ESPERA..."; 
+        resultDisplay.textContent = "0.000 ms";
 
         let cumulativeDelay = 0;
 
-        // Secuencia de luces rojas (una cada 800ms)
-        lights.forEach((light, index) => {
+        // Secuencia de luces rojas
+        lights.forEach((light) => {
             cumulativeDelay += 800;
             const id = setTimeout(() => {
-                // Verificamos que sigamos esperando (por si hubo click anticipado)
                 if (gameState === 'waiting') light.classList.add('red');
             }, cumulativeDelay);
             gameTimeouts.push(id);
         });
 
-        // Tiempo aleatorio extra (1s a 4s) antes del verde
+        // Tiempo aleatorio extra
         const randomTime = Math.floor(Math.random() * 3000) + 1000;
         const totalWait = cumulativeDelay + randomTime;
 
@@ -104,7 +102,6 @@ document.addEventListener('astro:page-load', () => {
 
     function goGreen() {
         gameState = 'green';
-        // PERFORMANCE.NOW() ES CLAVE PARA PRECISIÓN
         startTime = performance.now();
         
         lights.forEach(l => {
@@ -112,12 +109,10 @@ document.addEventListener('astro:page-load', () => {
             l.classList.add('green');
         });
         
-        btnText.textContent = "¡AHORA!";
-        btn.style.backgroundColor = "#00ff00";
+        btn.innerText = "¡AHORA!"; 
     }
 
     function handleInteraction(e) {
-        // Prevenir zoom o scroll accidental en móviles al tocar rápido
         if(e.type === 'touchstart') e.preventDefault(); 
 
         if (gameState === 'idle' || gameState === 'result' || gameState === 'fault') {
@@ -132,14 +127,18 @@ document.addEventListener('astro:page-load', () => {
     function finishGame() {
         gameState = 'result';
         const endTime = performance.now();
-        const reactionTime = Math.floor(endTime - startTime); // Entero para limpieza
+        const reactionTime = Math.floor(endTime - startTime); 
 
         resultDisplay.textContent = `${reactionTime} ms`;
         
         // --- LÓGICA DE RANGO ---
         let rankTitle, rankClass, color;
 
-        if (reactionTime < 250) { // Ajustado para ser realista sin lag táctil
+        if (reactionTime < 150) {
+             rankTitle = "¿ROBOT DETECTADO? 🤖"; 
+             rankClass = "rank-legend";
+             color = "#00ffff";
+        } else if (reactionTime < 250) { 
             rankTitle = "JAGUAR LEGEND 🐆";
             rankClass = "rank-legend";
             color = "#FFD700";
@@ -158,36 +157,38 @@ document.addEventListener('astro:page-load', () => {
         }
 
         rankDisplay.textContent = rankTitle;
-        rankDisplay.className = `rank-badge ${rankClass}`;
-        resultDisplay.style.color = color;
+        rankDisplay.className = `reaction-rank ${rankClass}`;
+        // Aplicamos el color explícitamente
+        rankDisplay.style.color = color;
+        rankDisplay.style.opacity = "1";
+        
+        rankDisplay.style.transform = "scale(1.2)";
+        setTimeout(() => rankDisplay.style.transform = "scale(1)", 200);
 
         // Récord
-        if (reactionTime < personalBest) {
+        if (reactionTime < personalBest && reactionTime > 50) { 
             personalBest = reactionTime;
             localStorage.setItem('jaguarReactionRecord', personalBest);
-            bestTimeDisplay.textContent = `${personalBest} ms (¡RÉCORD!)`;
-            bestTimeDisplay.style.color = "#FFD700";
+            if(bestTimeDisplay) {
+                bestTimeDisplay.textContent = `${personalBest} ms (¡RÉCORD!)`;
+                bestTimeDisplay.style.color = "#FFD700";
+            }
         }
 
-        btnText.textContent = "JUGAR OTRA VEZ";
-        btn.style.backgroundColor = "#A67C00";
+        btn.innerText = "JUGAR OTRA VEZ"; 
     }
 
-    // --- EVENT LISTENERS OPTIMIZADOS ---
-    // Removemos onclick para usar pointerdown (respuesta inmediata)
+    // --- EVENT LISTENERS ---
     btn.onclick = null; 
-    
-    // Soporte híbrido: Pointer Events cubre mouse y touch modernos
     if (window.PointerEvent) {
         btn.onpointerdown = handleInteraction;
     } else {
-        // Fallback para navegadores viejos
         btn.ontouchstart = handleInteraction;
         btn.onmousedown = handleInteraction;
     }
 });
 
-// LIMPIEZA DE SEGURIDAD AL SALIR DE LA PÁGINA
+// Limpieza
 document.addEventListener('astro:before-swap', () => {
     gameTimeouts.forEach(id => clearTimeout(id));
     gameTimeouts = [];

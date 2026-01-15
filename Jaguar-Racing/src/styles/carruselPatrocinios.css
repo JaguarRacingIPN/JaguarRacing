@@ -1,16 +1,17 @@
 /* =============================================================================
-   CARRUSEL PATROCINADORES - OPTIMIZADO PERFORMANCE v3.1
+   CARRUSEL PATROCINADORES - v4.1 (Rounded Corners)
+   Nota: Requiere global.css cargado previamente.
    ============================================================================= */
 
 /* Contenedor Principal */
 .sponsors-section {
     padding: 80px 0;
-    background: linear-gradient(to bottom, #050505, #111111);
+    background-color: var(--bg-black);
     overflow: hidden;
     position: relative;
     z-index: 1;
+    border-top: 1px solid #222;
     
-    /* Optimización de renderizado: salta el render si no está en pantalla */
     content-visibility: auto;
     contain-intrinsic-size: 400px;
 }
@@ -18,17 +19,19 @@
 /* Título de Sección */
 .titulo-seccion {
     text-align: center;
-    font-family: 'Impact', sans-serif;
+    font-family: var(--font-impact);
     font-size: clamp(2.5rem, 5vw, 4rem);
-    color: #fff;
     margin-bottom: 40px;
     text-transform: uppercase;
     letter-spacing: 2px;
     
-    background: linear-gradient(135deg, #A67C00 20%, #FFE878 50%, #A67C00 80%);
+    background: linear-gradient(135deg, #ffffff 0%, var(--jaguar-gold) 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 4px 0px rgba(0,0,0,0.5));
+    color: transparent;
+    
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 /* Descripción */
@@ -36,6 +39,7 @@
     max-width: 800px;
     margin: 0 auto 50px auto;
     text-align: center;
+    font-family: var(--font-main);
     font-size: 1.1rem;
     line-height: 1.6;
     color: #cccccc;
@@ -47,27 +51,32 @@
     display: flex;
     gap: 40px;
     width: max-content;
-    will-change: transform; /* Solo el padre necesita esto */
+    will-change: transform;
     animation: desplazamiento 40s linear infinite;
 }
 
-/* Tarjetas Individuales */
+/* Tarjetas Individuales (REDONDEADAS & ESTÁTICAS) */
 .sponsor-card {
     flex-shrink: 0;
-    width: 400px;
-    height: 300px;
+    width: 350px;
+    height: 200px;
     
-    background: #0f0f0f;
-    border: 1px solid rgba(166, 124, 0, 0.15); 
-    border-radius: 12px;
+    background-color: var(--bg-dark-grey);
+    
+    /* Borde Dorado Fijo */
+    border: 1px solid var(--jaguar-gold); 
+    
+    /* CAMBIO: Esquinas redondeadas suaves */
+    border-radius: 16px; 
     
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
     
-    /* Sombra suave solo para escritorio */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    /* Sin efectos extra */
+    box-shadow: none;
+    transition: none;
 }
 
 /* Imagen del logo */
@@ -76,8 +85,7 @@
     height: 100%;
     object-fit: contain;
     opacity: 1;
-    filter: none;
-    transition: none;
+    filter: none; /* Siempre a color */
     pointer-events: none;
     user-select: none;
 }
@@ -97,30 +105,27 @@
 }
 
 /* =============================================================================
-   AJUSTES MOBILE & RENDIMIENTO (CRÍTICO)
+   AJUSTES MOBILE
    ============================================================================= */
 @media (max-width: 768px) {
-    /* 1. Título ligero: Quitamos filtros costosos */
     .titulo-seccion {
         filter: none !important;
-        text-shadow: 2px 2px 0px rgba(0,0,0,0.5); /* Sombra barata para CPU */
+        background: none;
+        -webkit-text-fill-color: var(--jaguar-gold);
+        color: var(--jaguar-gold);
+        text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
     }
 
-    /* 2. Tarjetas optimizadas */
     .sponsor-card {
-        /* Tamaño más ajustado para pantallas verticales */
         width: 200px; 
         height: 120px;
-        
-        /* IMPORTANTE: Quitamos sombra en movimiento para ganar FPS */
-        box-shadow: none !important;
-        
-        /* Compensamos la falta de sombra con un borde un poco más visible */
-        border: 1px solid rgba(166, 124, 0, 0.3);
-        background: #0a0a0a;
+        border: 1px solid var(--jaguar-gold);
+        background: var(--bg-dark-grey);
+        border-radius: 12px; /* Un poco menos radio en móvil para proporción */
     }
     
     .sponsors-marquee {
         gap: 20px;
+        animation-duration: 30s;
     }
 }

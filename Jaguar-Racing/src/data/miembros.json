@@ -77,13 +77,6 @@
         "linkedin": "https://linkedin.com"
       },
       {
-        "nombre": "Pierdant Gómez Yaretzi Angélica",
-        "rol": "Líder de Frenos",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
         "nombre": "Martinez Ordoñez Roberto",
         "rol": "Líder de Suspensión",
         "carrera": "Estudiante de Ing. Mecánica",
@@ -135,13 +128,6 @@
       {
         "nombre": "Guerrero Martinez Juan Benigno",
         "rol": "Líder de Manufactura General",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "/img/page/JaguarLogoPestania.webp",
-        "linkedin": "https://linkedin.com"
-      },
-      {
-        "nombre": "Vilchis Maceda Roberto Angel",
-        "rol": "Líder de Almacén",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "/img/page/JaguarLogoPestania.webp",
         "linkedin": "https://linkedin.com"
