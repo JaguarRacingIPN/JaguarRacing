@@ -134,11 +134,7 @@ document.addEventListener('astro:page-load', () => {
         // --- LÓGICA DE RANGO ---
         let rankTitle, rankClass, color;
 
-        if (reactionTime < 150) {
-             rankTitle = "¿ROBOT DETECTADO? 🤖"; 
-             rankClass = "rank-legend";
-             color = "#00ffff";
-        } else if (reactionTime < 250) { 
+        if (reactionTime < 250) { 
             rankTitle = "JAGUAR LEGEND 🐆";
             rankClass = "rank-legend";
             color = "#FFD700";

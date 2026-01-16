@@ -1,56 +1,45 @@
 /* =============================================================================
-   JAGUAR RACING - MINIJUEGO STYLES (Final Version - Rounded Button)
+   JAGUAR RACING - MINIJUEGO STYLES (Minimalist Dark Edition)
    ============================================================================= */
 
 .reaction-game-section {
-    padding: 5rem 20px;
+    padding: 4rem 15px;
     text-align: center;
-    border-top: 1px solid #333;
-    border-bottom: 1px solid #333;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
     position: relative;
     overflow: hidden;
 
-    /* --- FONDO FIBRA DE CARBONO --- */
-    background-color: #111;
-    background-image:
-        linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000),
-        linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
-    background-size: 20px 20px;
-    background-position: 0 0, 10px 10px;
-    box-shadow: inset 0 0 100px #000; 
-}
-
-.reaction-game-section::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, transparent 40%, #000 100%);
-    pointer-events: none;
+    /* --- FONDO LIMPIO (Sin cuadros) --- */
+    background-color: #050505;
+    background: radial-gradient(circle at center, #0a0a0a 0%, #050505 100%);
 }
 
 .reaction-game-clean {
-    max-width: 600px;
+    max-width: 100%; /* Asegura que no se desborde en móvil */
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrado absoluto de los elementos */
     position: relative;
     z-index: 2;
 }
 
 .reaction-title {
     font-family: var(--font-impact, 'Impact', sans-serif);
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 5vw, 2.5rem); /* Tamaño fluido */
     color: #fff;
     margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.8);
 }
 
 /* --- RÉCORD PERSONAL --- */
 .personal-best {
     font-family: var(--font-main, sans-serif);
-    color: #888;
-    font-size: 1rem;
-    margin-bottom: 2rem;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     font-weight: 700;
@@ -58,62 +47,42 @@
 
 #best-time-display {
     color: var(--jaguar-gold, #FFE878);
-    font-family: 'Courier New', monospace;
-    font-size: 1.2rem;
-    text-shadow: 0 0 5px rgba(255, 232, 120, 0.5);
-    transition: color 0.3s;
 }
 
 /* --- DASHBOARD LUCES --- */
 .lights-row {
-    display: inline-flex;
+    display: flex; /* Cambiado a flex para mejor control móvil */
     justify-content: center;
-    gap: 20px;
+    gap: clamp(8px, 3vw, 20px); /* Espaciado dinámico */
     margin-bottom: 2rem;
-    padding: 25px 40px;
-    background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
-    border: 4px solid #111;
-    border-radius: 20px;
-    box-shadow: 
-        0 20px 50px rgba(0,0,0,1),
-        inset 0 1px 1px rgba(255,255,255,0.1);
-    position: relative;
+    padding: 20px clamp(15px, 5vw, 40px);
+    background: #000;
+    border: 1px solid #1a1a1a;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    width: fit-content; /* Se ajusta al contenido y se centra por el flex del padre */
 }
 
 .light {
-    width: 60px;
-    height: 60px;
+    width: clamp(40px, 10vw, 60px); /* Tamaño dinámico */
+    height: clamp(40px, 10vw, 60px);
     border-radius: 50%;
-    background: #222; /* Apagado */
-    border: 3px solid #000;
-    box-shadow: inset 0 5px 10px rgba(0,0,0,0.8);
-    transition: background-color 0.1s, box-shadow 0.1s;
+    background: #111; 
+    border: 2px solid #1a1a1a;
     position: relative;
-    overflow: hidden;
-}
-
-.light::after {
-    content: '';
-    position: absolute;
-    top: 10%; left: 20%;
-    width: 25%; height: 25%;
-    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
+    transition: background-color 0.1s;
 }
 
 /* ROJO */
 .light.red {
     background: #ff0000 !important;
     box-shadow: 0 0 30px #ff0000, inset 0 0 10px #fff;
-    border-color: #500;
 }
 
 /* VERDE */
 .light.green {
     background: #00ff00 !important;
     box-shadow: 0 0 30px #00ff00, inset 0 0 10px #fff;
-    border-color: #050;
 }
 
 /* --- CONTROLES Y RESULTADOS --- */
@@ -121,88 +90,65 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    width: 100%;
 }
 
 .reaction-result {
     font-family: 'Courier New', monospace;
-    font-size: 3rem;
-    color: var(--jaguar-gold, #FFE878);
+    font-size: clamp(2rem, 8vw, 3rem);
+    color: #fff;
     font-weight: 700;
-    text-shadow: 0 0 10px rgba(255, 232, 120, 0.3);
-    min-height: 60px;
+    margin-bottom: 0.5rem;
+    min-height: 1.2em;
 }
 
-/* --- RANGOS --- */
 .reaction-rank { 
     font-family: var(--font-main, sans-serif);
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 5px 15px;
-    border-radius: 4px;
-    opacity: 1;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     margin-bottom: 1.5rem;
-    min-height: 30px;
+    min-height: 1.5em;
+    opacity: 1;
 }
 
-.rank-legend { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
-.rank-pro { text-shadow: 0 0 15px rgba(0, 255, 0, 0.6); }
-.rank-avg { text-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
-.rank-slow { text-shadow: 0 0 10px rgba(255, 68, 68, 0.6); }
-
-/* --- BOTÓN (Actualizado a Redondeado) --- */
+/* --- BOTÓN REDONDEADO --- */
 .btn-race {
     background: transparent;
     border: 2px solid var(--jaguar-gold, #FFE878);
     color: #fff;
-    padding: 15px 50px;
-    font-size: 1.2rem;
+    padding: 15px clamp(30px, 10vw, 50px);
+    font-size: 1.1rem;
     font-weight: 800;
     cursor: pointer;
-    transition: all 0.2s ease;
     text-transform: uppercase;
     font-family: var(--font-main, sans-serif);
     letter-spacing: 2px;
-    
-    /* CAMBIO: Redondeado completo */
     border-radius: 50px; 
-    
-    outline: none;
-    user-select: none; 
+    transition: all 0.3s ease;
+    user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
 
 .btn-race:hover {
     background: var(--jaguar-gold, #FFE878);
     color: #000;
-    box-shadow: 0 0 20px rgba(255, 232, 120, 0.5);
-    transform: translateY(-2px);
-}
-
-.btn-race:active {
-    transform: translateY(1px);
+    box-shadow: 0 0 20px rgba(255, 232, 120, 0.4);
 }
 
 .btn-race.penalty {
     border-color: #ff4444;
     color: #ff4444;
-    box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
 }
 
-.btn-race.penalty:hover {
-    background-color: #ff4444;
-    color: #000;
-}
-
-/* RESPONSIVE */
-@media (max-width: 600px) {
-    .reaction-game-section { padding: 3rem 15px; }
-    .lights-row { gap: 8px; padding: 15px 15px; width: 100%; max-width: 350px; }
-    .light { width: 45px; height: 45px; }
-    .reaction-title { font-size: 2rem; margin-bottom: 0.5rem; }
-    .reaction-result { font-size: 2.5rem; }
-    .btn-race { width: 100%; padding: 15px 0; }
+/* RESPONSIVE AJUSTADO */
+@media (max-width: 480px) {
+    .reaction-game-section { padding: 3rem 10px; }
+    .lights-row { 
+        padding: 15px 10px; 
+        width: 100%; 
+        max-width: 320px; /* Evita que choque con los bordes */
+    }
+    .btn-race { width: 90%; }
 }

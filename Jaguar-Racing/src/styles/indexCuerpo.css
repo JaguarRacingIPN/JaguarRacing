@@ -1,5 +1,5 @@
 /* =============================================================================
-   JAGUAR RACING - INDEX BODY STYLES (Final - Centered Stats)
+   JAGUAR RACING - INDEX BODY STYLES (Final - Bold Stats & Dark Context)
    Dependencia: global.css
    ============================================================================= */
 
@@ -41,7 +41,7 @@
 
 .hero-content-fixed { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; width: 90%; text-align: center; pointer-events: none; }
 
-/* --- 2. STATS BAR (ESTADÍSTICAS) --- */
+/* --- 2. STATS BAR (ESTADÍSTICAS MEJORADAS) --- */
 .stats-bar { 
     background: var(--bg-dark-grey); 
     border-bottom: 1px solid #222; 
@@ -55,7 +55,6 @@
     flex-wrap: wrap; 
 }
 
-/* CAMBIO: Aseguramos centrado del texto dentro del item */
 .stat-item {
     text-align: center;
     display: flex;
@@ -63,23 +62,29 @@
     align-items: center;
 }
 
+/* CAMBIO: Texto más pesado y con sombra */
 .stat-number { 
     display: block; 
     font-family: var(--font-impact); 
     font-size: 3rem; 
     color: var(--jaguar-gold); 
     line-height: 1; 
+    /* Sombra para dar grosor visual */
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    margin-bottom: 5px;
 }
 
+/* CAMBIO: Fuente mucho más gruesa (800) */
 .stat-label { 
     font-family: var(--font-main); 
     font-size: 0.9rem; 
-    color: #888; 
+    color: #999; /* Un poco más claro para contraste con el bold */
     text-transform: uppercase; 
     letter-spacing: 1px; 
+    font-weight: 800; /* Extra Bold */
 }
 
-/* --- 3. CONTEXTO --- */
+/* --- 3. CONTEXTO (IMÁGENES OSCURAS) --- */
 .context-section { padding: 3rem 5%; background: var(--bg-black); }
 .context-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 2rem; max-width: 1400px; margin: 0 auto; align-items: stretch; }
 .context-card { padding: 1.5rem; border-left: 1px solid #222; display: flex; flex-direction: column; justify-content: center; }
@@ -87,7 +92,22 @@
 .context-card h3 { color: var(--text-white); font-family: var(--font-impact); font-size: 1.4rem; margin-bottom: 0.8rem; text-transform: uppercase; }
 .context-card p { font-family: var(--font-main); font-size: 1rem; color: #ccc; line-height: 1.5; }
 .context-image-wrapper { width: 100%; height: 100%; min-height: 250px; position: relative; overflow: hidden; border-radius: 4px; }
-.context-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); transition: 0.3s; }
+
+/* CAMBIO: Filtro Dark Engineering permanente */
+.context-img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    /* Brillo 0.7 + Contraste alto = Look profesional */
+    filter: brightness(0.7) grayscale(20%) contrast(1.1); 
+    transition: 0.4s ease; 
+}
+
+/* Efecto Hover opcional para dar vida */
+.context-img:hover {
+    filter: brightness(0.9) grayscale(0%) contrast(1.1);
+    transform: scale(1.02);
+}
 
 /* --- 4. BAJA SAE --- */
 .what-is-baja { padding: 3rem 5%; background: var(--bg-dark-grey); }
@@ -108,7 +128,7 @@
 .detail-box li { font-family: var(--font-main); font-size: 0.9rem; color: #999; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
 .detail-box li::before { content: "•"; color: var(--jaguar-gold); }
 
-/* IMAGEN BAJA SAE (Brillo 0.7) */
+/* IMAGEN BAJA SAE */
 .what-is-image img, 
 .what-is-image video { 
     width: 100%; 
@@ -188,7 +208,7 @@
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-    /* CAMBIO: Estadísticas apiladas y centradas en móvil */
+    /* Estadísticas apiladas y centradas en móvil */
     .stats-grid { 
         flex-direction: column; 
         align-items: center;
@@ -210,4 +230,21 @@
     .strip-info, .strip-target, .strip-timer { width: 100%; justify-content: flex-start; }
     .strip-target { border-bottom: 1px solid #222; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
     .history-strip { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+}
+/* --- ESTILO PARA EL LINK DISCRETO (BAJA SAE INTERNACIONAL) --- */
+.link-discreet {
+    display: inline-block;
+    margin-top: 0.8rem;
+    font-family: var(--font-main);
+    font-size: 0.85rem;      /* Tamaño pequeño y elegante */
+    color: #777;             /* Gris discreto para no distraer */
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.link-discreet:hover {
+    color: var(--jaguar-gold); /* Cambio a dorado en hover */
+    border-bottom-color: var(--jaguar-gold);
+    transform: translateX(5px); /* Desplazamiento sutil */
 }

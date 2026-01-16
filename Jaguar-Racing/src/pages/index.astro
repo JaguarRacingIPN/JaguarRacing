@@ -25,7 +25,7 @@ import imgEquipo1 from '../assets/Equipo/1.JPG';
 const patrocinadores = [
   { img: 'altair.webp', url: 'https://altair.com' },
   { img: 'ansys.webp', url: 'https://www.ansys.com' },
-  { img: 'bimsa.webp', url: 'https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv/?originalSubdomain=mx' }, /* <-- Pon el link real aquí */
+  { img: 'bimsa.webp', url: 'https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv/?originalSubdomain=mx' }, 
   { img: 'copiisa.webp', url: 'https://copiisa.com.mx' },
   { img: 'mantemimiento.webp', url: 'https://mantto.mx/' },
   { img: 'polimex.webp', url: 'https://www.polimex.mx' },
@@ -37,10 +37,9 @@ const patrocinadores = [
 ];
 
 const trayectoria = [
-  { anio: "2019", titulo: "1er Lugar Marketing", desc: "Baja SAE México" },
-  { anio: "2020", titulo: "Finalista Diseño", desc: "Validación Virtual" },
-  { anio: "2022", titulo: "1er Lugar General", desc: "ATV Design Challenge" },
-  { anio: "2026", titulo: "Prototipo 4x4", desc: "Rumbo a Baja SAE" },
+  { anio: "2019", titulo: "1er Lugar Marketing - Baja SAE México", desc: "Baja SAE México" },
+  { anio: "2020", titulo: "Finalista Diseño - BAJA SAE México", desc: "Validación Virtual" },
+  { anio: "2022", titulo: "1er Lugar - ATV Design Challenge", desc: "ATV Design Challenge" }
 ];
 ---
 
@@ -116,12 +115,12 @@ const trayectoria = [
         <section class="what-is-baja scroll-animate">
             <div class="what-is-container compact-layout">
                 
-                {/* CAMBIO: La Imagen va PRIMERO en el código */}
+                {/* La Imagen va PRIMERO */}
                 <div class="what-is-image">
                      <Image 
                         src={imgBaja} 
                         alt="Baja SAE Competencia" 
-                        width={800}
+                        width={800} 
                         loading="lazy"
                      />
                 </div>
@@ -135,6 +134,10 @@ const trayectoria = [
                             monoplaza, robusto y apto para todo tipo de clima. El objetivo es crear un prototipo capaz de 
                             sobrevivir al severo castigo de terrenos accidentados, lodo y obstáculos extremos.
                         </p>
+                        {/* ENLACE DISCRETO AGREGADO AQUÍ */}
+                        <a href="https://www.sae.org/events/student/about/baja" target="_blank" rel="noopener noreferrer" class="link-discreet">
+                            + Más info en SAE International
+                        </a>
                     </div>
 
                     <div class="baja-details compact-details">
@@ -161,9 +164,7 @@ const trayectoria = [
         </section>
 
         {/* 5 & 6. BLOQUE TÉCNICO MINIMALISTA (Retos + Trayectoria) */}
-        {/* Diseño unificado tipo Dashboard / Telemetría */}
         <div class="tech-dashboard scroll-animate">
-            
             <div class="dashboard-container">
                 <h3 class="dashboard-label">TELEMETRÍA 2026</h3>
                 
@@ -209,7 +210,6 @@ const trayectoria = [
                         ))}
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -223,35 +223,28 @@ const trayectoria = [
             </div>
             <div class="join-cta__text">
                 <h2>ÚNETE A LA <span class="text-gold">ESCUDERÍA</span></h2>
-                {/* Estilo de botón actualizado */}
                 <a href="/join" class="btn-underline">APLICAR AHORA</a>
             </div>
         </section>
 
         {/* 8. PATROCINADORES */}
         <section class="sponsors-section scroll-animate">
-            <h2 class="section-title compact-title">ALIADOS</h2>
+            <h2 class="section-title compact-title">PATROCINADORES</h2>
             <p class="sponsors-desc">
                 Agradecemos profundamente a nuestros socios estratégicos. Su apoyo en tecnología, 
                 manufactura y recursos hace posible que la ingeniería mexicana compita al más alto nivel mundial.
             </p>
             <div class="sponsors-marquee">
-                
-                {/* Carrusel 1 */}
                 {patrocinadores.map((pat) => (
-                    /* CAMBIO: Usamos <a> en vez de <div> y leemos pat.img y pat.url */
                     <a href={pat.url} target="_blank" rel="noopener noreferrer" class="sponsor-card">
                         <img src={`/img/IMGpatrocinadores/${pat.img}`} alt="Patrocinador" width="200" height="100" loading="lazy" />
                     </a>
                 ))}
-
-                 {/* Carrusel Duplicado (Para efecto infinito) */}
-                 {patrocinadores.map((pat) => (
+                {patrocinadores.map((pat) => (
                     <a href={pat.url} target="_blank" rel="noopener noreferrer" class="sponsor-card">
                         <img src={`/img/IMGpatrocinadores/${pat.img}`} alt="Patrocinador" width="200" height="100" loading="lazy" />
                     </a>
                 ))}
-
             </div>
             <div class="center-content">
                 <a href="/sponsors" class="boton-legendario">SER PATROCINADOR</a>
@@ -272,9 +265,9 @@ const trayectoria = [
                     <div class="team-overlay">
                         <h2>EQUIPO JAGUAR</h2>
                         <div class="social-links-large">
-                            <a href="https://www.facebook.com/people/Jaguar-Racing-IPN/" target="_blank"><img src="/img/page/ImgFaceeBook.webp" alt="FB"></a>
                             <a href="https://www.instagram.com/jaguar_racing_team/" target="_blank"><img src="/img/page/ImgIG.webp" alt="IG"></a>
                             <a href="https://www.linkedin.com" target="_blank"><img src="/img/page/linkedIn_.webp" alt="IN"></a>
+                            <a href="https://www.facebook.com/people/Jaguar-Racing-IPN/" target="_blank"><img src="/img/page/ImgFaceeBook.webp" alt="FB"></a>
                         </div>
                         <a href="/team" class="btn-underline">CONOCER INTEGRANTES</a>
                     </div>
@@ -286,10 +279,7 @@ const trayectoria = [
         <section class="reaction-game-section scroll-animate">
             <div class="reaction-game-clean">
                 <h2 class="reaction-title">REFLEJOS DE PILOTO</h2>
-                
-                {/* NUEVO: Visualización del Récord Personal */}
                 <div class="personal-best">RÉCORD: <span id="best-time-display">--</span></div>
-
                 <div class="lights-row">
                     <div class="light" id="l1"></div>
                     <div class="light" id="l2"></div>
@@ -297,13 +287,9 @@ const trayectoria = [
                     <div class="light" id="l4"></div>
                     <div class="light" id="l5"></div>
                 </div>
-                
                 <div class="game-controls">
                     <div id="reaction-result" class="reaction-result">0.000 ms</div>
-                    
-                    {/* NUEVO: Contenedor para el Rango (Jaguar Legend, etc) */}
                     <div id="player-rank" class="reaction-rank"></div>
-
                     <button id="reaction-btn" class="btn-race">INICIAR TEST</button>
                 </div>
             </div>
