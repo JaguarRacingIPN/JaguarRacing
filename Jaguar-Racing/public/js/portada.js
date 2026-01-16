@@ -8,7 +8,7 @@ document.addEventListener('astro:page-load', () => {
     if (slides.length <= 1) return;
 
     let currentIndex = 0;
-    const intervalTime = 4000; // 4 segundos
+    const intervalTime = 3000; // 4 segundos
 
     // 3. Función de cambio
     const interval = setInterval(() => {

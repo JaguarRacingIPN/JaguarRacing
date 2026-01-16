@@ -13,15 +13,15 @@ import '../styles/NoSelect.css';
 
 const pageTitle = "Inicio";
 
-// 1. CARGA DE PORTADA (Glob para carpeta completa en assets)
+// 1. CARGA DE PORTADA
 const backgroundImages = await Astro.glob('../assets/Portada/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
 
-// 2. IMPORTACIÓN DE IMÁGENES ESPECÍFICAS (Assets JPG)
+// 2. IMPORTACIÓN DE IMÁGENES ESPECÍFICAS
 import imgBaja from '../assets/CuerpoIndex/10.jpg';
 import imgTaller from '../assets/Equipo/EQUIPO EN TALLER.jpg';
 import imgEquipo1 from '../assets/Equipo/1.JPG';
 
-// 3. ARRAY DE PATROCINADORES (Con Enlaces)
+// 3. ARRAY DE PATROCINADORES
 const patrocinadores = [
   { img: 'altair.webp', url: 'https://altair.com' },
   { img: 'ansys.webp', url: 'https://www.ansys.com' },
@@ -34,12 +34,6 @@ const patrocinadores = [
   { img: 'tmx.webp', url: 'https://hvhindustrial.com/es/brand/toolmex-tmx' },
   { img: 'toyota.webp', url: 'https://www.toyota.mx' },
   { img: 'IPN.webp', url: 'https://www.ipn.mx' }
-];
-
-const trayectoria = [
-  { anio: "2019", titulo: "1er Lugar Marketing - Baja SAE México", desc: "Baja SAE México" },
-  { anio: "2020", titulo: "Finalista Diseño - BAJA SAE México", desc: "Validación Virtual" },
-  { anio: "2022", titulo: "1er Lugar - ATV Design Challenge", desc: "ATV Design Challenge" }
 ];
 ---
 
@@ -86,27 +80,28 @@ const trayectoria = [
             </div>
         </section>
 
-        {/* 3. CONTEXTO (Quiénes, Qué, Imagen Taller) */}
-        <section class="context-section scroll-animate">
-            <div class="context-grid">
-                <div class="context-card">
-                    <h3>QUIÉNES SOMOS</h3>
-                    <p>Ingenieros politécnicos de la ESIME Azcapotzalco unidos por la pasión al automovilismo y el orgullo de representar al IPN.</p>
-                </div>
-                <div class="context-card highlight">
-                    <h3>QUÉ HACEMOS</h3>
-                    <p>Diseño, manufactura y validación de prototipos de alto rendimiento (Baja y Fórmula) aplicando ingeniería de clase mundial.</p>
+       {/* 3. IDENTIDAD DE ESCUDERÍA */}
+        <section class="mission-section scroll-animate">
+            <div class="mission-container">
+                <div class="mission-text">
+                    <h2 class="section-title-left">Espíritu del equipo</h2>
+                    <p class="mission-lead">
+                        Estudiantes de ingeniería apasionados por el automovilismo. Desde 2017, transformamos el conocimiento del aula en prototipos de competición.
+                    </p>
+                    <p class="mission-body">
+                        Como equipo de la <strong>ESIME Azcapotzalco</strong>, diseñamos, fabricamos y validamos un vehículo todoterreno cada año para representar al <strong>IPN</strong> en Baja SAE. Nuestra meta es clara: formar la élite de la ingeniería mexicana a través de la excelencia técnica en el taller.
+                    </p>
                 </div>
                 
-                {/* Imagen del equipo en taller */}
-                <div class="context-image-wrapper">
-                    <Image 
-                        src={imgTaller} 
-                        alt="Equipo trabajando en taller" 
-                        class="context-img" 
-                        width={800}
-                        loading="lazy"
-                    />
+                <div class="mission-visual">
+                    <div class="image-frame">
+                        <Image 
+                            src={imgTaller} 
+                            alt="Estudiantes trabajando en taller Jaguar Racing" 
+                            class="mission-img" 
+                            width={1000}
+                        />
+                    </div>
                 </div>
             </div>
         </section>
@@ -115,26 +110,25 @@ const trayectoria = [
         <section class="what-is-baja scroll-animate">
             <div class="what-is-container compact-layout">
                 
-                {/* La Imagen va PRIMERO */}
+                {/* La Imagen va PRIMERO en estructura HTML */}
                 <div class="what-is-image">
-                     <Image 
+                      <Image 
                         src={imgBaja} 
                         alt="Baja SAE Competencia" 
                         width={800} 
                         loading="lazy"
-                     />
+                      />
                 </div>
 
                 {/* El Texto va DESPUÉS */}
                 <div class="what-is-text">
-                    <h2 class="section-title-left compact-title">LA COMPETENCIA <span class="text-gold">BAJA SAE</span></h2>
+                    <h2 class="section-title-left compact-title">LA COMPETENCIA BAJA SAE</h2>
                     <div class="baja-description">
                         <p>
                             Baja SAE desafía a los estudiantes de ingeniería a diseñar y construir un vehículo todoterreno 
                             monoplaza, robusto y apto para todo tipo de clima. El objetivo es crear un prototipo capaz de 
                             sobrevivir al severo castigo de terrenos accidentados, lodo y obstáculos extremos.
                         </p>
-                        {/* ENLACE DISCRETO AGREGADO AQUÍ */}
                         <a href="https://www.sae.org/events/student/about/baja" target="_blank" rel="noopener noreferrer" class="link-discreet">
                             + Más info en SAE International
                         </a>
@@ -163,10 +157,10 @@ const trayectoria = [
             </div>
         </section>
 
-        {/* 5 & 6. BLOQUE TÉCNICO MINIMALISTA (Retos + Trayectoria) */}
+        {/* 5. BLOQUE TÉCNICO (Sin Historial) */}
         <div class="tech-dashboard scroll-animate">
             <div class="dashboard-container">
-                <h3 class="dashboard-label">TELEMETRÍA 2026</h3>
+                <h3 class="dashboard-label">CRONOGRAMA 2026</h3>
                 
                 {/* Strip 1: México */}
                 <div class="data-strip">
@@ -197,32 +191,22 @@ const trayectoria = [
                         <span id="timer-usa" class="mono-timer">00d 00h 00m 00s</span>
                     </div>
                 </div>
-
-                {/* Strip 3: Historial (Miniatura) */}
-                <div class="history-strip">
-                    <span class="hist-label">HISTORIAL:</span>
-                    <div class="hist-ticker">
-                        {trayectoria.map((hito, index) => (
-                            <span class="hist-item">
-                                <span class="h-year">{hito.anio}</span> {hito.titulo}
-                                {index < trayectoria.length - 1 && <span class="separator">/</span>}
-                            </span>
-                        ))}
-                    </div>
-                </div>
             </div>
         </div>
 
         {/* 7. RECLUTAMIENTO */}
         <section class="join-cta scroll-animate">
             <div class="cta-media-wrapper">
-                <video class="cta-video-bg" autoplay loop muted playsinline preload="auto" poster="/img/page/Registro.webp">
-                    <source src="/videos/VideoConv.mp4" type="video/mp4">
-                </video>
+                <img 
+                    src="/img/page/Registro.webp" 
+                    alt="Fondo Reclutamiento" 
+                    class="cta-video-bg" 
+                    loading="lazy"
+                />
                 <div class="cta-overlay"></div>
             </div>
             <div class="join-cta__text">
-                <h2>ÚNETE A LA <span class="text-gold">ESCUDERÍA</span></h2>
+                <h2>ÚNETE A LA ESCUDERÍA</h2>
                 <a href="/join" class="btn-underline">APLICAR AHORA</a>
             </div>
         </section>
@@ -251,7 +235,7 @@ const trayectoria = [
             </div>
         </section>
 
-        {/* 9. EQUIPO (Foto JPG Assets) */}
+        {/* 9. EQUIPO */}
         <section class="team-hero scroll-animate">
             <div class="team-container-limited">
                 <div class="team-image-wrapper-limited">
@@ -263,7 +247,7 @@ const trayectoria = [
                         width={1200}
                     />
                     <div class="team-overlay">
-                        <h2>EQUIPO JAGUAR</h2>
+                        <h2 class="section-title compact-title">EQUIPO JAGUAR</h2>
                         <div class="social-links-large">
                             <a href="https://www.instagram.com/jaguar_racing_team/" target="_blank"><img src="/img/page/ImgIG.webp" alt="IG"></a>
                             <a href="https://www.linkedin.com" target="_blank"><img src="/img/page/linkedIn_.webp" alt="IN"></a>

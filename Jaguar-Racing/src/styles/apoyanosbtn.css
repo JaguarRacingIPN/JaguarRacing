@@ -1,6 +1,6 @@
 /* =============================================================================
-   BOTÓN "APÓYANOS" - ESTILO LIQUID GOLD
-   "Sofisticado, fluido y magnético"
+   BOTÓN "APÓYANOS" - ESTILO LIQUID METAL (SOPHISTICATED GOLD)
+   "Lujoso, fluido y dramático"
    ============================================================================= */
 
 .boton-legendario {
@@ -16,13 +16,13 @@
     text-transform: uppercase;
     text-decoration: none;
     
-    /* COLOR Y FONDO (El truco del degradado ancho) */
-    color: #000; /* Texto negro para máximo contraste */
+    /* --- COLOR Y FONDO (Nueva Paleta Metálica) --- */
+    color: #000; /* Texto negro para máximo contraste y nitidez */
     background-image: linear-gradient(
         45deg, 
-        #FFE878 0%, 
-        #DBA514 51%, 
-        #FFE878 100%
+        #C59D1E 0%,  /* Bronce Medio (Elegante y sobrio) */
+        #FFF5C2 51%, /* Oro Pálido Brillante (Punto de luz metálico) */
+        #C59D1E 100% /* Bronce Medio (Cierre) */
     );
     background-size: 200% auto; /* Hacemos el fondo doble de ancho para animarlo */
     
@@ -31,11 +31,11 @@
     border-radius: 50px; /* Píldora perfecta */
     
     /* TRANSICIONES */
-    transition: 0.5s all ease; /* Suavidad total */
+    transition: 0.5s all cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición muy suave */
     cursor: pointer;
     
-    /* SOMBRA INICIAL (Sutil) */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* SOMBRA INICIAL (Sutil y profunda) */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     
     /* Evita parpadeos en móvil */
     -webkit-tap-highlight-color: transparent;
@@ -45,11 +45,12 @@
 
 /* --- INTERACCIÓN HOVER (PC) --- */
 .boton-legendario:hover {
-    /* 1. Mueve el degradado (Efecto líquido) */
+    /* 1. Mueve el degradado (Efecto metal líquido fluyendo) */
     background-position: right center; 
     
-    /* 2. El botón se vuelve incandescente (Glow Dorado) */
-    box-shadow: 0 0 20px rgba(255, 232, 120, 0.6); 
+    /* 2. El botón se vuelve incandescente (Glow Dorado Sofisticado) */
+    /* Usamos una versión transparente del color bronce para el brillo */
+    box-shadow: 0 0 25px rgba(197, 157, 30, 0.6); 
     
     /* 3. Levita ligeramente */
     transform: translateY(-3px);
@@ -61,7 +62,9 @@
 /* --- INTERACCIÓN ACTIVE (CLICK/TOUCH) --- */
 .boton-legendario:active {
     transform: translateY(1px) scale(0.98); /* Efecto de presión */
-    box-shadow: 0 0 10px rgba(255, 232, 120, 0.4); /* El brillo se contrae */
+    /* El brillo se contrae y se hace más intenso */
+    box-shadow: 0 0 15px rgba(197, 157, 30, 0.8); 
+    transition: 0.1s; /* Respuesta rápida al click */
 }
 
 /* CONTENEDOR CENTRADO */
