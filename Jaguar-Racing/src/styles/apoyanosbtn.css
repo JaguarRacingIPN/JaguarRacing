@@ -1,43 +1,52 @@
 /* =============================================================================
-   BOTÓN "APÓYANOS" - ESTILO LIQUID METAL (SOPHISTICATED GOLD)
-   "Lujoso, fluido y dramático"
+   BOTÓN "APÓYANOS" - ESTILO LIQUID METAL DARK (BRONCE PROFUNDO)
+   "Más oscuro, dramático y lujoso, basado en las variables oficiales"
    ============================================================================= */
 
 .boton-legendario {
     position: relative;
     display: inline-block;
-    padding: 18px 55px; /* Tamaño generoso y cómodo */
+    padding: 18px 55px;
     
     /* TIPOGRAFÍA */
     font-family: var(--font-main, sans-serif); 
-    font-weight: 800; /* Letra gruesa pero elegante */
+    font-weight: 800; 
     font-size: 1.1rem;
-    letter-spacing: 3px; /* Espaciado amplio = Lujo */
+    letter-spacing: 3px;
     text-transform: uppercase;
     text-decoration: none;
     
-    /* --- COLOR Y FONDO (Nueva Paleta Metálica) --- */
-    color: #000; /* Texto negro para máximo contraste y nitidez */
-    background-image: linear-gradient(
-        45deg, 
-        #C59D1E 0%,  /* Bronce Medio (Elegante y sobrio) */
-        #FFF5C2 51%, /* Oro Pálido Brillante (Punto de luz metálico) */
-        #C59D1E 100% /* Bronce Medio (Cierre) */
-    );
-    background-size: 200% auto; /* Hacemos el fondo doble de ancho para animarlo */
+    /* COLOR DE TEXTO */
+    /* Al oscurecer el fondo, mantenemos el negro para un look "metal grabado" */
+    color: var(--jaguar-black); 
+
+    /* --- FONDO METÁLICO OSCURO (TÉCNICA DE CAPAS) --- */
+    background-image: 
+        /* CAPA 1 (Superior): Tinte negro semitransparente para oscurecer (30%) */
+        linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)),
+        /* CAPA 2 (Inferior): El degradado original con tus variables */
+        linear-gradient(
+            45deg, 
+            var(--jaguar-gold) 0%,   
+            var(--jaguar-light) 51%, 
+            var(--jaguar-gold) 100%  
+        );
+    
+    /* Mezclamos las capas para un efecto de oscurecimiento rico */
+    background-blend-mode: multiply; 
+    background-size: 200% auto; 
     
     /* BORDES Y FORMA */
     border: none;
-    border-radius: 50px; /* Píldora perfecta */
+    border-radius: 50px; 
     
     /* TRANSICIONES */
-    transition: 0.5s all cubic-bezier(0.25, 0.8, 0.25, 1); /* Transición muy suave */
+    transition: 0.5s all cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: pointer;
     
-    /* SOMBRA INICIAL (Sutil y profunda) */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    /* SOMBRA INICIAL (Más profunda) */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     
-    /* Evita parpadeos en móvil */
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     z-index: 10;
@@ -45,26 +54,26 @@
 
 /* --- INTERACCIÓN HOVER (PC) --- */
 .boton-legendario:hover {
-    /* 1. Mueve el degradado (Efecto metal líquido fluyendo) */
+    /* 1. Mueve el degradado */
     background-position: right center; 
     
-    /* 2. El botón se vuelve incandescente (Glow Dorado Sofisticado) */
-    /* Usamos una versión transparente del color bronce para el brillo */
-    box-shadow: 0 0 25px rgba(197, 157, 30, 0.6); 
+    /* 2. Glow Dorado Profundo */
+    /* Usamos un tono dorado más oscuro y rico para el brillo (RGB: 140, 105, 0) */
+    box-shadow: 0 0 35px rgba(140, 105, 0, 0.8); 
     
-    /* 3. Levita ligeramente */
+    /* 3. Levita */
     transform: translateY(-3px);
     
-    color: #000;
+    color: var(--jaguar-black);
     text-decoration: none;
 }
 
 /* --- INTERACCIÓN ACTIVE (CLICK/TOUCH) --- */
 .boton-legendario:active {
-    transform: translateY(1px) scale(0.98); /* Efecto de presión */
-    /* El brillo se contrae y se hace más intenso */
-    box-shadow: 0 0 15px rgba(197, 157, 30, 0.8); 
-    transition: 0.1s; /* Respuesta rápida al click */
+    transform: translateY(1px) scale(0.98); 
+    /* Brillo concentrado y oscuro */
+    box-shadow: 0 0 15px rgba(140, 105, 0, 1); 
+    transition: 0.1s;
 }
 
 /* CONTENEDOR CENTRADO */

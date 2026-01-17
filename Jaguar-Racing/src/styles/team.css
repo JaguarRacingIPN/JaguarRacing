@@ -1,0 +1,186 @@
+/* =============================================================================
+   JAGUAR RACING - TEAM PAGE (v5.2 - Final Fixed: Centered Flexbox Roster)
+   ============================================================================= */
+
+/* --- 1. SECCIÓN ORÍGENES --- */
+.origins-section {
+    padding: 60px 20px;
+    background: #080808; 
+    text-align: center;
+    border-bottom: 1px solid #222;
+}
+.origins-content { max-width: 900px; margin: 0 auto; }
+.origins-text {
+    font-family: var(--font-main); font-size: 1rem; color: #bbbbbb; 
+    line-height: 1.8; margin-bottom: 30px;
+}
+.origins-logo {
+    display: block; margin: 40px auto; width: 150px; height: auto;
+    filter: drop-shadow(0 0 10px rgba(166,124,0,0.3)); 
+}
+
+/* --- 2. CARRUSEL INFINITO (Estilo Portada: Oscuro 0.6) --- */
+.team-marquee-section {
+    padding: 40px 0;
+    background: #000000;
+    overflow: hidden; 
+    position: relative;
+    border-bottom: 1px solid #222;
+}
+
+.team-marquee-wrapper {
+    display: flex; width: 100%; overflow: hidden; position: relative;
+}
+
+.team-marquee-track {
+    display: flex;
+    gap: 15px; 
+    width: max-content; 
+    animation: scrollTeam 25s linear infinite; 
+}
+
+.marquee-card {
+    position: relative;
+    width: 280px;
+    height: 190px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #222;
+}
+
+/* Overlay sutil para profundidad */
+.marquee-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 90%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.marquee-img {
+    width: 100%; height: 100%; object-fit: cover;
+    /* Filtro exacto del carrusel de miembros */
+    filter: brightness(1) contrast(1.0); 
+}
+
+@keyframes scrollTeam {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } 
+}
+
+/* --- 3. ROSTER (Centrado Absoluto en PC) --- */
+.roster-section {
+    padding: 60px 20px;
+    background: #050505;
+}
+
+.roster-category {
+    max-width: 1300px;
+    margin: 0 auto 60px auto; 
+}
+
+.category-header {
+    display: flex; align-items: center; justify-content: center;
+    gap: 20px; margin-bottom: 40px;
+}
+.category-title {
+    font-family: var(--font-main);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--text-white); text-transform: uppercase;
+    font-weight: 800; margin: 0; text-align: center; letter-spacing: -1px;
+}
+.gold-line { height: 2px; width: 60px; background-color: var(--jaguar-gold); }
+
+/* --- GRID / FLEX (MODIFICADO PARA CENTRADO PERFECTO) --- */
+.roster-grid {
+    /* PC: Usamos FLEX para que los elementos huérfanos se vayan al centro */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.roster-card {
+    /* PC: Comportamiento flexible con base de 240px */
+    flex: 0 1 240px;
+    width: 100%;
+    max-width: 240px; 
+    
+    background: #0a0a0a;
+    border: 1px solid #1f1f1f;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.roster-card:hover { border-color: #333; }
+
+.roster-img-box {
+    width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
+    position: relative; border-bottom: 1px solid #222;
+}
+
+.roster-img { width: 100%; height: 100%; object-fit: cover; filter: none; }
+
+.roster-info { padding: 15px 10px; text-align: center; }
+
+.roster-role {
+    color: var(--jaguar-gold);
+    font-size: 0.7rem; 
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.roster-name {
+    color: #fff;
+    font-size: 0.9rem; /* Nombre pequeño */
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    font-family: var(--font-main);
+    text-transform: uppercase;
+    line-height: 1.1;
+}
+
+.roster-career {
+    color: #777;
+    font-size: 0.75rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+/* Icono LinkedIn */
+.linkedin-icon {
+    width: 22px; height: 22px; object-fit: contain;
+    transition: transform 0.2s ease; display: inline-block;
+}
+.roster-social-link:hover .linkedin-icon {
+    transform: scale(1.1); filter: brightness(1.2);
+}
+
+/* --- RESPONSIVE (MÓVIL) --- */
+@media (max-width: 600px) {
+    .marquee-card { width: 220px; height: 150px; } 
+    .gold-line { width: 30px; }
+    
+    .roster-section { padding: 40px 10px; }
+    
+    /* MÓVIL: Regresamos a GRID para 2 columnas estrictas */
+    .roster-grid { 
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        gap: 10px; 
+    }
+    
+    .roster-card { 
+        flex: none; /* Quitamos flex */
+        max-width: 100%; /* Ocupan toda la celda */
+    }
+
+    .roster-name { font-size: 0.8rem; } 
+    .roster-role { font-size: 0.6rem; letter-spacing: 0; }
+    .roster-career { font-size: 0.65rem; }
+    .roster-info { padding: 10px 5px; }
+}

@@ -1,59 +1,66 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
 
-// Estilos específicos
 import '../styles/carruselAreas.css';
 import '../styles/registrobtnConvocatoria.css';
-import '../styles/NoSelect.css';
+import '../styles/hero-internal.css';
 
-const pageTitle = "Únete a la Escudería";
+// Importamos la imagen desde Assets
+import imgConv from '../assets/Equipo/Conv.JPG';
 
+const pageTitle = "Convocatoria";
 const areas = ['1.webp', '2.webp', '3.webp', '4.webp', '5.webp', '6.webp', '7.webp', '8.webp'];
 ---
 
 <Layout title={pageTitle}>
 
+    <header class="hero-internal">
+        <Image 
+            src={imgConv} 
+            alt="Equipo Jaguar Racing Convocatoria"
+            class="hero-internal__bg"
+            width={1920} 
+            height={1080}
+            loading="eager" 
+        />
+
+        <div class="hero-internal__overlay"></div>
+
+        <div class="hero-internal__content">
+            <h1 class="hero-internal__title">CONVOCATORIA</h1>
+        </div>
+    </header>
+
     <main>
-        <div class="hero">
-            <video 
-                class="hero__image" 
-                autoplay 
-                loop 
-                muted 
-                playsinline 
-                preload="auto"
-                poster="assets/Convocatoria/1.jpg"
-            >
-                <source src="/video/VideoConv.mp4" type="video/mp4">
-            </video>
+        <section class="areas-showcase">
+            <h2 class="areas-showcase__title">Nuestras Áreas</h2>
+            
+            <div class="carousel-wrapper">
+                <button class="areas-showcase__btn areas-showcase__btn--prev" id="btn-prev" aria-label="Anterior">&#10094;</button>
 
-            <h1 class="hero__title">Convocatoria</h1>
-        </div>
+                <div class="areas-carousel" id="carruselAreas">
+                    {areas.map((img) => (
+                        <div class="area-card">
+                            <img 
+                                src={`/img/IMGAreas/${img}`} 
+                                alt="Área Jaguar Racing" 
+                                class="area-card__img"
+                                width="640"
+                                height="360"
+                                loading="lazy" 
+                                decoding="async"
+                            />
+                        </div>
+                    ))}
+                </div>
 
-        <div class="areas-showcase">
-            <h2 class="areas-showcase__title">Áreas</h2>
-            <button class="areas-showcase__btn areas-showcase__btn--prev" id="btn-prev" aria-label="Anterior">&#10094;</button>
-
-            <div class="areas-carousel" id="carruselAreas">
-                {areas.map((img, index) => (
-                    <div class="area-card">
-                        <img 
-                            src={`/img/IMGAreas/${img}`} 
-                            alt="Área Jaguar Racing" 
-                            class="area-card__img"
-                            width="640"
-                            height="360"
-                            loading="lazy" 
-                            decoding="async"
-                        />
-                    </div>
-                ))}
+                <button class="areas-showcase__btn areas-showcase__btn--next" id="btn-next" aria-label="Siguiente">&#10095;</button>
             </div>
-
-            <button class="areas-showcase__btn areas-showcase__btn--next" id="btn-next" aria-label="Siguiente">&#10095;</button>
+            
             <div class="areas-showcase__indicators" id="indicadores"></div>
-        </div>
+        </section>
 
         <section class="registration-cta">
             <div class="registration-cta__content">
@@ -76,5 +83,5 @@ const areas = ['1.webp', '2.webp', '3.webp', '4.webp', '5.webp', '6.webp', '7.we
 
     <Footer />
 
-    <script is:inline defer src="/js/carrusel.js"></script>
+    <script is:inline src="/js/carrusel.js"></script>
 </Layout>

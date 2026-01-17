@@ -1,120 +1,135 @@
 ---
-// --- ZONA DE LÓGICA (Server Side) ---
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
 
-// Importamos los datos directamente.
+// 1. Datos y Estilos
 import roster from '../data/miembros.json';
+import '../styles/team.css';      
+import '../styles/hero-internal.css'; 
 
-// Estilos específicos
-import '../styles/equipo.css';
-import '../styles/carruselAlbum.css';
-import '../styles/credencialesEquipo.css';
-import '../styles/NoSelect.css';
+// 2. Carga automática de la Galería
+const teamImages = await Astro.glob('../assets/Equipo/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
+
+// 3. Imagen Portada Hero
+import imgHero from '../assets/Portadas/1.JPG';
 
 const pageTitle = "Conoce al equipo";
-
-const album = [ 
-  '1.webp', '2.webp', '3.webp', '4.webp', '5.webp', '6.webp', '7.webp', 
-  '8.webp', '9.webp', '10.webp', '11.webp', '12.webp', '13.webp', '14.webp' 
-];
 ---
 
 <Layout title={pageTitle}>
-    <main>
-        <div class="hero">
-            <img 
-                src="/img/page/Conocenos.avif" 
-                alt="Instalaciones ESIME Azcapotzalco" 
-                class="hero__image"
-                fetchpriority="high" 
-                decoding="async"
-                loading="eager"
-                width="1080"
-                height="472"
-            />
-            <h1 class="hero__title">Conoce al equipo</h1>
+
+    <header class="hero-internal">
+        <Image 
+            class="hero-internal__bg" 
+            src={imgHero} 
+            alt="Equipo Jaguar Racing"
+            loading="eager"
+            width={1920}
+        />
+        <div class="hero-internal__overlay"></div>
+        <div class="hero-internal__content">
+            <h1 class="hero-internal__title">CONOCE AL EQUIPO</h1>
         </div>
+    </header>
 
-        <div class="origins-section">
-            <div class="origins-section__content">
-                <h2>Orígenes</h2>
-                <p>
-                    El equipo surgió el 27 de octubre de 2017 en las instalaciones de la ESIME Azcapotzalco, impulsado por un grupo de jóvenes apasionados por la ingeniería y con el deseo de llevar al campo práctico lo aprendido en el aula.
+    <main>
+
+        <section class="origins-section">
+            <div class="origins-content">
+                <h2 class="section-title compact-title">ORÍGENES</h2>
+                
+                <p class="origins-text">
+                    El equipo surgió el 27 de octubre de 2017 en las instalaciones de la ESIME Azcapotzalco, 
+                    impulsado por un grupo de jóvenes apasionados por la ingeniería y con el deseo de llevar 
+                    al campo práctico lo aprendido en el aula.
                 </p>
-                <p>
-                    A lo largo del tiempo, con la llegada de nuevas generaciones, el equipo ha evolucionado, adaptando su identidad y fortaleciendo su visión. Tras varios nombres y etapas, hoy nos consolidamos como Jaguar Racing, un equipo comprometido con la innovación, el trabajo en equipo y la excelencia universitaria.
+                
+                <p class="origins-text">
+                    A lo largo del tiempo, con la llegada de nuevas generaciones, el equipo ha evolucionado, 
+                    adaptando su identidad y fortaleciendo su visión. Tras varios nombres y etapas, hoy nos 
+                    consolidamos como Jaguar Racing, un equipo comprometido con la innovación, el trabajo en 
+                    equipo y la excelencia universitaria.
                 </p>
 
-                <img src="/img/page/JaguarLogoConocenos.webp" class="origins-section__logo" alt="Logo Jaguar" 
-                     loading="lazy" decoding="async" width="200" height="200">
+                <img 
+                    src="/img/page/JaguarLogo.webp" 
+                    class="origins-logo" 
+                    alt="Logo Jaguar Racing" 
+                    width="150" 
+                    height="150" 
+                    loading="lazy"
+                />
 
-                <p>
-                    Jaguar Racing es la escudería de la Escuela Superior de Ingeniería Mecánica y Eléctrica, con sede en la colonia Azcapotzalco, en Av. de las Granjas 682, Col. Santa Catarina, Alcaldía Azcapotzalco, Ciudad de México, C.P. 02250. Participamos en competencias Mini BAJA organizadas por diversas instituciones, principalmente SAE International.
+                <p class="origins-text">
+                    Jaguar Racing es la escudería de la Escuela Superior de Ingeniería Mecánica y Eléctrica, 
+                    con sede en la colonia Azcapotzalco, CDMX. Participamos en competencias Mini BAJA organizadas 
+                    por diversas instituciones, principalmente SAE International.
                 </p>
             </div>
-        </div>
+        </section>
 
-        <div class="album-strip"> 
-            <div class="album-strip__track">
-            {album.map((img) => (
-                <div class="album-card">
-                    <img 
-                        src={`/img/Conocenos/${img}`} 
-                        alt="Momento Jaguar" 
-                        width="400" 
-                        height="280" 
-                        decoding="async" 
-                        loading="lazy" 
-                    />
+        <section class="team-marquee-section">
+            <div class="team-marquee-wrapper">
+                <div class="team-marquee-track">
+                    {/* Renderizamos DOS veces las imágenes para loop */}
+                    {[...teamImages, ...teamImages].map((img) => (
+                        <div class="marquee-card">
+                            <Image 
+                                src={img.default} 
+                                alt="Momento Jaguar Racing" 
+                                class="marquee-img"
+                                width={400}
+                                height={280}
+                                loading="lazy"
+                            />
+                        </div>
+                    ))}
                 </div>
-            ))}
-            {/* Duplicado para efecto infinito */}
-            {album.map((img) => (
-                <div class="album-card">
-                    <img 
-                        src={`/img/Conocenos/${img}`} 
-                        alt="Momento Jaguar" 
-                        width="400" 
-                        height="280" 
-                        decoding="async" 
-                        loading="lazy" 
-                    />
-                </div>
-            ))}
-        </div>
-        </div>
-    </div>
+            </div>
+        </section>
 
-        <div class="roster-container">
-            <h1 class="roster-main-title">NUESTRO EQUIPO</h1>
-
+        <div class="roster-section">
             {roster.map((seccion) => (
                 <section class="roster-category">
-                    <h2 class="roster-category__title">
+                    <div class="category-header">
                         <span class="gold-line"></span>
-                        {seccion.categoria}
+                        <h2 class="category-title">{seccion.categoria}</h2>
                         <span class="gold-line"></span>
-                    </h2>
+                    </div>
 
                     <div class="roster-grid">
                         {seccion.integrantes.map((miembro) => (
-                            <div class="member-card">
-                                <div class="member-card__img-box">
-                                    <img src={miembro.foto} alt={miembro.nombre} loading="lazy" decoding="async" width="300" height="300" />
-                                    <div class="member-card__overlay"></div>
+                            <div class="roster-card">
+                                <div class="roster-img-box">
+                                    <img 
+                                        src={miembro.foto} 
+                                        alt={miembro.nombre} 
+                                        class="roster-img" 
+                                        loading="lazy" 
+                                        width="300" 
+                                        height="300" 
+                                    />
                                 </div>
 
-                                <div class="member-card__info">
-                                    <h3 class="member-card__role">{miembro.rol}</h3>
-                                    <h4 class="member-card__name">{miembro.nombre}</h4>
-                                    <p class="member-card__career">{miembro.carrera}</p>
-
-                                    <a href={miembro.linkedin} target="_blank" rel="noopener noreferrer" class="member-card__social" aria-label="LinkedIn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                                        </svg>
-                                    </a>
+                                <div class="roster-info">
+                                    <div class="roster-role">{miembro.rol}</div>
+                                    <h3 class="roster-name">{miembro.nombre}</h3>
+                                    <p class="roster-career">{miembro.carrera}</p>
+                                    
+                                    {/* CAMBIO: Imagen LinkedIn WebP */}
+                                    {miembro.linkedin && (
+                                        <a href={miembro.linkedin} target="_blank" rel="noopener noreferrer" class="roster-social-link" aria-label="LinkedIn">
+                                            <img 
+                                                src="/img/page/linkedIn_.webp" 
+                                                alt="LinkedIn" 
+                                                class="linkedin-icon"
+                                                loading="lazy"
+                                                width="22"
+                                                height="22"
+                                            />
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -122,6 +137,7 @@ const album = [
                 </section>
             ))}
         </div>
+
     </main>
 
     <Footer />

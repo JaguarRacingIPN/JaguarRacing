@@ -14,7 +14,7 @@ import '../styles/NoSelect.css';
 const pageTitle = "Inicio";
 
 // 1. CARGA DE PORTADA
-const backgroundImages = await Astro.glob('../assets/Portada/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
+const backgroundImages = await Astro.glob('../assets/Index/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
 
 // 2. IMPORTACIÓN DE IMÁGENES ESPECÍFICAS
 import imgBaja from '../assets/CuerpoIndex/10.jpg';
@@ -57,9 +57,6 @@ const patrocinadores = [
                     </div>
                 ))}
             </div>
-            <div class="hero-content-fixed">
-                <h1 class="hero__title">JAGUAR RACING</h1>
-            </div>
         </div>
 
         {/* 2. ESTADÍSTICAS */}
@@ -71,7 +68,7 @@ const patrocinadores = [
                 </div>
                 <div class="stat-item">
                     <span class="stat-number" data-target="5000">0</span>
-                    <span class="stat-label">Horas Ingeniería</span>
+                    <span class="stat-label">Horas de Ingeniería</span>
                 </div>
                 <div class="stat-item">
                     <span class="stat-number" data-target="14000">0</span>
@@ -89,7 +86,7 @@ const patrocinadores = [
                         Estudiantes de ingeniería apasionados por el automovilismo. Desde 2017, transformamos el conocimiento del aula en prototipos de competición.
                     </p>
                     <p class="mission-body">
-                        Como equipo de la <strong>ESIME Azcapotzalco</strong>, diseñamos, fabricamos y validamos un vehículo todoterreno cada año para representar al <strong>IPN</strong> en Baja SAE. Nuestra meta es clara: formar la élite de la ingeniería mexicana a través de la excelencia técnica en el taller.
+                        Como equipo de la <strong>ESIME Azcapotzalco</strong>, diseñamos, fabricamos y validamos un vehículo todoterreno cada año para competir en Baja SAE. Nuestra meta es formar la élite de la ingeniería mexicana a través de la excelencia técnica en el taller.
                     </p>
                 </div>
                 
@@ -106,93 +103,66 @@ const patrocinadores = [
             </div>
         </section>
 
-        {/* 4. ¿QUÉ ES BAJA SAE? */}
+{/* 4. BAJA SAE + CRONOGRAMA FULL WIDTH */}
         <section class="what-is-baja scroll-animate">
-            <div class="what-is-container compact-layout">
-                
-                {/* La Imagen va PRIMERO en estructura HTML */}
+            
+            {/* Contenedor con padding lateral para el contenido central */}
+            <div class="compact-layout">
                 <div class="what-is-image">
                       <Image 
                         src={imgBaja} 
-                        alt="Baja SAE Competencia" 
+                        alt="Competencia Baja SAE" 
                         width={800} 
                         loading="lazy"
                       />
                 </div>
 
-                {/* El Texto va DESPUÉS */}
                 <div class="what-is-text">
-                    <h2 class="section-title-left compact-title">LA COMPETENCIA BAJA SAE</h2>
+                    <h2 class="section-title-left compact-title">BAJA SAE INTERNATIONAL</h2>
                     <div class="baja-description">
                         <p>
-                            Baja SAE desafía a los estudiantes de ingeniería a diseñar y construir un vehículo todoterreno 
-                            monoplaza, robusto y apto para todo tipo de clima. El objetivo es crear un prototipo capaz de 
-                            sobrevivir al severo castigo de terrenos accidentados, lodo y obstáculos extremos.
+                            Baja SAE desafía a estudiantes de ingeniería a diseñar, fabricar y probar un vehículo todoterreno monoplaza capaz de superar terrenos severos.
                         </p>
+                        <p>
+                            Más que una carrera, es una evaluación rigurosa de <strong>resistencia mecánica, diseño ingenieril y viabilidad comercial</strong>. El objetivo es crear un prototipo real que soporte las condiciones más exigentes.
+                        </p>
+                        {/* ÚNICO ELEMENTO DORADO PERMITIDO: EL LINK */}
                         <a href="https://www.sae.org/events/student/about/baja" target="_blank" rel="noopener noreferrer" class="link-discreet">
-                            + Más info en SAE International
+                            + Especificaciones Técnicas SAE
                         </a>
                     </div>
-
-                    <div class="baja-details compact-details">
-                        <div class="detail-box">
-                            <h4>PRUEBAS DINÁMICAS</h4>
-                            <ul>
-                                <li>Endurance (Resistencia 4 horas)</li>
-                                <li>Arrastre y Tracción (Sled Pull)</li>
-                                <li>Maniobrabilidad y Suspensión</li>
-                            </ul>
-                        </div>
-                        <div class="detail-box">
-                            <h4>PRUEBAS ESTÁTICAS</h4>
-                            <ul>
-                                <li>Diseño de Ingeniería</li>
-                                <li>Costos y Manufactura</li>
-                                <li>Plan de Negocios (Ventas)</li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
-
             </div>
+
+            {/* BARRA DE TIEMPO (FULL WIDTH - Extremo a extremo) */}
+            <div class="integrated-timer-bar">
+                <div class="timer-container-inner">
+                    
+                    {/* Evento 1: San Luis Potosí */}
+                    <div class="timer-item">
+                        <div class="timer-info">
+                            <span class="race-series">BAJA SAE MÉXICO</span>
+                            <span class="race-location">SAN LUIS POTOSÍ</span>
+                        </div>
+                        <span id="timer-mexico" class="timer-value">000d 00h 00m 00s</span>
+                    </div>
+
+                    {/* Separador Visual */}
+                    <div class="timer-separator"></div>
+
+                    {/* Evento 2: Querétaro */}
+                    <div class="timer-item">
+                        <div class="timer-info">
+                            <span class="race-series">BAJA SAE MÉXICO</span>
+                            <span class="race-location">QUERÉTARO</span>
+                        </div>
+                        <span id="timer-queretaro" class="timer-value">000d 00h 00m 00s</span>
+                    </div>
+
+                </div>
+            </div>
+
         </section>
-
-        {/* 5. BLOQUE TÉCNICO (Sin Historial) */}
-        <div class="tech-dashboard scroll-animate">
-            <div class="dashboard-container">
-                <h3 class="dashboard-label">CRONOGRAMA 2026</h3>
-                
-                {/* Strip 1: México */}
-                <div class="data-strip">
-                    <div class="strip-info">
-                        <span class="flag">🇲🇽</span>
-                        <span class="race-name">BAJA SAE MÉXICO</span>
-                    </div>
-                    <div class="strip-target">
-                        <span class="target-label">OBJETIVO:</span>
-                        <span class="target-value">TOP 3 OVERALL</span>
-                    </div>
-                    <div class="strip-timer">
-                        <span id="timer-mexico" class="mono-timer">00d 00h 00m 00s</span>
-                    </div>
-                </div>
-
-                {/* Strip 2: USA */}
-                <div class="data-strip">
-                    <div class="strip-info">
-                        <span class="flag">🇺🇸</span>
-                        <span class="race-name">BAJA SAE INT.</span>
-                    </div>
-                    <div class="strip-target">
-                        <span class="target-label">OBJETIVO:</span>
-                        <span class="target-value">TOP 10 OVERALL</span>
-                    </div>
-                    <div class="strip-timer">
-                        <span id="timer-usa" class="mono-timer">00d 00h 00m 00s</span>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         {/* 7. RECLUTAMIENTO */}
         <section class="join-cta scroll-animate">
@@ -207,6 +177,12 @@ const patrocinadores = [
             </div>
             <div class="join-cta__text">
                 <h2>ÚNETE A LA ESCUDERÍA</h2>
+                
+                <p class="join-cta__subtitle">
+                    Cada temporada es una oportunidad de reiniciar y mejorar. El diseño del coche 25/26 ya está en proceso. 
+                    Es tu oportunidad de sumarte y hacer realidad el nuevo prototipo.
+                </p>
+
                 <a href="/join" class="btn-underline">APLICAR AHORA</a>
             </div>
         </section>
@@ -287,4 +263,5 @@ const patrocinadores = [
     <script is:inline defer src="/js/contadores.js"></script>
     <script is:inline defer src="/js/miniJuego.js"></script>
     <script is:inline defer src="/js/scroll.js"></script>
+    
 </Layout>

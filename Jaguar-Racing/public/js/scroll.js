@@ -1,5 +1,5 @@
 document.addEventListener('astro:page-load', () => {
-    // 1. Observer para animaciones de entrada generales (Fade In)
+    // 1. Observer para animaciones de entrada generales (Fade In de textos/secciones)
     const fadeElements = document.querySelectorAll('.scroll-animate');
     const fadeObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -11,23 +11,24 @@ document.addEventListener('astro:page-load', () => {
 
     fadeElements.forEach(el => fadeObserver.observe(el));
 
-    // 2. Observer NUEVO para imágenes (Efecto Zoom/Color al hacer scroll)
-    // CAMBIO AQUI: Agregamos '.mission-img' que es la clase nueva de "Quiénes Somos"
-    const imageElements = document.querySelectorAll('.mission-img, .what-is-image img');
+    // 2. Observer para IMÁGENES (Efecto Zoom/Color al hacer scroll)
+    // CAMBIO: Se agregó '.team-img-fit' para que la foto del equipo también tenga el efecto
+    const imageElements = document.querySelectorAll('.mission-img, .what-is-image img, .team-img-fit');
     
     const imageObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Añade la clase que activa el CSS de color y zoom
+                // Se activa cuando entra en pantalla
                 entry.target.classList.add('active-scroll-effect');
             } else {
-                // Si quieres que se repita al salir y entrar, descomenta la siguiente línea:
+                // (Opcional) Si quieres que se quite el efecto al salir:
                 entry.target.classList.remove('active-scroll-effect'); 
             }
         });
     }, { 
-        threshold: 0.3, // Se activa cuando el 30% de la imagen es visible
-        rootMargin: "0px 0px -100px 0px" 
+        // CAMBIO: threshold bajado a 0.15 para que el efecto inicie antes ("scroll más grande")
+        threshold: 0.15, 
+        rootMargin: "0px 0px -50px 0px" 
     });
 
     imageElements.forEach(img => imageObserver.observe(img));

@@ -1,0 +1,41 @@
+/* =============================================================================
+   1. VARIABLES, RESET & BASE
+   ============================================================================= */
+:root {
+    /* --- PALETA OFICIAL --- */
+    --jaguar-gold: #A67C00;       
+    --jaguar-light: #FFE878;      
+    --jaguar-black: #000000;      
+    
+    --bg-black: #000000;
+    --text-white: #ffffff;
+
+    /* --- FUENTE OFICIAL --- */
+    --font-main: 'Montserrat', sans-serif;
+
+    /* --- SISTEMA DE TIPOGRAFÍA AJUSTADO --- */
+    --fs-hero: clamp(2.5rem, 10vw, 6rem);
+    --fs-h2: clamp(1.5rem, 5vw, 2.5rem);
+    --fs-h3: clamp(1.1rem, 3vw, 1.5rem);
+    --fs-body: clamp(0.9rem, 1vw + 0.5rem, 1rem);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html {
+    background-color: var(--bg-black);
+    scrollbar-gutter: stable;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0; padding: 0; width: 100%; min-height: 100%;
+    background-color: var(--bg-black); color: var(--text-white);
+    font-family: var(--font-main); font-size: var(--fs-body);
+    font-weight: 400; line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; display: block; }

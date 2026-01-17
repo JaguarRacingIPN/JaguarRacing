@@ -1,202 +1,212 @@
 /* =============================================================================
-   JAGUAR RACING - TRAYECTORIA v4.1 (OPTIMIZED PERFORMANCE)
+   JAGUAR RACING - TRAYECTORIA STYLES (v5.4 Clean Structure)
+   Estilo: Dark Stealth + Bordes Redondos + Sin declaraciones de fuente redundantes
    ============================================================================= */
 
-:root {
-    --gold-primary: #FFE878;
-    --gold-dark: var(--jaguar-gold, #A67C00);
-    --bg-dark: var(--bg-black, #0a0a0a);
-    
-    /* Fondo Glass (Desktop) */
-    --glass-bg: rgba(20, 20, 20, 0.85);
-    /* Fondo Sólido (Móvil - Rendimiento) */
-    --solid-bg: #111111; 
-}
-
-/* --- SECCIÓN PRINCIPAL --- */
+/* -----------------------------------------------------------------------------
+   1. CONTENEDOR PRINCIPAL
+   ----------------------------------------------------------------------------- */
 .history-section {
-    background: radial-gradient(circle at top, #151515 0%, var(--bg-dark) 100%);
-    padding: 80px 20px;
-    /* IMPORTANTE: Evita scroll horizontal accidental */
-    overflow-x: hidden; 
-    contain: content; /* Aisla el renderizado de esta sección */
+    background: #050505;
+    padding: 60px 20px;
+    overflow-x: hidden;
+    contain: content;
 }
 
-/* --- CONTENEDOR TIMELINE --- */
+/* -----------------------------------------------------------------------------
+   2. TIMELINE (LÍNEA CENTRAL)
+   ----------------------------------------------------------------------------- */
 .history-timeline {
     position: relative;
     max-width: 1000px;
     margin: 0 auto;
 }
 
-/* Línea central (Escritorio) */
+/* La línea vertical */
 .history-timeline::after {
     content: '';
     position: absolute;
     width: 2px;
-    background: var(--gold-dark);
-    opacity: 0.3;
+    background: #1a1a1a; /* Gris muy profundo */
     top: 0; bottom: 0; left: 50%;
     margin-left: -1px;
     z-index: 1;
 }
 
-/* --- EVENTO INDIVIDUAL --- */
+/* -----------------------------------------------------------------------------
+   3. EVENTOS (TARJETAS INDIVIDUALES)
+   ----------------------------------------------------------------------------- */
 .timeline-event {
     padding: 10px 40px;
     position: relative;
     width: 50%;
     box-sizing: border-box;
-    margin-bottom: 60px;
-    
-    /* Ayuda al navegador a optimizar */
-    will-change: transform; 
+    margin-bottom: 50px;
+    will-change: transform;
 }
 
 .timeline-event--left { left: 0; }
 .timeline-event--right { left: 50%; }
 
-/* --- CONTENIDO TARJETA (GLASS - DESKTOP) --- */
+/* --- CONTENIDO INTERNO --- */
 .timeline-event__content {
-    padding: 40px 30px 30px 30px;
-    background: var(--glass-bg);
-    
-    /* En PC sí usamos el blur */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    
-    border-radius: 8px;
+    padding: 35px 30px 30px 30px;
+    background: #0a0a0a;
+    border-radius: 16px; 
+    border: 1px solid #1f1f1f;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     position: relative;
-    border: 1px solid var(--gold-primary);
-    box-shadow: 0 0 20px rgba(166, 124, 0, 0.2);
-    
-    /* SEGURIDAD DE TEXTO */
     overflow-wrap: break-word;
     word-break: break-word;
 }
 
-/* --- AÑO (BADGE) --- */
+/* --- AÑO (ETIQUETA DARK) --- */
 .timeline-event__year {
     position: absolute;
     top: -15px;
     left: 20px;
-    background: var(--gold-dark);
-    color: #000;
-    font-family: 'Arial Black', sans-serif;
-    font-size: 1.1rem;
-    padding: 5px 12px;
-    border-radius: 4px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    
+    background: #000000; 
+    color: #ffffff;
+    border: 1px solid #222; 
+    
+    /* Tipografía heredada del global, solo ajustamos peso y tamaño */
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 4px 12px;
+    border-radius: 8px; 
+    letter-spacing: 0.5px;
     z-index: 10;
 }
 
 .timeline-event--right .timeline-event__year {
-    left: auto;
-    right: 20px;
+    left: auto; right: 20px;
 }
 
-/* --- IMÁGENES --- */
+/* --- PUNTOS DE CONEXIÓN --- */
+.timeline-event::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    background: #000000;
+    border: 2px solid #333333; 
+    top: 25px; 
+    border-radius: 50%;
+    z-index: 2;
+    box-shadow: 0 0 0 5px #050505; 
+}
+
+.timeline-event--left::after { right: -6px; }
+.timeline-event--right::after { left: -6px; }
+
+/* -----------------------------------------------------------------------------
+   4. TIPOGRAFÍA Y CONTENIDO
+   ----------------------------------------------------------------------------- */
+.timeline-event__title {
+    margin: 15px 0 10px 0;
+    color: #ffffff; 
+    
+    /* Peso y transformación para jerarquía */
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.3rem; 
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+    
+    /* FIX: Evita que se corten palabras en móvil */
+    hyphens: none;
+}
+
+.timeline-event__list, 
+.timeline-event__content p {
+    color: #bbbbbb; 
+    font-size: 0.95rem; 
+    margin-bottom: 8px;
+    line-height: 1.6;
+    padding-left: 0;
+    font-weight: 400;
+}
+
+.timeline-event__list li {
+    list-style: none;
+    margin-bottom: 5px;
+    position: relative;
+    padding-left: 15px;
+}
+
+.timeline-event__list li::before {
+    content: '-';
+    color: #444; 
+    position: absolute; left: 0;
+}
+
+/* --- HIGHLIGHT --- */
+.timeline-event__highlight {
+    color: #ffffff !important;
+    border-left: none; 
+    padding-left: 0;
+    margin-top: 10px;
+    display: block;
+    background: transparent;
+}
+
+.timeline-event__detail {
+    font-size: 0.85em;
+    color: #666; 
+    font-style: italic;
+    display: block;
+    margin-top: 2px;
+}
+
+/* Imágenes */
 .timeline-event__img {
     width: 100%;
     height: auto;
     max-height: 250px; 
     object-fit: cover;
-    border-radius: 4px;
-    margin-bottom: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    
-    /* Evita layout shift */
+    border-radius: 12px; 
+    margin-bottom: 15px;
+    border: 1px solid #1a1a1a; 
     display: block; 
+    filter: brightness(0.85) contrast(1.1);
 }
 
-/* --- PUNTOS (DOTS) --- */
-.timeline-event::after {
-    content: '';
-    position: absolute;
-    width: 14px; height: 14px;
-    background: var(--gold-dark);
-    top: 25px; 
-    border-radius: 50%;
-    z-index: 2;
-    box-shadow: 0 0 10px var(--gold-dark);
-}
-
-.timeline-event--left::after { right: -7px; }
-.timeline-event--right::after { left: -7px; }
-
-/* --- TIPOGRAFÍA --- */
-.timeline-event__title {
-    margin: 10px 0;
-    color: var(--gold-primary);
-    text-transform: uppercase;
-    font-size: var(--fs-h3, 1.4rem); 
-    letter-spacing: 0.5px;
-    line-height: 1.3;
-}
-
-.timeline-event__list, 
-.timeline-event__content p {
-    color: #ccc; 
-    font-size: 1rem; 
-    margin-bottom: 8px;
-    line-height: 1.6;
-}
-
-.timeline-event__highlight {
-    color: #fff !important;
-    border-left: 3px solid var(--gold-dark);
-    padding-left: 12px;
-    margin-top: 10px;
-    display: block;
-}
-
-.timeline-event__detail {
-    font-size: 0.9em;
-    color: #999;
-    font-style: italic;
-}
-
-/* =============================================================================
-   RESPONSIVE DESIGN (MÓVIL ALTO RENDIMIENTO)
-   ============================================================================= */
-@media screen and (max-width: 768px) {
-    .history-timeline::after { left: 15px; }
+/* -----------------------------------------------------------------------------
+   5. RESPONSIVE DESIGN (MÓVIL)
+   ----------------------------------------------------------------------------- */
+@media screen and (max-width: 900px) {
+    .history-timeline::after { left: 20px; }
     
     .timeline-event { 
         width: 100%; 
-        padding-left: 35px; 
+        padding-left: 45px; 
         padding-right: 0; 
         margin-bottom: 40px;
-        /* En móvil quitamos will-change para ahorrar RAM */
-        will-change: auto; 
     }
     
     .timeline-event--left, 
     .timeline-event--right { left: 0; }
     
-    .timeline-event::after { left: 9px !important; right: auto; }
+    .timeline-event::after { left: 14px !important; right: auto; }
     
-    .timeline-event__year { 
+    .timeline-event__year,
+    .timeline-event--right .timeline-event__year { 
         left: 20px !important; 
         right: auto !important; 
-        font-size: 0.9rem; 
-        padding: 4px 10px;
+        background: #000;
+        border: 1px solid #222;
     }
 
-    /* OPTIMIZACIÓN RENDIMIENTO TARJETA MÓVIL */
+    /* AJUSTE PARA TÍTULOS EN MÓVIL (Evita competencia con el H1 principal) */
+    .timeline-event__title {
+        font-size: 1.1rem; /* Más pequeño en móvil */
+    }
+
     .timeline-event__content {
-        padding: 35px 20px 20px 20px;
-        
-        /* 1. Fondo sólido opaco en vez de transparente */
-        background: var(--solid-bg); 
-        
-        /* 2. CRÍTICO: Eliminamos blur para evitar lag al scrollear */
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        
-        /* 3. Sombra más sencilla */
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        padding: 40px 20px 20px 20px;
+        background: #0a0a0a;
+        border: 1px solid #1f1f1f;
+        box-shadow: none; 
+        border-radius: 16px; 
     }
 }

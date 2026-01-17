@@ -1,134 +1,127 @@
 /* =============================================================================
-   SECCIÓN DE REGISTRO & BOTÓN TEAMS - v3.1 (Industrial Block Clean)
+   SECCIÓN DE REGISTRO - v5.1 (Small Text + Gold Button)
    ============================================================================= */
 
-/* Contenedor Principal (.registration-cta) */
+/* Contenedor Principal */
 .registration-cta {
     padding: 80px 20px;
-    background-color: var(--bg-black, #000);
+    background-color: #000000; 
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    
-    /* Fondo técnico limpio */
     background-image: radial-gradient(#222 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-size: 30px 30px;
 }
 
 .registration-cta__content {
-    max-width: 800px;
+    max-width: 650px; /* Más compacto */
     width: 100%;
-    /* Centramos el contenido flex para asegurar alineación del botón */
     display: flex;
     flex-direction: column;
     align-items: center; 
 }
 
-/* Título */
+/* TÍTULO H2 (Pequeño, igual que carrusel) */
 .registration-cta__title {
-    font-family: 'Impact', sans-serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700; 
+    
+    /* CAMBIO: Tamaño reducido */
+    /* Móvil: 1.2rem | PC: 2rem */
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
+    
     text-transform: uppercase;
-    margin-bottom: 20px;
-    color: var(--text-white, #fff);
-    letter-spacing: 1px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
 }
 
-/* Descripción */
+/* DESCRIPCIÓN (Estilo Técnico Fino) */
 .registration-cta__desc {
-    font-size: 1.2rem;
-    color: #ccc;
+    /* CAMBIO: Texto pequeño y legible */
+    font-size: 0.95rem; 
+    color: #bbbbbb; 
+    
     line-height: 1.6;
-    margin-bottom: 40px;
+    margin-bottom: 35px;
+    max-width: 550px;
+    font-weight: 400;
 }
 
 /* Nota inferior */
 .registration-cta__note {
-    margin-top: 25px;
-    font-size: 0.9rem;
-    color: #666;
+    margin-top: 20px;
+    font-size: 0.75rem; /* Muy discreto */
+    color: #555; 
     font-style: italic;
 }
 
-/* --- BOTÓN DE TEAMS / CONVOCATORIA (.teams-btn) --- */
-/* Estilo Industrial Block: Sólido, Ancho y Directo */
+/* --- BOTÓN TEAMS (Dorado Activo) --- */
 .teams-btn {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px; /* Espacio entre texto e icono */
+    gap: 15px; 
+    width: 100%;      
+    max-width: 350px; /* Un poco más compacto */
+    padding: 18px 25px;
     
-    /* TAMAÑO Y FORMA */
-    width: 100%;       /* Ancho completo en móvil */
-    max-width: 400px;  /* Límite en PC para que no sea ridículamente ancho */
-    padding: 18px 30px;
+    background-color: #000000;
     
-    /* ESTILO VISUAL */
-    background-color: #000; /* Fondo Negro Sólido */
-    border: 2px solid var(--jaguar-gold, #FFE878);
-    border-radius: 0; /* Cuadrado perfecto */
+    /* CAMBIO: Borde Dorado */
+    border: 1px solid var(--jaguar-gold); 
     
-    /* TIPOGRAFÍA */
-    color: var(--jaguar-gold, #FFE878);
-    font-family: var(--font-main, sans-serif);
-    font-weight: 800; /* Letra gruesa */
-    font-size: 1.1rem;
+    /* CAMBIO: Texto Dorado */
+    color: var(--jaguar-gold);
+    
+    font-weight: 700; 
+    font-size: 0.9rem; /* Letra técnica pequeña */
     text-transform: uppercase;
     text-decoration: none;
-    letter-spacing: 1px;
-    
-    /* INTERACCIÓN */
+    letter-spacing: 2px; 
     cursor: pointer;
-    transition: all 0.2s ease-out;
+    transition: all 0.3s ease;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
 
-/* ICONO (Simplificado y Limpio) */
-.teams-btn__icon {
-    width: 24px;
-    height: 24px;
-    /* Usamos el color actual del texto (dorado o negro) */
-    fill: currentColor; 
-    transition: transform 0.3s;
-}
-
-/* --- ESTADO ACTIVE (Feedback Táctil) --- */
 .teams-btn:active {
-    background-color: var(--jaguar-gold, #FFE878); /* Se llena de dorado */
-    color: #000; /* Texto negro */
-    transform: scale(0.97); /* Presión física */
+    background-color: var(--jaguar-gold);
+    color: #000;
+    transform: scale(0.98);
 }
 
-/* --- ESTADO HOVER (Solo PC) --- */
+/* Icono (hereda el color dorado) */
+.teams-btn__icon {
+    fill: currentColor;
+    width: 20px;
+    height: 20px;
+}
+
 @media (hover: hover) {
     .teams-btn:hover {
-        background-color: rgba(255, 232, 120, 0.1); 
-        box-shadow: 0 0 20px rgba(166, 124, 0, 0.4);
-        transform: translateY(-2px);
-    }
-    
-    .teams-btn:hover .teams-btn__icon {
-        transform: translateX(5px); /* El icono se mueve un poco a la derecha */
+        /* CAMBIO: Hover se llena de dorado */
+        background-color: var(--jaguar-gold); 
+        color: #000000;            
+        box-shadow: 0 0 20px rgba(166, 124, 0, 0.3); 
     }
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 600px) {
     .registration-cta {
-        padding: 60px 15px;
+        padding: 50px 20px;
     }
     
     .registration-cta__title {
-        font-size: 2.5rem;
+        font-size: 1.3rem !important; 
     }
     
     .teams-btn {
-        /* En móvil aseguramos que sea una barra sólida fácil de tocar */
         width: 100%;
-        font-size: 1rem;
-        padding: 20px 0; /* Alto generoso */
+        font-size: 0.85rem;
+        padding: 16px 0; 
     }
 }

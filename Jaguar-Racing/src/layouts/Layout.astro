@@ -1,8 +1,22 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 
-// --- ESTILOS GLOBALES ---
-import '../styles/global.css'; 
+// --- ESTILOS GLOBALES (MODULARIZADOS) ---
+// 1. Base y Variables (Imprescindible: Colores, fuentes, reset)
+import '../styles/variables-base.css';
+
+// 2. UI y Tipografía (Imprescindible: H1-H3, Botones, Utilidades)
+import '../styles/typography-ui.css';
+
+// 3. Estructura Fija (Header y Footer)
+import '../styles/header.css';
+import '../styles/footer.css';
+
+// 4. Portadas (Hero Index y Hero Interno)
+import '../styles/hero.css';          /* Para el Index */
+import '../styles/hero-internal.css'; /* Para páginas internas */
+
+// --- ESTILOS ESPECÍFICOS / LEGACY ---
 import '../styles/NoSelect.css';
 import '../styles/widget_chat.css'; 
 

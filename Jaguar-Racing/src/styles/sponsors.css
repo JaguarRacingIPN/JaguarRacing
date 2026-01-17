@@ -1,0 +1,126 @@
+/* =============================================================================
+   JAGUAR RACING - SPONSORS PAGE (v3.1 - Brighter & Compact Grid)
+   ============================================================================= */
+
+/* --- SECCIÓN INTRO --- */
+.sponsors-intro-section {
+    padding: 80px 20px;
+    background: #080808;
+    text-align: center;
+    border-bottom: 1px solid #1a1a1a;
+}
+
+.sponsors-intro-content { max-width: 800px; margin: 0 auto; }
+
+.intro-title {
+    font-family: var(--font-main); font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--text-white); text-transform: uppercase; font-weight: 800;
+    margin-bottom: 30px; letter-spacing: -1px;
+}
+
+.intro-text {
+    font-family: var(--font-main); font-size: 1rem; color: #bbbbbb;
+    line-height: 1.8; margin-bottom: 40px;
+}
+
+/* --- BOTÓN DOSSIER (Redondeado) --- */
+.dossier-btn-wrapper { display: flex; justify-content: center; margin-top: 20px; }
+
+.btn-download {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: transparent; border: 2px solid var(--jaguar-gold);
+    color: var(--jaguar-gold);
+    border-radius: 50px; /* Pill Shape */
+    padding: 15px 40px;
+    font-family: var(--font-main); font-weight: 800; font-size: 1rem;
+    text-transform: uppercase; text-decoration: none; letter-spacing: 2px;
+    transition: all 0.3s ease; cursor: pointer;
+}
+
+.btn-download:hover {
+    background: var(--jaguar-gold); color: #000;
+    box-shadow: 0 0 20px rgba(166, 124, 0, 0.4);
+}
+
+/* --- GRID DE LOGOS (Ajustado) --- */
+.sponsors-grid-section {
+    padding: 60px 20px; /* Menos padding vertical */
+    background: #000000;
+}
+
+.sponsors-grid {
+    display: grid;
+    /* CAMBIO PC: Reducido minmax de 280px a 220px para tarjetas más chicas */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    max-width: 1200px; /* Ancho máximo reducido */
+    margin: 0 auto;
+}
+
+/* TARJETA PREMIUM (Más pequeña y compacta) */
+.sponsor-card {
+    background: #0e0e0e;
+    border: 1px solid #222;
+    border-radius: 20px; /* Redondeado un poco más cerrado */
+    
+    /* CAMBIO PC: Altura reducida de 200px a 160px */
+    height: 160px;
+    
+    display: flex; align-items: center; justify-content: center;
+    padding: 25px; /* Menos padding interno */
+    position: relative; overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+/* LOGO (Con Efecto de Brillo) */
+.sponsor-logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    
+    /* Explicación del filtro:
+       - brightness(1.1): Brillo base del logo.
+       - contrast(1.1): Mantiene los colores vivos.
+       - drop-shadow: Crea el resplandor exterior usando el dorado Jaguar (--jaguar-gold).
+    */
+    filter: brightness(0) contrast(1.1) drop-shadow(0 0 10px var(--jaguar-gold)); 
+    
+    opacity: 1;
+    transition: transform 0.3s ease;
+}
+
+/* Zoom sutil al logo */
+.sponsor-card:hover .sponsor-logo { transform: scale(1.05); }
+
+/* --- TARJETA "TU LOGO AQUÍ" --- */
+.sponsor-cta {
+    border: 2px dashed #333; background: rgba(255, 255, 255, 0.02);
+    flex-direction: column; gap: 10px; cursor: pointer; text-decoration: none;
+    transition: border-color 0.3s;
+}
+.sponsor-cta:hover { border-color: var(--jaguar-gold); }
+.cta-text {
+    color: #666; font-weight: 800; text-transform: uppercase;
+    font-size: 1rem; letter-spacing: 1px;
+}
+.sponsor-cta:hover .cta-text { color: var(--jaguar-gold); }
+.cta-sub { color: #444; font-size: 0.7rem; text-transform: uppercase; }
+
+/* RESPONSIVE (MÓVIL: 2 POR FILA) */
+@media (max-width: 600px) {
+    .sponsors-grid { 
+        /* CAMBIO MÓVIL: Forzar 2 columnas */
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; /* Espacio reducido */
+    }
+    
+    .sponsor-card { 
+        /* CAMBIO MÓVIL: Altura mucho más pequeña */
+        height: 120px; 
+        padding: 15px; 
+        border-radius: 14px; 
+    }
+    
+    .btn-download { width: 100%; padding: 18px 0; font-size: 0.9rem; }
+    .intro-title { font-size: 1.8rem; }
+}

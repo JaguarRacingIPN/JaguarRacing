@@ -1,89 +1,85 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
+import { Image } from 'astro:assets';
 
-// Importación de estilos
-import '../styles/patrocinios.css';
-import '../styles/NoSelect.css';
+// 1. Estilos Nuevos
+import '../styles/sponsors.css';
+import '../styles/hero-internal.css';
+
+// 2. Carga Dinámica de Logos (Desde src/assets/Patrocinadores/)
+const sponsorLogos = await Astro.glob('../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}');
+
+// 3. Imagen Portada
+import imgPortada from '../assets/Portadas/Patrocinios.webp'; 
 
 const pageTitle = "Patrocinios";
-
-const patrocinadores = [
-  'altair.webp', 'ansys.webp', 'bimsa.webp', 'copiisa.webp', 
-  'mantemimiento.webp', 'polimex.webp', 'SMI.webp', 
-  'solidwor.webp', 'tmx.webp', 'toyota.webp', 'IPN.webp'
-];
 ---
 
 <Layout title={pageTitle}>
-    <main>
-        <div class="hero">
-            <img 
-                src="/img/page/Patrocinios.webp" 
-                alt="Nuestros Patrocinadores" 
-                class="hero__image" 
-                fetchpriority="high" 
-                decoding="async"
-                loading="eager"
-                width="1358"
-                height="649"
-            />
-            <h1 class="hero__title apple-scroll">Alianzas Estratégicas</h1>
-        </div>
 
-        <section class="sponsors-section">
-            <div class="sponsors-intro apple-scroll">
-                <h2 class="sponsors-intro__title">Construyendo el Futuro Juntos</h2>
-                <div class="sponsors-intro__text">
+    <header class="hero-internal">
+        <Image 
+            src={imgPortada} 
+            alt="Patrocinadores Jaguar Racing" 
+            class="hero-internal__bg" 
+            loading="eager"
+            width={1920}
+        />
+        <div class="hero-internal__overlay"></div>
+        <div class="hero-internal__content">
+            <h1 class="hero-internal__title">ALIANZAS ESTRATÉGICAS</h1>
+        </div>
+    </header>
+
+    <main>
+        
+        <section class="sponsors-intro-section">
+            <div class="sponsors-intro-content">
+                <h2 class="intro-title">Construyendo el Futuro Juntos</h2>
+                <div class="intro-text">
                     <p>
                         La ingeniería no se construye sola. Detrás de cada tornillo, cada línea de código y cada kilómetro recorrido, 
                         existe una red de aliados que creen en el talento politécnico mexicano.
                     </p>
                     <p>
-                        Su apoyo transforma ideas en máquinas de alto rendimiento.
+                        Su apoyo transforma ideas en máquinas de alto rendimiento, permitiéndonos competir al máximo nivel internacional.
                     </p>
                 </div>
 
-                <a href="/Dossier_SAE_UNI-ES.pdf" target="_blank" rel="noopener noreferrer" class="dossier-btn" download>
-                    <div class="dossier-btn__icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 16L7 11H10V4H14V11H17L12 16ZM20 19H4V17H20V19Z"/>
-                        </svg>
-                    </div>
-                    <div class="dossier-btn__content">
-                        <span class="dossier-btn__title">DESCARGAR DOSSIER 2025</span>
-                        <span class="dossier-btn__subtitle">Conoce los beneficios de patrocinar a Jaguar Racing</span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="sponsors-grid-wrapper">
-                <div class="sponsors-grid">
-                    {patrocinadores.map((img, index) => (
-                        <div class="sponsor-card" style={{ animationDelay: `${index * 0.1}s` }}>
-                            <div class="sponsor-card__img-box">
-                                <img 
-                                    src={`/img/IMGpatrocinadores/${img}`} 
-                                    alt="Patrocinador Jaguar Racing" 
-                                    loading="lazy" 
-                                    decoding="async"
-                                    width="300" 
-                                    height="200"
-                                />
-                            </div>
-                            <div class="sponsor-card__glow"></div>
-                        </div>
-                    ))}
-                    
-                    <div class="sponsor-card sponsor-card--cta">
-                        <div class="sponsor-card__cta-content">
-                            <span>TU LOGO AQUÍ</span>
-                            <a href="mailto:contacto@jaguarracing.com" class="sponsor-card__link">Contáctanos</a>
-                        </div>
-                    </div>
+                <div class="dossier-btn-wrapper">
+                    <a href="/Dossier_SAE_UNI-ES.pdf" target="_blank" rel="noopener noreferrer" class="btn-download" download>
+                        DESCARGAR DOSSIER 2025
+                    </a>
                 </div>
             </div>
         </section>
+
+        <section class="sponsors-grid-section">
+            <div class="sponsors-grid">
+                
+                {/* Mapeo Automático de Logos */}
+                {sponsorLogos.map((logo) => (
+                    <div class="sponsor-card">
+                        <Image 
+                            src={logo.default} 
+                            alt="Logo Patrocinador" 
+                            class="sponsor-logo" 
+                            width={300} 
+                            loading="lazy"
+                        />
+                    </div>
+                ))}
+
+                {/* Tarjeta de Llamada a la Acción */}
+                <a href="mailto:contacto@jaguarracing.com" class="sponsor-card sponsor-cta">
+                    <span class="cta-text">TU LOGO AQUÍ</span>
+                    <span class="cta-sub">Sé parte del equipo</span>
+                </a>
+
+            </div>
+        </section>
+
     </main>
 
     <Footer />

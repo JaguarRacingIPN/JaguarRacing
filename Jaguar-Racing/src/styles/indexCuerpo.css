@@ -1,214 +1,302 @@
 /* =============================================================================
-   JAGUAR RACING - INDEX BODY (FINAL: DARKER HERO & PERFECT TEXT HIERARCHY)
+   JAGUAR RACING - INDEX BODY STYLES (v9.0 Unified Hierarchy)
+   Estandarizado con Convocatoria/Trayectoria (H1 Dominante / H2 Compacto)
    ============================================================================= */
 
-/* --- UTILIDADES LOCALES --- */
+/* -----------------------------------------------------------------------------
+   1. UTILIDADES LOCALES (Sincronizadas con Global)
+   ----------------------------------------------------------------------------- */
+/* H1 - Títulos Principales de Sección (PATROCINADORES, EQUIPO) */
 .section-title {
-    font-family: var(--font-impact);
-    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-family: var(--font-main);
+    font-weight: 800; 
+    
+    /* CAMBIO: Igualado a Global H1 */
+    /* Móvil: 1.8rem | PC: 3.5rem */
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    
     text-align: center;
     color: var(--text-white);
     text-transform: uppercase;
-    margin-bottom: 2rem;
-    letter-spacing: 1px;
-    line-height: 1.1;
-    overflow-wrap: break-word; 
-    hyphens: auto;
+    margin-bottom: 20px; 
+    letter-spacing: -1px;
+    line-height: 1.1; 
+    
+    overflow-wrap: normal; 
+    hyphens: none !important; 
+    width: 100%;
 }
 
+/* H2 - Subtítulos (MISIÓN, BAJA SAE, RECLUTAMIENTO) */
 .section-title-left {
-    font-family: var(--font-impact);
-    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-family: var(--font-main);
+    font-weight: 700;
+    
+    /* CAMBIO: Igualado a Global H2 (Más compacto y elegante) */
+    /* Móvil: 1.2rem | PC: 2rem */
+    font-size: clamp(1.2rem, 2.5vw, 2rem); 
+    
     color: var(--text-white);
     text-transform: uppercase;
-    margin-bottom: 1rem;
-    line-height: 1.1;
-    text-align: left;
-    overflow-wrap: break-word;
+    margin-bottom: 1rem; 
+    line-height: 1.2;
+    text-align: left; /* En Index mantenemos izquierda por diseño de grilla */
+    letter-spacing: -0.5px;
+    hyphens: none; 
 }
 
-/* --- 1. HERO SLIDER (OSCURO PARA TEXTO PERFECTO) --- */
-.hero-background-container { position: relative; width: 100%; height: 100vh; background: var(--bg-black); overflow: hidden; }
-.slideshow-wrapper, .bg-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+/* -----------------------------------------------------------------------------
+   2. HERO SLIDER
+   ----------------------------------------------------------------------------- */
+.hero-background-container { 
+    position: relative; width: 100%; height: 100vh; 
+    background: var(--bg-black); overflow: hidden; 
+}
+.slideshow-wrapper, .bg-slide { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+}
 .bg-slide { opacity: 0; transition: opacity 1.5s ease; z-index: 1; }
 .bg-slide.active { opacity: 1; z-index: 2; }
-
-/* CAMBIO: Brillo reducido a 0.35 (Muy oscuro) */
 .bg-image-fit { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    filter: brightness(0.35); 
+    width: 100%; height: 100%; object-fit: cover; 
+    filter: brightness(0.6) grayscale(10%) contrast(1.1); 
+}
+.hero-background-container::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 90%);
+    z-index: 3; pointer-events: none;
+}
+.hero-content-fixed { 
+    position: absolute; top: 50%; left: 50%; 
+    transform: translate(-50%, -50%); 
+    z-index: 10; width: 90%; text-align: center; pointer-events: none; 
 }
 
-.hero-content-fixed { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; width: 90%; text-align: center; pointer-events: none; }
-
-/* --- 2. STATS BAR --- */
-.stats-bar { background: var(--bg-dark-grey); border-bottom: 1px solid #222; padding: 1.5rem 0; }
-.stats-grid { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; }
-.stat-item { text-align: center; display: flex; flex-direction: column; align-items: center; }
-.stat-number { display: block; font-family: var(--font-impact); font-size: 3rem; color: var(--jaguar-gold); line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,0.5); margin-bottom: 5px; }
-.stat-label { font-family: var(--font-main); font-size: 0.9rem; color: #999; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-
-/* --- 3. MISSION SECTION --- */
-.mission-section { padding: clamp(3rem, 5vw, 4rem) 5%; background: var(--bg-black); display: flex; justify-content: center; }
-.mission-container { 
-    max-width: 1200px; width: 100%; 
-    display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; align-items: center; 
-}
-
-/* Jerarquía: Tamaño estándar */
-.mission-lead { 
-    font-family: var(--font-main); 
-    font-size: 1.05rem; 
-    color: var(--text-white); 
-    line-height: 1.6; 
-    margin-bottom: 1rem; 
-    font-weight: 400; 
-    text-align: left; 
-}
-.mission-lead strong { color: var(--jaguar-gold); font-weight: 700; }
-
-/* Jerarquía: Tamaño pequeño (Secundario) */
-.mission-body { 
-    font-family: var(--font-main); 
-    font-size: 0.9rem; 
-    color: #888; 
-    line-height: 1.6; 
-    text-align: left; 
-}
-
-.image-frame { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 15px; }
-.mission-img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.7) grayscale(20%) contrast(1.1); transition: all 0.5s ease; }
-.image-frame:hover .mission-img { filter: brightness(0.7) grayscale(0%) contrast(1.1); transform: scale(1.02); }
-.frame-decor { display: none; }
-
-/* --- 4. BAJA SAE --- */
-.what-is-baja { 
-    padding: 3rem 5%; 
+/* -----------------------------------------------------------------------------
+   3. STATS BAR
+   ----------------------------------------------------------------------------- */
+.stats-bar { 
     background: var(--bg-dark-grey); 
-    width: 100%; 
-    box-sizing: border-box; 
-    overflow: hidden; 
+    border-bottom: 1px solid #222; 
+    padding: 1rem 0; 
+}
+.stats-grid { 
+    display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; 
+}
+.stat-item { 
+    text-align: center; display: flex; flex-direction: column; align-items: center; 
+}
+.stat-number { 
+    display: block; font-family: var(--font-main); font-weight: 800; 
+    font-size: 2.5rem; color: var(--text-white); line-height: 1; 
+    text-shadow: 0 5px 15px rgba(0,0,0,0.5); margin-bottom: 0px; 
+}
+.stat-number::after {
+    content: '+'; font-size: 0.8em; vertical-align: text-top;
+}
+.stat-label { 
+    font-family: var(--font-main); font-size: 0.7rem; color: #888; 
+    text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-top: 3px;
 }
 
+/* -----------------------------------------------------------------------------
+   4. MISSION SECTION
+   ----------------------------------------------------------------------------- */
+.mission-section { 
+    padding: 3rem 5%; background: var(--bg-black); display: flex; justify-content: center; 
+}
+.mission-container { 
+    max-width: 1200px; width: 100%; display: grid; grid-template-columns: 1.5fr 1fr; 
+    gap: 2rem; align-items: center; 
+}
+.mission-lead { 
+    font-family: var(--font-main); font-size: 1rem; color: var(--text-white); 
+    line-height: 1.5; margin-bottom: 0.8rem; font-weight: 500; text-align: left; 
+}
+.mission-lead strong { color: var(--text-white); font-weight: 700; }
+.mission-body { 
+    /* Estandarizado al gris global */
+    font-family: var(--font-main); font-size: 0.95rem; color: #bbbbbb; 
+    line-height: 1.6; text-align: left; 
+}
+.image-frame { 
+    position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 4px; 
+}
+.mission-img { 
+    width: 100%; height: 100%; object-fit: cover; display: block; 
+    filter: brightness(0.7) grayscale(20%) contrast(1.1); transition: transform 1.2s ease; 
+}
+
+/* -----------------------------------------------------------------------------
+   5. BAJA SAE
+   ----------------------------------------------------------------------------- */
+.what-is-baja { 
+    padding: 3rem 0; background: #080808; width: 100%; 
+    display: flex; flex-direction: column; align-items: center; box-sizing: border-box; overflow: hidden;
+}
 .compact-layout { 
-    display: grid; grid-template-columns: 1fr 1.5fr; gap: 3rem; 
-    max-width: 1200px; width: 100%; margin: 0 auto; align-items: center; 
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin: 0 auto 1rem auto;
+    max-width: 1200px; width: 100%; align-items: center; padding: 0 5%; 
 }
-
 .baja-description { 
-    font-family: var(--font-main); 
-    font-size: 1.05rem; 
-    color: #ccc; 
-    margin-bottom: 1.5rem; 
-    line-height: 1.6; 
-    text-align: left; 
+    /* Estandarizado al gris global */
+    font-family: var(--font-main); font-size: 0.95rem; color: #bbbbbb; 
+    margin-bottom: 0.8rem; line-height: 1.6; text-align: left; 
+}
+.baja-description strong { color: var(--text-white); font-weight: 600; }
+.what-is-image { 
+    width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 4px; 
+}
+.what-is-image img { 
+    width: 100%; height: 100%; object-fit: cover; 
+    filter: brightness(0.7) grayscale(20%) contrast(1.1); transition: transform 1.2s ease;
 }
 
-.compact-details { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.detail-box h4 { color: var(--jaguar-gold); font-family: var(--font-main); font-size: 1rem; margin-bottom: 8px; border-bottom: 1px solid #333; padding-bottom: 4px; font-weight: 700; text-align: left; }
-.detail-box ul { list-style: none; padding: 0; margin: 0; }
-.detail-box li { font-family: var(--font-main); font-size: 0.9rem; color: #999; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; text-align: left; }
-.detail-box li::before { content: "•"; color: var(--jaguar-gold); }
+/* -----------------------------------------------------------------------------
+   6. TIMER BAR
+   ----------------------------------------------------------------------------- */
+.integrated-timer-bar {
+    width: 100%; background: #050505; 
+    border-top: 1px solid #222; border-bottom: 1px solid #222;
+    padding: 0.8rem 0; display: flex; justify-content: center; position: relative;
+}
+.timer-container-inner {
+    max-width: 1200px; width: 90%;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.timer-item { display: flex; align-items: center; gap: 1rem; flex: 1; justify-content: center; }
+.timer-info { display: flex; flex-direction: column; text-align: right; }
 
-.what-is-image { order: -1; width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 15px; }
-.what-is-image img { width: 100%; height: 100%; object-fit: cover; transition: all 0.5s ease; display: block; filter: brightness(0.7) grayscale(20%) contrast(1.1); }
-.what-is-image:hover img { transform: scale(1.02); filter: brightness(0.7) grayscale(0%) contrast(1.1); }
+.race-series {
+    font-family: var(--font-main); font-size: 0.65rem; color: #666;
+    letter-spacing: 1px; text-transform: uppercase; font-weight: 600;
+}
+.race-location {
+    font-family: var(--font-main); font-weight: 800; 
+    font-size: 1.1rem; color: var(--text-white);
+    letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px;
+}
+.timer-value {
+    font-family: 'Courier New', monospace; font-size: 1.2rem; 
+    color: var(--text-white); font-weight: 700;
+}
+.timer-separator { width: 1px; height: 20px; background: #333; margin: 0 1.5rem; }
 
-/* --- 5. TELEMETRÍA --- */
-.tech-dashboard { background-color: #050505; padding: 2.5rem 5%; border-bottom: 1px solid #111; border-top: 1px solid #111; }
-.dashboard-container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; border: 1px solid #222; border-radius: 8px; overflow: hidden; }
-.dashboard-label { font-family: var(--font-main); font-size: 0.85rem; color: #666; letter-spacing: 2px; margin-bottom: 0.5rem; text-transform: uppercase; font-weight: 700; padding-left: 5px; }
-
-.data-strip { display: grid; grid-template-columns: 1.8fr 1.2fr 1fr; align-items: center; background: #0a0a0a; border-bottom: 1px solid #222; padding: 0.8rem 1.5rem; transition: background 0.2s ease; margin: 0; }
-.data-strip:last-child { border-bottom: none; }
-.data-strip:hover { background: #111; box-shadow: inset 3px 0 0 var(--jaguar-gold); }
-.strip-info { display: flex; align-items: center; gap: 1rem; }
-.flag { font-size: 1.5rem; }
-.race-name { color: var(--text-white); font-family: var(--font-impact); font-size: 1.2rem; letter-spacing: 0.5px; }
-.strip-target { display: flex; align-items: center; gap: 0.8rem; }
-.target-label { font-size: 0.75rem; color: #555; font-weight: 700; font-family: var(--font-main); }
-.target-value { color: var(--jaguar-gold); font-weight: 800; font-family: var(--font-main); font-size: 1rem; text-transform: uppercase; }
-.strip-timer { text-align: right; }
-.mono-timer { font-family: 'Courier New', monospace; color: var(--text-white); font-size: 1rem; letter-spacing: -0.5px; font-weight: bold; }
-
-/* --- 7. RECLUTAMIENTO --- */
-.join-cta { position: relative; height: 400px; display: flex; align-items: center; justify-content: center; background: var(--bg-black); overflow: hidden; }
+/* -----------------------------------------------------------------------------
+   7. RECLUTAMIENTO
+   ----------------------------------------------------------------------------- */
+.join-cta { 
+    position: relative; 
+    height: 450px; 
+    display: flex; align-items: center; justify-content: center; 
+    background: var(--bg-black); overflow: hidden; 
+}
 .cta-media-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.cta-video-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
-.join-cta__text { position: relative; z-index: 2; text-align: center; padding: 0 1rem; }
-.join-cta__text h2 { font-size: 3rem; color: var(--text-white); font-family: var(--font-impact); margin-bottom: 2rem; text-shadow: 0 4px 10px #000; }
+.cta-video-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
 
-/* --- 8. SPONSORS --- */
-.sponsors-section { padding: 3rem 0; background: var(--bg-black); text-align: center; }
-.sponsors-desc { 
-    max-width: 700px; 
-    margin: 0 auto 2.5rem auto; 
-    color: #ccc; 
-    font-family: var(--font-main); 
-    font-size: 1.05rem; 
-    line-height: 1.6; 
-    padding: 0 20px; 
+.join-cta__text { 
+    position: relative; z-index: 2; text-align: center; padding: 0 1rem; 
+    max-width: 800px;
+}
+.join-cta__text h2 { 
+    /* Igualado al H1 Global */
+    font-family: var(--font-main); font-weight: 800; 
+    font-size: clamp(1.8rem, 4vw, 3.5rem); 
+    color: var(--text-white); margin-bottom: 1.5rem; 
+    text-shadow: 0 4px 20px #000; text-transform: uppercase; 
+    letter-spacing: -1px; line-height: 1;
 }
 
-.sponsors-marquee { display: flex; gap: 4rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; opacity: 0.8; }
-.sponsor-card img { width: 140px; filter: grayscale(100%); transition: 0.3s; }
-.sponsor-card:hover img { filter: grayscale(0%); transform: scale(1.1); }
+/* -----------------------------------------------------------------------------
+   8. SPONSORS
+   ----------------------------------------------------------------------------- */
+.sponsors-section { 
+    padding: 3rem 0; 
+    background: var(--bg-black); text-align: center; border-bottom: 1px solid #111; 
+}
+.sponsors-desc { 
+    max-width: 800px; margin: 0 auto 2rem auto; color: #888; 
+    font-family: var(--font-main); font-size: 0.95rem; line-height: 1.6; padding: 0 20px; 
+}
+.sponsors-marquee { display: flex; gap: 4rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+.sponsor-card img { height: 45px; width: auto; transition: transform 0.4s ease; object-fit: contain; }
+.sponsor-card:hover img { transform: scale(1.1); }
 .center-content { margin-top: 1.5rem; }
 
-/* --- 9. EQUIPO --- */
-.team-hero { padding: 3rem 0; background: var(--bg-black); display: flex; justify-content: center; }
+/* -----------------------------------------------------------------------------
+   9. EQUIPO
+   ----------------------------------------------------------------------------- */
+.team-hero { 
+    padding: 2rem 0; 
+    background: var(--bg-black); display: flex; justify-content: center; 
+}
 .team-container-limited { max-width: 1200px; width: 95%; margin: 0 auto; }
-.team-image-wrapper-limited { position: relative; width: 100%; height: 500px; overflow: hidden; border-radius: 20px; border: none; }
-.team-img-fit { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; filter: grayscale(100%); transition: 0.5s; }
-.team-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 1; padding: 1rem; text-align: center; }
-.team-overlay h2 { color: var(--text-white); font-family: var(--font-impact); font-size: 3rem; margin-bottom: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.8); }
-.social-links-large { display: flex; gap: 20px; margin-bottom: 20px; }
-.social-links-large img { width: 32px !important; height: 32px !important; object-fit: contain; transition: 0.3s; }
-.social-links-large img:hover { transform: scale(1.2); }
-.btn-underline { color: var(--jaguar-gold); text-decoration: none; font-weight: 700; border-bottom: 2px solid var(--jaguar-gold); padding-bottom: 5px; font-family: var(--font-main); }
+.team-image-wrapper-limited { 
+    position: relative; width: 100%; height: 400px; 
+    overflow: hidden; border-radius: 4px; border: 1px solid #333; 
+}
+.team-img-fit { 
+    width: 100%; height: 100%; object-fit: cover; object-position: center 30%; 
+    filter: grayscale(100%) brightness(0.5); transition: transform 1.2s ease; 
+}
+.team-overlay { 
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    display: flex; flex-direction: column; justify-content: center; align-items: center; 
+    z-index: 5; background: rgba(0,0,0,0.3); 
+}
+.team-overlay h2 { 
+    /* Igualado al H1 Global */
+    font-family: var(--font-main); font-weight: 800; 
+    font-size: clamp(2rem, 6vw, 4.5rem); 
+    color: var(--text-white); margin-bottom: 1.2rem; 
+    text-shadow: 0 5px 20px rgba(0,0,0,1); line-height: 1; 
+    text-transform: uppercase; letter-spacing: -2px; 
+}
 
-/* --- LINK DISCRETO --- */
-.link-discreet { display: inline-block; margin-top: 0.8rem; font-family: var(--font-main); font-size: 0.85rem; color: #777; text-decoration: none; transition: all 0.3s ease; border-bottom: 1px solid transparent; }
+/* UTILIDADES */
+.social-links-large { display: flex; gap: 15px; margin-bottom: 1.5rem; justify-content: center; }
+.social-links-large img { width: 28px !important; height: 28px !important; object-fit: contain; transition: 0.3s; filter: none; }
+.social-links-large img:hover { transform: scale(1.2); }
+.btn-underline { 
+    color: var(--jaguar-gold); text-decoration: none; font-weight: 700; 
+    border-bottom: 2px solid var(--jaguar-gold); padding-bottom: 3px; 
+    font-family: var(--font-main); font-size: 0.9rem; letter-spacing: 1px; 
+    transition: all 0.3s; text-transform: uppercase;
+}
+.btn-underline:hover { color: var(--text-white); border-color: var(--text-white); }
+.link-discreet { display: inline-block; margin-top: 0.5rem; font-family: var(--font-main); font-size: 0.85rem; color: #666; text-decoration: none; transition: all 0.3s ease; border-bottom: 1px solid transparent; }
 .link-discreet:hover { color: var(--jaguar-gold); border-bottom-color: var(--jaguar-gold); transform: translateX(5px); }
-.active-scroll-effect { filter: brightness(0.7) grayscale(0%) contrast(1.1) !important; transform: scale(1.02) !important; }
+.active-scroll-effect { filter: brightness(0.6) grayscale(0%) contrast(1.1) !important; transform: scale(1.11) !important; }
+.team-img-fit.active-scroll-effect { filter: grayscale(100%) brightness(0.5) !important; transform: scale(1.11) !important; }
 
 /* =========================================
-   RESPONSIVE (MÓVIL CENTRADO & TEXTO UNIFICADO)
-   ========================================= */
+   10. MEDIA QUERIES (Mobile Fix)
+   ========================================================================= */
 @media (max-width: 900px) {
-    .mission-section, .what-is-baja, .tech-dashboard, .join-cta { padding-left: 1rem; padding-right: 1rem; }
-    .stats-grid { gap: 2rem; flex-direction: column; align-items: center; }
+    .mission-section, .what-is-baja, .join-cta { padding-left: 1.5rem; padding-right: 1.5rem; }
     
-    .mission-container { grid-template-columns: 1fr; text-align: center; gap: 2rem; width: 100%; }
-    .mission-visual { width: 100%; margin: 0 auto; order: 2; }
+    .stats-bar { padding: 1rem 0; }
+    .stats-grid { gap: 1rem; justify-content: space-evenly; }
+    .stat-number { font-size: 2rem; }
     
-    .compact-layout { grid-template-columns: 1fr; width: 100%; gap: 2rem; }
-    .what-is-text { order: 1; width: 100%; }
-    .what-is-image { order: 2; margin-top: 1rem; width: 100%; }
+    .mission-container, .compact-layout { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1rem; }
+    .what-is-image, .mission-img { order: 2; margin-top: 0.8rem; }
     
-    .compact-details { grid-template-columns: 1fr; }
+    /* Centramos textos en móvil para consistencia */
+    .section-title-left, .mission-lead, .mission-body, .baja-description { text-align: center; }
     
-    /* ALINEACIÓN CENTRADA MÓVIL */
-    .section-title-left { text-align: center; }
-    .mission-lead { text-align: center; }
+    .sponsors-desc { width: 100%; padding: 0 15px; font-size: 0.9rem; word-wrap: break-word; }
     
-    .mission-body, .baja-description, .sponsors-desc { 
-        text-align: center; 
-        font-size: 1rem; 
-    }
+    .join-cta { height: 400px; } 
+    .team-image-wrapper-limited { height: 300px; } 
     
-    .detail-box h4 { text-align: center; border-bottom: 1px solid #333; display: inline-block; width: 100%; }
-    .detail-box ul { display: flex; flex-direction: column; align-items: center; }
-    .detail-box li { justify-content: center; text-align: center; }
-    
-    .hero__title { font-size: 3.5rem; }
-    .section-title { font-size: 2.2rem; }
-    
-    .team-image-wrapper-limited { height: 400px; }
-    .team-overlay h2 { font-size: 2.5rem; }
-    
-    .data-strip { grid-template-columns: 1fr; gap: 0.5rem; text-align: center; padding: 1.2rem; justify-items: center; }
-    .strip-info, .strip-target, .strip-timer { width: 100%; justify-content: center; }
+    /* Timer Móvil */
+    .integrated-timer-bar { padding: 2rem 1rem; }
+    .timer-container-inner { flex-direction: column; gap: 2rem; }
+    .timer-item { flex-direction: column; text-align: center; gap: 0.5rem; width: 100%; border-bottom: 1px solid #222; padding-bottom: 1.5rem; }
+    .timer-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .timer-info { text-align: center; width: 100%; }
+    .timer-separator { display: none; }
+    .race-location { font-size: 1.3rem; margin-bottom: 0.2rem; }
+    .timer-value { font-size: 1.4rem; color: var(--text-white); } 
 }

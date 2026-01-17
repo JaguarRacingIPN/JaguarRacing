@@ -1,154 +1,105 @@
 /* =============================================================================
-   JAGUAR RACING - MINIJUEGO STYLES (Minimalist Dark Edition)
+   JAGUAR RACING - MINIJUEGO (Brand Compliant & Compact)
    ============================================================================= */
 
 .reaction-game-section {
-    padding: 4rem 15px;
+    padding: 4rem 1rem;
     text-align: center;
-    border-top: 1px solid #1a1a1a;
-    border-bottom: 1px solid #1a1a1a;
-    position: relative;
-    overflow: hidden;
-
-    /* --- FONDO LIMPIO (Sin cuadros) --- */
-    background-color: #050505;
-    background: radial-gradient(circle at center, #0a0a0a 0%, #050505 100%);
+    border-block: 1px solid #1a1a1a;
+    /* Fondo oscuro puro acorde al resto del sitio */
+    background: radial-gradient(circle at center, #0a0a0a, var(--bg-black));
+    position: relative; overflow: hidden;
 }
 
-.reaction-game-clean {
-    max-width: 100%; /* Asegura que no se desborde en móvil */
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centrado absoluto de los elementos */
-    position: relative;
-    z-index: 2;
+.reaction-game-clean, .game-controls {
+    display: flex; flex-direction: column; align-items: center; width: 100%;
+    position: relative; z-index: 2;
 }
 
+/* --- TIPOGRAFÍA (100% Montserrat) --- */
 .reaction-title {
-    font-family: var(--font-impact, 'Impact', sans-serif);
-    font-size: clamp(1.8rem, 5vw, 2.5rem); /* Tamaño fluido */
-    color: #fff;
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    /* Usamos font-main (Montserrat) para cumplir el manual */
+    font-family: var(--font-main); 
+    font-weight: 800; /* Extra Bold */
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    color: #fff; margin-bottom: 1rem;
+    text-transform: uppercase; letter-spacing: -1px; /* Kerning negativo estilo Jaguar */
 }
 
-/* --- RÉCORD PERSONAL --- */
 .personal-best {
-    font-family: var(--font-main, sans-serif);
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-    letter-spacing: 2px;
+    font-family: var(--font-main);
+    color: #888; font-size: 0.9rem; font-weight: 600;
+    margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px;
+}
+/* El tiempo récord en Dorado Oficial */
+#best-time-display { color: var(--jaguar-gold); }
+
+.reaction-result {
+    /* Mantenemos monospace para sensación técnica, o cambiamos a Montserrat */
+    font: 700 clamp(2rem, 8vw, 3rem) 'Courier New', monospace;
+    color: #fff; margin-bottom: 0.5rem; min-height: 1.2em;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+.reaction-rank {
+    font-family: var(--font-main);
+    font-size: 1rem; font-weight: 700; letter-spacing: 1px;
     text-transform: uppercase;
-    font-weight: 700;
+    margin-bottom: 1.5rem; min-height: 1.5em; color: var(--text-white);
 }
 
-#best-time-display {
-    color: var(--jaguar-gold, #FFE878);
-}
-
-/* --- DASHBOARD LUCES --- */
+/* --- LUCES (Funcionales) --- */
 .lights-row {
-    display: flex; /* Cambiado a flex para mejor control móvil */
-    justify-content: center;
-    gap: clamp(8px, 3vw, 20px); /* Espaciado dinámico */
-    margin-bottom: 2rem;
-    padding: 20px clamp(15px, 5vw, 40px);
-    background: #000;
-    border: 1px solid #1a1a1a;
+    display: inline-flex; gap: clamp(8px, 3vw, 20px);
+    padding: 20px clamp(15px, 5vw, 40px); margin-bottom: 2rem;
+    background: #000; border: 1px solid #222;
     border-radius: 15px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    width: fit-content; /* Se ajusta al contenido y se centra por el flex del padre */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
 .light {
-    width: clamp(40px, 10vw, 60px); /* Tamaño dinámico */
-    height: clamp(40px, 10vw, 60px);
-    border-radius: 50%;
-    background: #111; 
-    border: 2px solid #1a1a1a;
-    position: relative;
-    transition: background-color 0.1s;
+    width: clamp(40px, 10vw, 60px); aspect-ratio: 1;
+    border-radius: 50%; background: #111; border: 2px solid #333;
+    transition: background-color 0.05s; /* Respuesta instantánea */
 }
 
-/* ROJO */
-.light.red {
-    background: #ff0000 !important;
-    box-shadow: 0 0 30px #ff0000, inset 0 0 10px #fff;
-}
+/* Colores funcionales semáforo (Excepción necesaria al manual) */
+.light.red { background: #ff0000 !important; box-shadow: 0 0 40px #ff0000, inset 0 0 15px #fff; border-color: #ff0000; }
+.light.green { background: #00ff00 !important; box-shadow: 0 0 40px #00ff00, inset 0 0 15px #fff; border-color: #00ff00; }
 
-/* VERDE */
-.light.green {
-    background: #00ff00 !important;
-    box-shadow: 0 0 30px #00ff00, inset 0 0 10px #fff;
-}
-
-/* --- CONTROLES Y RESULTADOS --- */
-.game-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-}
-
-.reaction-result {
-    font-family: 'Courier New', monospace;
-    font-size: clamp(2rem, 8vw, 3rem);
-    color: #fff;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    min-height: 1.2em;
-}
-
-.reaction-rank { 
-    font-family: var(--font-main, sans-serif);
-    font-size: 1rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 1.5rem;
-    min-height: 1.5em;
-    opacity: 1;
-}
-
-/* --- BOTÓN REDONDEADO --- */
+/* --- BOTÓN (Estilo Jaguar Strict) --- */
 .btn-race {
     background: transparent;
-    border: 2px solid var(--jaguar-gold, #FFE878);
-    color: #fff;
+    /* Borde en Dorado Oscuro (Oficial) */
+    border: 2px solid var(--jaguar-gold); 
+    /* Texto en Dorado para mayor contraste */
+    color: var(--jaguar-gold); 
+    
     padding: 15px clamp(30px, 10vw, 50px);
-    font-size: 1.1rem;
-    font-weight: 800;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-family: var(--font-main, sans-serif);
-    letter-spacing: 2px;
-    border-radius: 50px; 
-    transition: all 0.3s ease;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
+    font: 800 1.1rem var(--font-main); /* Montserrat ExtraBold */
+    text-transform: uppercase; letter-spacing: 2px;
+    border-radius: 50px; cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    user-select: none; -webkit-tap-highlight-color: transparent;
 }
 
 .btn-race:hover {
-    background: var(--jaguar-gold, #FFE878);
-    color: #000;
-    box-shadow: 0 0 20px rgba(255, 232, 120, 0.4);
+    /* Fondo Dorado Oscuro */
+    background: var(--jaguar-gold); 
+    color: #000; /* Texto negro sobre dorado */
+    /* Resplandor en Dorado Claro (Brillo) */
+    box-shadow: 0 0 25px var(--jaguar-light); 
+    transform: translateY(-2px);
 }
 
-.btn-race.penalty {
-    border-color: #ff4444;
-    color: #ff4444;
-}
+.btn-race:active { transform: scale(0.95); }
 
-/* RESPONSIVE AJUSTADO */
+/* Penalización en Rojo (Funcional) */
+.btn-race.penalty { border-color: #ff4444; color: #ff4444; box-shadow: none; }
+
+/* --- RESPONSIVE --- */
 @media (max-width: 480px) {
     .reaction-game-section { padding: 3rem 10px; }
-    .lights-row { 
-        padding: 15px 10px; 
-        width: 100%; 
-        max-width: 320px; /* Evita que choque con los bordes */
-    }
+    .lights-row { width: 100%; max-width: 320px; padding: 15px 10px; }
     .btn-race { width: 90%; }
 }
