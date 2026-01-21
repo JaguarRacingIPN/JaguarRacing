@@ -141,8 +141,8 @@ const patrocinadores = [
                     {/* Evento 1: San Luis Potosí */}
                     <div class="timer-item">
                         <div class="timer-info">
-                            <span class="race-series">BAJA SAE MÉXICO</span>
-                            <span class="race-location">SAN LUIS POTOSÍ</span>
+                            <span class="race-series">SAN LUIS POTOSÍ</span>
+                            <span class="race-location">BAJA SAE MÉXICO</span>
                         </div>
                         <span id="timer-mexico" class="timer-value">000d 00h 00m 00s</span>
                     </div>
@@ -153,8 +153,8 @@ const patrocinadores = [
                     {/* Evento 2: Querétaro */}
                     <div class="timer-item">
                         <div class="timer-info">
-                            <span class="race-series">BAJA SAE MÉXICO</span>
-                            <span class="race-location">QUERÉTARO</span>
+                            <span class="race-series">QUERÉTARO</span>
+                            <span class="race-location">All Terrain Vehicle Design Challenge</span>
                         </div>
                         <span id="timer-queretaro" class="timer-value">000d 00h 00m 00s</span>
                     </div>
@@ -237,22 +237,70 @@ const patrocinadores = [
 
         {/* 10. MINIJUEGO */}
         <section class="reaction-game-section scroll-animate">
-            <div class="reaction-game-clean">
-                <h2 class="reaction-title">REFLEJOS DE PILOTO</h2>
-                <div class="personal-best">RÉCORD: <span id="best-time-display">--</span></div>
-                <div class="lights-row">
-                    <div class="light" id="l1"></div>
-                    <div class="light" id="l2"></div>
-                    <div class="light" id="l3"></div>
-                    <div class="light" id="l4"></div>
-                    <div class="light" id="l5"></div>
+            <div class="game-container">
+                
+                <div class="game-interface">
+                    <h2 class="reaction-title">REFLEJOS DE PILOTO</h2>
+
+                    <div class="lights-row">
+                        <div class="light" id="l1"></div>
+                        <div class="light" id="l2"></div>
+                        <div class="light" id="l3"></div>
+                        <div class="light" id="l4"></div>
+                        <div class="light" id="l5"></div>
+                    </div>
+
+                    <div class="game-controls">
+                        <div id="reaction-result" class="reaction-result">0.000 ms</div>
+                        <div id="player-rank" class="reaction-rank"></div>
+                        <button id="reaction-btn" class="btn-race">INICIAR TEST</button>
+                    </div>
                 </div>
-                <div class="game-controls">
-                    <div id="reaction-result" class="reaction-result">0.000 ms</div>
-                    <div id="player-rank" class="reaction-rank"></div>
-                    <button id="reaction-btn" class="btn-race">INICIAR TEST</button>
+
+                <div class="f1-leaderboard">
+                
+                <div class="leaderboard-top">
+                    <h3>CLASIFICACIÓN</h3>
+                    <button id="refresh-rank-btn" class="refresh-btn" aria-label="Actualizar Tabla">
+                        ↻
+                    </button>
+                </div>
+                <div class="leaderboard-header">
+                    <span class="col-pos">POS</span>
+                    <span class="col-pilot">PILOTO</span>
+                    <span class="col-time">TIEMPO</span>
+                </div>
+                
+                <div id="top-ranks" class="leaderboard-body">
+                    <div class="rank-row loading-row">Cargando parrilla...</div>
+                </div>
+
+                <div id="user-rank-row" class="rank-row user-row hidden">
+                    <span class="pos" id="user-pos">--</span>
+                    <div class="pilot-info">
+                        <span class="pilot">TÚ</span>
+                        <button id="edit-name-btn" class="edit-btn" title="Cambiar nombre">✏️</button>
+                    </div>
+                    <span class="time" id="user-time">--</span>
                 </div>
             </div>
+
+            <div id="name-modal" class="modal-overlay">
+            <div class="modal-content">
+                <button id="close-modal-btn" class="close-btn">&times;</button>
+                
+                <h3>LICENCIA DE PILOTO</h3>
+                <p>Personaliza tu ficha de corredor</p>
+                
+                <input type="text" id="pilot-name-input" class="pilot-input" placeholder="Ingresa tu Alias" maxlength="15" autocomplete="off">
+                
+                <input type="email" id="pilot-gmail-input" class="pilot-input" placeholder="Ingresa tu Correo " maxlength="40" autocomplete="off" style="margin-top: 10px;">
+                
+                <div class="modal-actions">
+                    <button id="save-name-btn" class="btn-save">GUARDAR</button>
+                </div>
+            </div>
+        </div>
         </section>
 
     </main>

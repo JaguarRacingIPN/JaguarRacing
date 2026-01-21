@@ -1,32 +1,43 @@
 document.addEventListener('astro:page-load', () => {
-    // 1. Observer para animaciones de entrada generales (Fade In de textos/secciones)
+    
+    // ==========================================
+    // 1. Observer GENERAL (Textos / Secciones)
+    // ==========================================
     const fadeElements = document.querySelectorAll('.scroll-animate');
-    const fadeObserver = new IntersectionObserver((entries) => {
+    
+    const fadeObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
+                // 1. Activamos la clase
                 entry.target.classList.add('is-visible');
+                
+                // 2. CRÍTICO: Dejamos de observar este elemento
+                // Esto libera recursos inmediatamente
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.1 });
 
     fadeElements.forEach(el => fadeObserver.observe(el));
 
-    // 2. Observer para IMÁGENES (Efecto Zoom/Color al hacer scroll)
-    // CAMBIO: Se agregó '.team-img-fit' para que la foto del equipo también tenga el efecto
+
+    // ==========================================
+    // 2. Observer IMÁGENES (Zoom / Efectos)
+    // ==========================================
     const imageElements = document.querySelectorAll('.mission-img, .what-is-image img, .team-img-fit');
     
-    const imageObserver = new IntersectionObserver((entries) => {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Se activa cuando entra en pantalla
+                // 1. Activamos el efecto
                 entry.target.classList.add('active-scroll-effect');
-            } else {
-                // (Opcional) Si quieres que se quite el efecto al salir:
-                entry.target.classList.remove('active-scroll-effect'); 
+                
+                // 2. CRÍTICO: Dejamos de observar y eliminamos el 'else'
+                // Ya no quitamos la clase si sale de pantalla. Se queda así para siempre.
+                observer.unobserve(entry.target);
             }
         });
     }, { 
-        // CAMBIO: threshold bajado a 0.15 para que el efecto inicie antes ("scroll más grande")
         threshold: 0.15, 
         rootMargin: "0px 0px -50px 0px" 
     });

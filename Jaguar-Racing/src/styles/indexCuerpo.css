@@ -275,9 +275,35 @@
 @media (max-width: 900px) {
     .mission-section, .what-is-baja, .join-cta { padding-left: 1.5rem; padding-right: 1.5rem; }
     
-    .stats-bar { padding: 1rem 0; }
-    .stats-grid { gap: 1rem; justify-content: space-evenly; }
-    .stat-number { font-size: 2rem; }
+    /* --------------------------------------
+       CORRECCIÓN DE STATS APILADOS
+       -------------------------------------- */
+    .stats-bar { 
+        padding: 2rem 0; /* Un poco más de aire arriba/abajo */
+    }
+    
+    .stats-grid { 
+        /* Cambiamos de 'flex' horizontal a 'flex-direction: column' */
+        flex-direction: column; 
+        align-items: center; 
+        gap: 2.5rem; /* Separación vertical generosa entre cada número */
+    }
+    
+    .stat-item {
+        /* Aseguramos que cada item ocupe su espacio sin pelear */
+        width: 100%;
+    }
+
+    .stat-number { 
+        /* Hacemos los números GRANDES en móvil para impactar */
+        font-size: 3.5rem; 
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+        opacity: 0.8;
+    }
     
     .mission-container, .compact-layout { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1rem; }
     .what-is-image, .mission-img { order: 2; margin-top: 0.8rem; }

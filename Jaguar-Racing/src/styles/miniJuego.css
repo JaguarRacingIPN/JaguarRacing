@@ -1,105 +1,218 @@
 /* =============================================================================
-   JAGUAR RACING - MINIJUEGO (Brand Compliant & Compact)
+   JAGUAR RACING - ESTILOS FINALES (Grid & UX)
    ============================================================================= */
 
 .reaction-game-section {
     padding: 4rem 1rem;
     text-align: center;
     border-block: 1px solid #1a1a1a;
-    /* Fondo oscuro puro acorde al resto del sitio */
-    background: radial-gradient(circle at center, #0a0a0a, var(--bg-black));
+    background: radial-gradient(circle at center, #0a0a0a, #000);
     position: relative; overflow: hidden;
 }
 
-.reaction-game-clean, .game-controls {
-    display: flex; flex-direction: column; align-items: center; width: 100%;
-    position: relative; z-index: 2;
+/* --- LAYOUT PRINCIPAL --- */
+.game-container {
+    display: flex; flex-direction: column; gap: 3rem;
+    max-width: 1100px; margin: 0 auto; align-items: center;
+}
+@media (min-width: 900px) {
+    .game-container { flex-direction: row; align-items: flex-start; justify-content: center; gap: 4rem; }
+    .game-interface { flex: 1; width: 100%; }
+    .f1-leaderboard { flex: 0.8; width: 100%; }
 }
 
-/* --- TIPOGRAFÍA (100% Montserrat) --- */
+/* --- INTERFAZ JUEGO --- */
 .reaction-title {
-    /* Usamos font-main (Montserrat) para cumplir el manual */
-    font-family: var(--font-main); 
-    font-weight: 800; /* Extra Bold */
-    font-size: clamp(1.8rem, 5vw, 2.5rem);
-    color: #fff; margin-bottom: 1rem;
-    text-transform: uppercase; letter-spacing: -1px; /* Kerning negativo estilo Jaguar */
+    font-family: 'Montserrat', sans-serif; font-weight: 800;
+    font-size: clamp(2rem, 5vw, 2.5rem); color: #fff; margin-bottom: 2rem;
+    text-transform: uppercase; letter-spacing: -1px;
+    text-shadow: 0 0 20px rgba(166, 124, 0, 0.4);
 }
-
-.personal-best {
-    font-family: var(--font-main);
-    color: #888; font-size: 0.9rem; font-weight: 600;
-    margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px;
-}
-/* El tiempo récord en Dorado Oficial */
-#best-time-display { color: var(--jaguar-gold); }
-
 .reaction-result {
-    /* Mantenemos monospace para sensación técnica, o cambiamos a Montserrat */
-    font: 700 clamp(2rem, 8vw, 3rem) 'Courier New', monospace;
-    color: #fff; margin-bottom: 0.5rem; min-height: 1.2em;
+    font-family: 'Courier New', monospace; font-weight: 700;
+    font-size: clamp(2.5rem, 6vw, 3.5rem); color: #fff;
+    margin-bottom: 0.5rem; min-height: 1.2em;
     text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
-
 .reaction-rank {
-    font-family: var(--font-main);
-    font-size: 1rem; font-weight: 700; letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem; min-height: 1.5em; color: var(--text-white);
+    font-family: 'Montserrat', sans-serif; font-size: 1.1rem; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2rem;
+    min-height: 1.5em; color: #ccc;
 }
-
-/* --- LUCES (Funcionales) --- */
+/* Luces */
 .lights-row {
-    display: inline-flex; gap: clamp(8px, 3vw, 20px);
-    padding: 20px clamp(15px, 5vw, 40px); margin-bottom: 2rem;
-    background: #000; border: 1px solid #222;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    display: inline-flex; gap: clamp(10px, 3vw, 20px);
+    padding: 20px clamp(20px, 5vw, 40px); margin-bottom: 2rem;
+    background: #000; border: 1px solid #222; border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
-
 .light {
-    width: clamp(40px, 10vw, 60px); aspect-ratio: 1;
-    border-radius: 50%; background: #111; border: 2px solid #333;
-    transition: background-color 0.05s; /* Respuesta instantánea */
+    width: clamp(40px, 8vw, 60px); aspect-ratio: 1; border-radius: 50%;
+    background: #111; border: 2px solid #333; transition: background-color 0.05s;
 }
+.light.red { background: #ff0000 !important; box-shadow: 0 0 50px #ff0000; }
+.light.green { background: #00ff00 !important; box-shadow: 0 0 50px #00ff00; }
 
-/* Colores funcionales semáforo (Excepción necesaria al manual) */
-.light.red { background: #ff0000 !important; box-shadow: 0 0 40px #ff0000, inset 0 0 15px #fff; border-color: #ff0000; }
-.light.green { background: #00ff00 !important; box-shadow: 0 0 40px #00ff00, inset 0 0 15px #fff; border-color: #00ff00; }
-
-/* --- BOTÓN (Estilo Jaguar Strict) --- */
+/* Botón */
 .btn-race {
-    background: transparent;
-    /* Borde en Dorado Oscuro (Oficial) */
-    border: 2px solid var(--jaguar-gold); 
-    /* Texto en Dorado para mayor contraste */
-    color: var(--jaguar-gold); 
+    background: transparent; border: 2px solid #A67C00; color: #A67C00;
+    padding: 15px 40px; font: 800 1rem 'Montserrat', sans-serif;
+    text-transform: uppercase; letter-spacing: 2px; border-radius: 50px;
+    cursor: pointer; transition: all 0.3s; width: 100%; max-width: 300px;
+}
+.btn-race:hover { background: #A67C00; color: #000; transform: translateY(-2px); }
+
+/* --- TABLA (GRID SYSTEM PARA ALINEACIÓN PERFECTA) --- */
+.f1-leaderboard {
+    background: #080808; border: 1px solid #333; border-radius: 12px;
+    overflow: hidden; width: 100%; max-width: 450px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: flex; flex-direction: column;
+}
+
+/* Definición de Columnas GRID: 15% Pos | Flexible Nombre | 30% Tiempo */
+.leaderboard-header, .rank-row, .user-row {
+    display: grid;
+    grid-template-columns: 15% 1fr 30%; /* LA CLAVE DE LA ALINEACIÓN */
+    align-items: center;
+    padding: 12px 15px;
+}
+
+.leaderboard-header {
+    background: linear-gradient(90deg, #A67C00, #805f00);
+    color: #fff; font-weight: 800; font-size: 0.8rem;
+    letter-spacing: 1px; border-bottom: 1px solid #554000;
+}
+.leaderboard-body {
+    max-height: 350px; overflow-y: auto; background: #0a0a0a;
+}
+.rank-row {
+    border-bottom: 1px solid #1a1a1a; font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem; color: #ccc; transition: background 0.2s;
+}
+.rank-row:hover { background: #111; }
+
+/* Alineación de textos */
+.col-pos, .pos { text-align: center; font-weight: bold; }
+.col-pilot { padding-left: 15px; } 
+
+/* CORRECCIÓN: Separamos el título del dato */
+.col-time { 
+    text-align: right; 
+    color: #fff !important; /* El título TIEMPO en Blanco puro */
+}
+
+.time { 
+    text-align: right; 
+    font-family: 'Courier New', monospace; 
+    font-weight: bold; 
+    color: #A67C00; /* Solo los números se quedan Dorados */
+}
+
+/* Colores Top 3 */
+.rank-row:nth-child(1) .pos { color: #FFD700; text-shadow: 0 0 5px #FFD700; }
+.rank-row:nth-child(2) .pos { color: #C0C0C0; }
+.rank-row:nth-child(3) .pos { color: #CD7F32; }
+
+/* Fila Usuario */
+.user-row {
+    background: linear-gradient(145deg, #151515, #000);
+    border-top: 2px solid #A67C00; z-index: 10;
+    margin-top: 0; 
+}
+.pilot-info { display: flex; align-items: center; gap: 10px; overflow: hidden; padding-left: 15px; }
+.pilot { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.edit-btn {
+    background: rgba(255,255,255,0.1); border: none; color: #fff;
+    width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+    font-size: 0.8rem; display: flex; align-items: center; justify-content: center;
+}
+.edit-btn:hover { background: #A67C00; }
+
+/* --- MODAL (Mejorado) --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.modal-overlay.active { opacity: 1; pointer-events: all; }
+
+.modal-content {
+    background: #111; border: 1px solid #A67C00; padding: 2.5rem;
+    border-radius: 12px; text-align: center; width: 90%; max-width: 400px;
+    position: relative; /* Para posicionar la X */
+    box-shadow: 0 0 40px rgba(166, 124, 0, 0.2);
+}
+.close-btn {
+    position: absolute; top: 10px; right: 15px;
+    background: none; border: none; color: #666; font-size: 2rem;
+    cursor: pointer; line-height: 1;
+}
+.close-btn:hover { color: #fff; }
+
+.modal-content h3 { color: #A67C00; margin-bottom: 0.5rem; font-family: 'Montserrat', sans-serif; }
+.modal-content p { color: #888; margin-bottom: 1.5rem; }
+.pilot-input {
+    width: 100%; padding: 12px; background: #222; border: 1px solid #444;
+    color: #fff; text-align: center; font-size: 1.1rem; border-radius: 6px;
+    margin-bottom: 1.5rem; outline: none;
+}
+.pilot-input:focus { border-color: #A67C00; }
+.btn-save {
+    background: #A67C00; color: #000; border: none; padding: 12px;
+    font-weight: 800; border-radius: 5px; cursor: pointer; width: 100%;
+}
+.btn-save:hover { background: #ffc400; }
+.hidden { display: none !important; }
+
+/* --- BARRA SUPERIOR (MODIFICADO) --- */
+.leaderboard-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Aumentamos el padding para que respire */
+    padding: 20px 25px; 
+    border-bottom: 1px solid #333;
+    margin-bottom: 10px;
+}
+
+.leaderboard-top h3 {
+    margin: 0;
+    font-size: 1.2rem; /* Texto más grande */
+    color: #FFD700;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* --- BOTÓN DE REFRESCAR (MODIFICADO) --- */
+.refresh-btn {
+    background: transparent;    /* Sin fondo */
+    border: none;               /* Sin bordes */
+    color: #fff;                /* Icono blanco puro */
     
-    padding: 15px clamp(30px, 10vw, 50px);
-    font: 800 1.1rem var(--font-main); /* Montserrat ExtraBold */
-    text-transform: uppercase; letter-spacing: 2px;
-    border-radius: 50px; cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    user-select: none; -webkit-tap-highlight-color: transparent;
+    /* El tamaño grande */
+    font-size: 2rem;            
+    line-height: 1;             
+    
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* Padding lateral para que sea fácil de picar */
+    padding: 0 5px;             
 }
 
-.btn-race:hover {
-    /* Fondo Dorado Oscuro */
-    background: var(--jaguar-gold); 
-    color: #000; /* Texto negro sobre dorado */
-    /* Resplandor en Dorado Claro (Brillo) */
-    box-shadow: 0 0 25px var(--jaguar-light); 
-    transform: translateY(-2px);
+.refresh-btn:hover {
+    color: #A67C00;             /* Se pone dorado al pasar el mouse */
+    transform: scale(1.1) rotate(45deg); /* Efecto de movimiento sutil */
+    text-shadow: 0 0 10px rgba(166, 124, 0, 0.5);
 }
 
-.btn-race:active { transform: scale(0.95); }
-
-/* Penalización en Rojo (Funcional) */
-.btn-race.penalty { border-color: #ff4444; color: #ff4444; box-shadow: none; }
-
-/* --- RESPONSIVE --- */
-@media (max-width: 480px) {
-    .reaction-game-section { padding: 3rem 10px; }
-    .lights-row { width: 100%; max-width: 320px; padding: 15px 10px; }
-    .btn-race { width: 90%; }
+/* Estado Deshabilitado (Cooldown) */
+.refresh-btn:disabled {
+    color: #444;                /* Gris oscuro apagado */
+    cursor: wait;
+    transform: rotate(360deg);  /* Se queda girando */
+    opacity: 0.5;
 }

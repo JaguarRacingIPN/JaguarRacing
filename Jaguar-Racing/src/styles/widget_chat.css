@@ -1,5 +1,5 @@
 /* =============================================================================
-   JAGUAR RACING CHAT WIDGET - UI v3.3 (Mobile Positioning Fix)
+   JAGUAR RACING CHAT WIDGET - UI v3.4 (Safe Mode Added)
    ============================================================================= */
 
 /* --- 1. BOTÓN DISPARADOR (.chat-trigger) --- */
@@ -28,9 +28,6 @@
     overflow: hidden; 
     contain: strict;
     
-    /* FIX BORROSO: Comentado para evitar problemas en algunas pantallas */
-    /* transform: translateZ(0); */
-    
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                 box-shadow 0.3s ease,
                 border-color 0.3s ease;
@@ -50,9 +47,10 @@
 }
 
 /* --- 2. VENTANA PRINCIPAL (.chat-window) --- */
+/* --- 2. VENTANA PRINCIPAL (.chat-window) --- */
 .chat-window {
     position: fixed;
-    bottom: 90px; /* En PC ya está encima del botón */
+    bottom: 90px;
     right: 20px;
     width: 350px;
     max-width: 90vw;
@@ -66,7 +64,6 @@
     border: 1px solid var(--jaguar-gold, #A67C00);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 
-    /* FIX Z-INDEX: Encima del trigger */
     z-index: 9999; 
 
     opacity: 0;
@@ -74,12 +71,17 @@
     transform: translateY(20px);
     transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
 
-    /* OPTIMIZACIÓN MÓVIL */
-    will-change: transform, opacity;
+    /* ❌ ELIMINADO: will-change causaba el texto borroso */
+    /* will-change: transform, opacity; */
 
-    /* FIX TEXTO BORROSO: Letras nítidas (HD) */
+    /* ✅ AGREGADO: Fuerza al navegador a limpiar los bordes */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    /* ✅ AGREGADO: Renderizado de texto en alta definición (HD) */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility; /* Mejora la legibilidad */
 }
 
 .chat-window--open {
@@ -183,6 +185,7 @@
     border-top: 1px solid rgba(166, 124, 0, 0.1);
     scrollbar-width: none;
     -ms-overflow-style: none;
+    transition: opacity 0.3s;
 }
 
 .chat-window__suggestions::-webkit-scrollbar { display: none; }
@@ -240,12 +243,6 @@
 
 .chat-input__send:hover { filter: brightness(1.2); }
 
-.chat-input__send:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(100%);
-}
-
 /* --- 7. TYPING INDICATOR --- */
 .chat-window__typing {
     display: none;
@@ -273,22 +270,14 @@
 
 /* --- 8. FIX PARA MÓVILES (POSICIÓN Y ALTURA) --- */
 @media (max-width: 480px) {
-    /* Aseguramos la posición del botón */
     .chat-trigger {
         bottom: 20px;
         right: 20px;
     }
-
-    /* Ajustes de la ventana */
     .chat-window {
-        /* FIX POSICIÓN: 
-           Botón (20px bottom + 60px altura) = 80px.
-           Ponemos la ventana en 90px para dejar 10px de espacio encima del botón. */
         bottom: 90px !important; 
         right: 10px;
         width: calc(100% - 20px);
-        
-        /* FIX ALTURA: Un poco más chaparro que 80dvh */
         height: 70dvh;
         max-height: 70dvh;
     }
@@ -296,12 +285,34 @@
 
 /* --- 9. ESTILOS PARA LINKS DENTRO DEL CHAT --- */
 .chat-link {
-    color: var(--jaguar-gold, #A67C00); /* Color dorado Jaguar */
+    color: var(--jaguar-gold, #A67C00);
     text-decoration: underline;
     font-weight: bold;
-    word-break: break-all; /* Importante: Si el link es muy largo, que baje de línea */
+    word-break: break-all;
 }
 
 .chat-link:hover {
-    color: #fff; /* Blanco al pasar el mouse */
+    color: #fff;
+}
+
+/* --- 10. ESTADOS DE BLOQUEO (SEGURIDAD) --- */
+/* Estas clases se activan vía JS cuando el bot está pensando */
+
+.chat-input__field:disabled,
+.chat-input__send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+    pointer-events: none; /* Evita cualquier clic fantasma */
+}
+
+/* Bloqueo específico para el contenedor de sugerencias */
+.chat-window__suggestions.disabled {
+    opacity: 0.4;
+    pointer-events: none !important; /* IMPORTANTE: Bloquea clics en los chips */
+    filter: grayscale(80%);
+}
+
+.suggestion-chip.disabled {
+    cursor: not-allowed;
 }

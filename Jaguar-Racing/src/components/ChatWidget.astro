@@ -7,7 +7,7 @@ import '../styles/widget_chat.css';
     class="chat-trigger" 
     style="background-image: url('/img/page/IMGChatv2.webp');"
 >
-    </div>
+</div>
 
 <div id="chat-window" class="chat-window">
     <div class="chat-window__header">
@@ -33,143 +33,11 @@ import '../styles/widget_chat.css';
 </div>
 
 <script>
+    // Importamos la lógica desde el archivo separado
+    import { initChatWidget } from '../scripts/chatWidget.js';
+
+    // Ejecutamos en cada navegación (compatible con View Transitions)
     document.addEventListener('astro:page-load', () => {
-        const input = document.getElementById('chat-input');
-        const sendBtn = document.getElementById('chat-send-btn');
-        const chatWindow = document.getElementById('chat-window');
-        const trigger = document.getElementById('chat-trigger');
-        const closeBtn = document.getElementById('chat-close-btn');
-        const suggestionsContainer = document.getElementById('suggestions-container');
-        const chatMessages = document.getElementById('chat-messages');
-        const typingIndicator = document.getElementById('typing-indicator');
-
-        if (!trigger || !chatWindow || !chatMessages || !input || !sendBtn) return;
-
-        // --- FUNCIONES CORE ---
-        const scrollAlFondo = () => {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
-
-        const mostrarTyping = (show) => {
-            if (typingIndicator) typingIndicator.style.display = show ? 'block' : 'none';
-            if (show) scrollAlFondo();
-        };
-
-        // ✨ NUEVA FUNCIÓN: Detecta links y los hace clicables
-        const formatearTexto = (texto) => {
-            // 1. Regex para detectar URLs (http o https)
-            const urlRegex = /(https?:\/\/[^\s]+)/g;
-            
-            // 2. Reemplazamos la URL por una etiqueta <a>
-            // Agregamos target="_blank" para que abra en otra pestaña
-            // Agregamos estilos inline para asegurar que se vea dorado/azul
-            return texto.replace(urlRegex, (url) => {
-                // Quitamos puntos o comas finales si se colaron en la detección
-                const cleanUrl = url.replace(/[.,;]$/, ''); 
-                return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="chat-link">${cleanUrl}</a>`;
-            });
-        };
-
-        const agregarMensaje = (texto, clase, guardar = false) => {
-            const div = document.createElement('div');
-            div.className = `chat-message ${clase}`;
-            
-            // ⚠️ CAMBIO CRÍTICO: Usamos innerHTML en lugar de innerText
-            // para que el enlace funcione. Pasamos el texto por la función formatear.
-            div.innerHTML = formatearTexto(texto);
-            
-            chatMessages.appendChild(div);
-            scrollAlFondo();
-
-            if (guardar) {
-                let h = JSON.parse(sessionStorage.getItem('jaguar_chat_history') || '[]');
-                h.push({ texto, remitente: clase.includes('user') ? 'user' : 'bot' });
-                sessionStorage.setItem('jaguar_chat_history', JSON.stringify(h.slice(-20)));
-            }
-        };
-
-        const enviarMensaje = async (mantenerFoco = true) => {
-            const texto = input.value.trim();
-            if (!texto) return;
-
-            let userId = localStorage.getItem('jaguar_user_id');
-            if (!userId) {
-                userId = crypto.randomUUID?.() || Math.random().toString(36).substring(2);
-                localStorage.setItem('jaguar_user_id', userId);
-            }
-
-            input.disabled = true;
-            sendBtn.disabled = true; 
-            sendBtn.classList.add('chat-input__send--disabled');
-
-            // El usuario manda texto plano, no necesita formato de links
-            agregarMensaje(texto, 'chat-message--user', true);
-            
-            input.value = '';
-            mostrarTyping(true);
-
-            const historial = JSON.parse(sessionStorage.getItem('jaguar_chat_history') || '[]');
-            const messages = historial.slice(-6).map((m) => ({
-                role: m.remitente === 'user' ? 'user' : 'assistant',
-                content: m.texto
-            }));
-
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-user-id': userId },
-                    body: JSON.stringify({ messages })
-                });
-
-                const data = await response.json();
-                mostrarTyping(false);
-                // El bot SÍ necesita formato de links
-                agregarMensaje(data.content || "Lo siento, tuve un problema técnico.", 'chat-message--bot', true);
-            } catch (error) {
-                mostrarTyping(false);
-                agregarMensaje("Error de conexión. Intenta de nuevo.", 'chat-message--bot');
-            } finally {
-                input.disabled = false;
-                sendBtn.disabled = false;
-                sendBtn.classList.remove('chat-input__send--disabled');
-                
-                if (mantenerFoco) input.focus();
-            }
-        };
-
-        const toggleChat = () => {
-            chatWindow.classList.toggle('chat-window--open');
-            trigger.classList.toggle('chat-trigger--active');
-            if (chatWindow.classList.contains('chat-window--open')) {
-                mostrarSugerencias();
-                scrollAlFondo();
-                setTimeout(() => input?.focus(), 100);
-            }
-        };
-
-        const mostrarSugerencias = () => {
-            if (!suggestionsContainer) return;
-            const preguntas = ["¿Cómo unirme?", "Patrocinios", "Ubicación"];
-            suggestionsContainer.innerHTML = '';
-            preguntas.forEach(p => {
-                const chip = document.createElement('div');
-                chip.className = 'suggestion-chip';
-                chip.innerText = p;
-                chip.onclick = () => { input.value = p; enviarMensaje(false); };
-                suggestionsContainer.appendChild(chip);
-            });
-        };
-
-        // --- INICIALIZACIÓN ---
-        chatMessages.innerHTML = '';
-        const historial = JSON.parse(sessionStorage.getItem('jaguar_chat_history') || '[]');
-        historial.forEach((m) => {
-            agregarMensaje(m.texto, m.remitente === 'user' ? 'chat-message--user' : 'chat-message--bot', false);
-        });
-
-        trigger.onclick = toggleChat;
-        closeBtn.onclick = toggleChat;
-        sendBtn.onclick = () => enviarMensaje();
-        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') enviarMensaje(); });
+        initChatWidget();
     });
 </script>

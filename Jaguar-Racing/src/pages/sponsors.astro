@@ -8,6 +8,7 @@ import '../styles/sponsors.css';
 import '../styles/hero-internal.css';
 
 // 2. Carga Dinámica de Logos (Desde src/assets/Patrocinadores/)
+// Nota: Astro optimizará cada uno de estos al usarlos en el componente <Image />
 const sponsorLogos = await Astro.glob('../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}');
 
 // 3. Imagen Portada
@@ -23,7 +24,12 @@ const pageTitle = "Patrocinios";
             src={imgPortada} 
             alt="Patrocinadores Jaguar Racing" 
             class="hero-internal__bg" 
+            /* OPTIMIZACIÓN HERO (LCP) */
             loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={80}
+            format="webp"
             width={1920}
         />
         <div class="hero-internal__overlay"></div>
@@ -65,8 +71,12 @@ const pageTitle = "Patrocinios";
                             src={logo.default} 
                             alt="Logo Patrocinador" 
                             class="sponsor-logo" 
-                            width={300} 
+                            width={300} /* Tamaño controlado */
+                            /* OPTIMIZACIÓN LOGOS */
                             loading="lazy"
+                            decoding="async"
+                            format="webp" /* Forzamos WebP para transparencia ligera */
+                            quality={90}  /* Calidad alta para que las letras del logo no se vean borrosas */
                         />
                     </div>
                 ))}

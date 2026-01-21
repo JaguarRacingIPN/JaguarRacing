@@ -1,191 +1,436 @@
-// Variable global para limpiar timeouts si cambias de página
+/**
+ * miniJuego.js - VERSIÓN FINAL
+ * - Sin logs.
+ * - Sin errores visibles.
+ * - Autocuración de usuarios viejos.
+ * - Optimizado para 500+ usuarios.
+ */
+
 let gameTimeouts = [];
+let pollingInterval = null;
 
 document.addEventListener('astro:page-load', () => {
     const btn = document.getElementById('reaction-btn');
     if (!btn) return;
 
-    // --- DOM ---
+    // --- DOM ELEMENTOS ---
     const lights = document.querySelectorAll('.light');
     const resultDisplay = document.getElementById('reaction-result');
-    const bestTimeDisplay = document.getElementById('best-time-display');
     const rankDisplay = document.getElementById('player-rank');
 
+    // --- RANKING DOM ---
+    const leaderboardContainer = document.getElementById('top-ranks');
+    const userRankRow = document.getElementById('user-rank-row');
+    const userTimeDisplay = document.getElementById('user-time');
+    const userPosDisplay = document.getElementById('user-pos');
+    const userPilotDisplay = userRankRow ? userRankRow.querySelector('.pilot') : null;
+
+    // --- MODAL DOM ---
+    const modal = document.getElementById('name-modal');
+
+    // --- BOTÓN REFRESH (LÓGICA RATE LIMIT) ---
+    const refreshBtn = document.getElementById('refresh-rank-btn');
+    if (refreshBtn) {
+        refreshBtn.onclick = () => {
+            // Animación visual de carga
+            refreshBtn.style.transform = "rotate(360deg)";
+            refreshBtn.disabled = true;
+            refreshBtn.style.opacity = "0.5";
+            refreshBtn.style.cursor = "wait";
+
+            loadLeaderboard();
+
+            // Reset visual rápido
+            setTimeout(() => refreshBtn.style.transform = "rotate(0deg)", 500);
+
+            // Cooldown de 10 segundos
+            setTimeout(() => {
+                refreshBtn.disabled = false;
+                refreshBtn.style.opacity = "1";
+                refreshBtn.style.cursor = "pointer";
+            }, 10000); 
+        };
+    }
+
     // --- ESTADO ---
-    let gameState = 'idle'; 
+    let gameState = 'idle';
     let startTime = 0;
-    
-    // --- LIMPIEZA INICIAL ---
+
+    // --- USUARIO ---
+    let userId = localStorage.getItem('jaguar_user');
+    if (userId && userPilotDisplay) userPilotDisplay.textContent = userId.split('#')[0];
+
     resetAllTimeouts();
+    const storedRecord = localStorage.getItem('jaguarReactionRecord');
+    let personalBest = storedRecord ? parseFloat(storedRecord) : Infinity;
 
-    // --- CARGAR RÉCORD ---
-    let personalBest = localStorage.getItem('jaguarReactionRecord');
-    updateBestDisplay(personalBest);
+    loadLeaderboard();
+    startPolling();
 
-    // --- FUNCIONES ---
+    // ==========================================
+    //        SISTEMA DE MODAL (2.0)
+    // ==========================================
+    function promptForName(isRename = false) {
+        return new Promise((resolve) => {
+            if (!modal) return resolve(null);
+
+            const emailInput = document.getElementById('pilot-gmail-input');
+            const nameInput = document.getElementById('pilot-name-input');
+            const modalTitle = modal.querySelector('h3');
+
+            modal.classList.add('active');
+
+            // --- LÓGICA DE VISIBILIDAD DEL CORREO ---
+            if (emailInput) {
+                if (isRename) {
+                    // Rename: Ocultar correo
+                    emailInput.style.display = 'none';
+                    if (modalTitle) modalTitle.innerText = "NUEVO ALIAS";
+                } else {
+                    // Registro: Verificar si ya existe correo
+                    const existingEmail = localStorage.getItem('jaguar_user_email');
+                    if (existingEmail) {
+                        emailInput.style.display = 'none';
+                    } else {
+                        emailInput.style.display = 'block';
+                        emailInput.value = "";
+                        emailInput.style.borderColor = "#444";
+                        emailInput.placeholder = "Correo (Institucional/Personal)";
+                    }
+                    if (modalTitle) modalTitle.innerText = "LICENCIA DE PILOTO";
+                }
+            }
+
+            nameInput.value = "";
+            nameInput.style.borderColor = "#444";
+            nameInput.focus();
+
+            const handleClose = () => {
+                modal.classList.remove('active');
+                cleanup();
+                resolve(null);
+            };
+
+            const handleSave = (e) => {
+                if (e) e.preventDefault();
+
+                // A. Validación Correo
+                if (!isRename && emailInput && emailInput.style.display !== 'none') {
+                    let rawEmail = emailInput.value.trim();
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                    if (rawEmail.length === 0 || !emailRegex.test(rawEmail)) {
+                        emailInput.style.borderColor = "#ff4444";
+                        emailInput.classList.add('shake');
+                        emailInput.placeholder = "¡Correo requerido!";
+                        setTimeout(() => emailInput.classList.remove('shake'), 500);
+                        return;
+                    }
+                    localStorage.setItem('jaguar_user_email', rawEmail);
+                    emailInput.style.borderColor = "#00ff00";
+                }
+
+                // B. Validación Alias
+                let rawValue = nameInput.value;
+                let name = rawValue.replace(/[^a-zA-Z0-9 _-]/g, "").trim();
+
+                if (name.length < 3) {
+                    nameInput.style.borderColor = "#ff4444";
+                    nameInput.classList.add('shake');
+                    setTimeout(() => nameInput.classList.remove('shake'), 500);
+                    return;
+                }
+
+                // C. Generar ID
+                const suffix = Math.floor(1000 + Math.random() * 9000);
+                const fullId = `${name}#${suffix}`;
+
+                modal.classList.remove('active');
+                cleanup();
+                resolve(fullId);
+            };
+
+            const handleOutsideClick = (e) => {
+                if (e.target === modal) handleClose();
+            };
+
+            function cleanup() {
+                modal.removeEventListener('click', handleOutsideClick);
+                
+                const newNameInput = nameInput.cloneNode(true);
+                nameInput.parentNode.replaceChild(newNameInput, nameInput);
+
+                if (emailInput) {
+                    const newEmailInput = emailInput.cloneNode(true);
+                    emailInput.parentNode.replaceChild(newEmailInput, emailInput);
+                }
+            }
+
+            // Gestión de Botones (Clonación para limpiar listeners)
+            const currentSaveBtn = document.getElementById('save-name-btn');
+            const currentCloseBtn = document.getElementById('close-modal-btn');
+
+            const newSaveBtn = currentSaveBtn.cloneNode(true);
+            currentSaveBtn.parentNode.replaceChild(newSaveBtn, currentSaveBtn);
+            newSaveBtn.addEventListener('click', handleSave);
+
+            if (currentCloseBtn) {
+                const newCloseBtn = currentCloseBtn.cloneNode(true);
+                currentCloseBtn.parentNode.replaceChild(newCloseBtn, currentCloseBtn);
+                newCloseBtn.addEventListener('click', handleClose);
+            }
+
+            modal.addEventListener('click', handleOutsideClick);
+
+            const inputs = [document.getElementById('pilot-name-input'), document.getElementById('pilot-gmail-input')];
+            inputs.forEach(input => {
+                if (input) {
+                    input.onkeydown = (e) => {
+                        if (e.key === 'Enter') handleSave(e);
+                        if (e.key === 'Escape') handleClose();
+                    }
+                }
+            });
+        });
+    }
+
+    // ==========================================
+    //           RENOMBRADO
+    // ==========================================
+    const editBtn = document.getElementById('edit-name-btn');
+    if (editBtn) {
+        editBtn.onclick = async () => {
+            const oldId = userId;
+            const newId = await promptForName(true); // true = Solo Nombre
+
+            if (!newId || newId === oldId) return;
+
+            const originalText = userPilotDisplay.textContent;
+            userPilotDisplay.style.opacity = "0.5";
+            userPilotDisplay.textContent = "Guardando...";
+
+            try {
+                const res = await fetch('/api/game/rename', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ oldName: oldId, newName: newId })
+                });
+
+                if (res.ok) {
+                    userId = newId;
+                    localStorage.setItem('jaguar_user', userId);
+                    userPilotDisplay.style.opacity = "1";
+                    userPilotDisplay.style.color = "#FFD700";
+                    userPilotDisplay.textContent = userId.split('#')[0];
+                    setTimeout(() => userPilotDisplay.style.color = "#fff", 1000);
+                    loadLeaderboard();
+                } else {
+                    userPilotDisplay.style.opacity = "1";
+                    userPilotDisplay.textContent = originalText;
+                }
+            } catch (e) {
+                userPilotDisplay.textContent = originalText;
+            }
+        };
+    }
+
+    // ==========================================
+    //        LÓGICA DE JUEGO & RANKING
+    // ==========================================
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && pollingInterval) clearInterval(pollingInterval);
+        else if (!document.hidden) startPolling();
+    });
+
+    function startPolling() {
+        if (pollingInterval) clearInterval(pollingInterval);
+        pollingInterval = setInterval(() => {
+            if (gameState === 'idle') loadLeaderboard();
+        }, 30000); 
+    }
 
     function resetAllTimeouts() {
         gameTimeouts.forEach(id => clearTimeout(id));
         gameTimeouts = [];
     }
 
-    function updateBestDisplay(time) {
-        if (time && time < 9999) {
-            personalBest = parseFloat(time);
-            if (bestTimeDisplay) {
-                bestTimeDisplay.textContent = `${personalBest} ms`;
-                bestTimeDisplay.style.color = "#FFE878";
+    async function loadLeaderboard() {
+        if (!leaderboardContainer) return;
+        try {
+            const res = await fetch('/api/game/ranking?t=' + Date.now());
+            if (!res.ok) return;
+            const top10 = await res.json();
+
+            leaderboardContainer.innerHTML = '';
+
+            if (!top10 || top10.length === 0) {
+                leaderboardContainer.innerHTML = '<div class="rank-row" style="display:block; text-align:center;">Sé el primero 🏆</div>';
+                return;
             }
-        } else {
-            personalBest = 9999;
-            if (bestTimeDisplay) bestTimeDisplay.textContent = "--";
+
+            top10.forEach((player, index) => {
+                const cleanName = String(player.member).split('#')[0];
+                const timeStr = Number(player.score).toFixed(3);
+
+                const row = document.createElement('div');
+                row.className = 'rank-row';
+                row.innerHTML = `
+                    <span class="pos">${index + 1}</span>
+                    <span class="pilot-col"></span>
+                    <span class="time">${timeStr} s</span>
+                `;
+                row.querySelector('.pilot-col').textContent = cleanName;
+                leaderboardContainer.appendChild(row);
+            });
+        } catch (e) { /* Silencio en producción */ }
+    }
+
+    async function submitScoreToRanking(tiempoMs) {
+        const tiempoSegundos = tiempoMs / 1000;
+        let currentBest = localStorage.getItem('jaguarReactionRecord');
+        let recordHistorico = currentBest ? (parseFloat(currentBest) / 1000) : Infinity;
+        let isSynced = localStorage.getItem('jaguar_server_synced');
+        let storedEmail = localStorage.getItem('jaguar_user_email'); // FIX: Recuperar Email
+
+        // Guardar localmente si es mejor
+        if (tiempoSegundos < recordHistorico) {
+            recordHistorico = tiempoSegundos;
+            localStorage.setItem('jaguarReactionRecord', recordHistorico * 1000);
         }
+
+        // FIX: Si no hay usuario O no hay email (usuarios viejos), pedir datos
+        if (!userId || !storedEmail) {
+            setTimeout(async () => {
+                // Esto fuerza el modal para capturar el email faltante
+                const newId = await promptForName(); 
+                if (newId) {
+                    userId = newId;
+                    localStorage.setItem('jaguar_user', userId);
+                    if (userPilotDisplay) userPilotDisplay.textContent = newId.split('#')[0];
+                    // Reintentar envío
+                    submitScoreToRanking(tiempoMs);
+                }
+            }, 800);
+            return;
+        }
+
+        // Filtro de envío (Ahorro de datos)
+        const mereceEnvio = (tiempoSegundos <= recordHistorico) || (!isSynced) || (tiempoSegundos < 0.250);
+
+        if (!mereceEnvio) {
+            // Log eliminado
+            showUserRow(recordHistorico, "-");
+            return;
+        }
+
+        const userEmail = storedEmail || "";
+
+        try {
+            const res = await fetch('/api/game/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nombre: userId,
+                    email: userEmail,
+                    tiempo: tiempoSegundos,
+                    recordLocal: recordHistorico
+                })
+            });
+            const data = await res.json();
+
+            if (res.status === 200) {
+                localStorage.setItem('jaguar_server_synced', 'true');
+                loadLeaderboard();
+                const rankPosition = data.new_rank ? `#${data.new_rank}` : "-";
+                showUserRow(recordHistorico, rankPosition);
+            } else if (data.error && data.error.includes("Correo")) {
+                // Si el servidor rechaza por correo, forzamos la limpieza para que pida de nuevo
+                localStorage.removeItem('jaguar_user_email');
+            }
+        } catch (error) { /* Silencio en producción */ }
+    }
+
+    function showUserRow(mejorTiempo, posicionTexto) {
+        if (!userRankRow) return;
+        userRankRow.classList.remove('hidden');
+        userTimeDisplay.textContent = mejorTiempo.toFixed(3) + " s";
+        userPosDisplay.innerText = posicionTexto;
+        const isFirst = String(posicionTexto) === "#1";
+        userPosDisplay.style.color = isFirst ? "#FFD700" : "#fff";
     }
 
     function resetVisuals() {
         lights.forEach(l => l.classList.remove('red', 'green'));
-        
         btn.classList.remove('penalty');
-        btn.style.backgroundColor = 'transparent'; 
-        btn.style.transform = 'scale(1)';
+        btn.style.backgroundColor = 'transparent'; btn.style.transform = 'scale(1)';
         resultDisplay.style.color = '#FFE878';
-        
-        // CORRECCIÓN: Limpiar cualquier color residual del rango
-        rankDisplay.style.color = ""; 
-        rankDisplay.style.opacity = "0";
+        if (rankDisplay) { rankDisplay.style.opacity = "0"; rankDisplay.className = "reaction-rank"; }
     }
 
     function triggerFault() {
-        gameState = 'fault';
-        resetAllTimeouts(); 
-        resetVisuals();
-        
+        gameState = 'fault'; resetAllTimeouts(); resetVisuals();
         resultDisplay.textContent = "¡SALIDA EN FALSO!";
-        resultDisplay.style.color = "#ff4444";
-        
-        btn.innerText = "REINTENTAR"; 
-        
-        rankDisplay.textContent = "DESCALIFICADO 🚫";
-        rankDisplay.className = "reaction-rank rank-slow";
-        // CORRECCIÓN: Forzar el color rojo aquí también para sobreescribir el verde anterior
-        rankDisplay.style.color = "#ff4444"; 
-        rankDisplay.style.opacity = "1";
+        resultDisplay.style.setProperty('color', '#ff4444', 'important');
+        btn.innerText = "REINTENTAR";
+        if (rankDisplay) { rankDisplay.textContent = "DESCALIFICADO 🚫"; rankDisplay.style.opacity = "1"; rankDisplay.style.color = "#ff4444"; }
     }
 
     function startGameSequence() {
-        gameState = 'waiting';
-        resetVisuals(); // Esto limpia el color verde anterior
-        
-        btn.innerText = "ESPERA..."; 
-        resultDisplay.textContent = "0.000 ms";
-
+        gameState = 'waiting'; resetVisuals(); btn.innerText = "ESPERA..."; resultDisplay.textContent = "0.000 ms";
         let cumulativeDelay = 0;
-
-        // Secuencia de luces rojas
         lights.forEach((light) => {
             cumulativeDelay += 800;
-            const id = setTimeout(() => {
-                if (gameState === 'waiting') light.classList.add('red');
-            }, cumulativeDelay);
+            const id = setTimeout(() => { if (gameState === 'waiting') light.classList.add('red'); }, cumulativeDelay);
             gameTimeouts.push(id);
         });
-
-        // Tiempo aleatorio extra
         const randomTime = Math.floor(Math.random() * 3000) + 1000;
         const totalWait = cumulativeDelay + randomTime;
-
-        const greenId = setTimeout(() => {
-            if (gameState === 'waiting') goGreen();
-        }, totalWait);
+        const greenId = setTimeout(() => { if (gameState === 'waiting') goGreen(); }, totalWait);
         gameTimeouts.push(greenId);
     }
 
     function goGreen() {
-        gameState = 'green';
-        startTime = performance.now();
-        
-        lights.forEach(l => {
-            l.classList.remove('red');
-            l.classList.add('green');
-        });
-        
-        btn.innerText = "¡AHORA!"; 
+        gameState = 'green'; startTime = performance.now();
+        lights.forEach(l => { l.classList.remove('red'); l.classList.add('green'); });
+        btn.innerText = "¡AHORA!";
     }
 
     function handleInteraction(e) {
-        if(e.type === 'touchstart') e.preventDefault(); 
-
-        if (gameState === 'idle' || gameState === 'result' || gameState === 'fault') {
-            startGameSequence();
-        } else if (gameState === 'waiting') {
-            triggerFault();
-        } else if (gameState === 'green') {
-            finishGame();
-        }
+        if (e.type === 'touchstart') e.preventDefault();
+        if (gameState === 'idle' || gameState === 'result' || gameState === 'fault') startGameSequence();
+        else if (gameState === 'waiting') triggerFault();
+        else if (gameState === 'green') finishGame();
     }
 
     function finishGame() {
         gameState = 'result';
         const endTime = performance.now();
-        const reactionTime = Math.floor(endTime - startTime); 
-
+        const reactionTime = Math.floor(endTime - startTime);
         resultDisplay.textContent = `${reactionTime} ms`;
-        
-        // --- LÓGICA DE RANGO ---
+
         let rankTitle, rankClass, color;
+        if (reactionTime < 250) { rankTitle = "JAGUAR LEGEND 🐆"; rankClass = "rank-legend"; color = "#FFD700"; }
+        else if (reactionTime < 350) { rankTitle = "PILOTO F1 🏎️"; rankClass = "rank-pro"; color = "#00ff00"; }
+        else if (reactionTime < 500) { rankTitle = "CONDUCTOR PROMEDIO 🚗"; rankClass = "rank-avg"; color = "#fff"; }
+        else { rankTitle = "ABUELITA AL VOLANTE 🐢"; rankClass = "rank-slow"; color = "#ff4444"; }
 
-        if (reactionTime < 250) { 
-            rankTitle = "JAGUAR LEGEND 🐆";
-            rankClass = "rank-legend";
-            color = "#FFD700";
-        } else if (reactionTime < 350) {
-            rankTitle = "PILOTO F1 🏎️";
-            rankClass = "rank-pro";
-            color = "#00ff00";
-        } else if (reactionTime < 500) {
-            rankTitle = "CONDUCTOR PROMEDIO 🚗";
-            rankClass = "rank-avg";
-            color = "#fff";
-        } else {
-            rankTitle = "ABUELITA AL VOLANTE 🐢";
-            rankClass = "rank-slow";
-            color = "#ff4444";
-        }
-
-        rankDisplay.textContent = rankTitle;
-        rankDisplay.className = `reaction-rank ${rankClass}`;
-        // Aplicamos el color explícitamente
-        rankDisplay.style.color = color;
-        rankDisplay.style.opacity = "1";
-        
-        rankDisplay.style.transform = "scale(1.2)";
+        rankDisplay.textContent = rankTitle; rankDisplay.className = `reaction-rank ${rankClass}`;
+        rankDisplay.style.color = color; rankDisplay.style.opacity = "1"; rankDisplay.style.transform = "scale(1.2)";
         setTimeout(() => rankDisplay.style.transform = "scale(1)", 200);
 
-        // Récord
-        if (reactionTime < personalBest && reactionTime > 50) { 
-            personalBest = reactionTime;
-            localStorage.setItem('jaguarReactionRecord', personalBest);
-            if(bestTimeDisplay) {
-                bestTimeDisplay.textContent = `${personalBest} ms (¡RÉCORD!)`;
-                bestTimeDisplay.style.color = "#FFD700";
-            }
-        }
+        if (reactionTime > 50 && reactionTime < 5000) submitScoreToRanking(reactionTime);
 
-        btn.innerText = "JUGAR OTRA VEZ"; 
+        btn.innerText = "JUGAR OTRA VEZ";
     }
 
-    // --- EVENT LISTENERS ---
-    btn.onclick = null; 
-    if (window.PointerEvent) {
-        btn.onpointerdown = handleInteraction;
-    } else {
-        btn.ontouchstart = handleInteraction;
-        btn.onmousedown = handleInteraction;
-    }
+    btn.onclick = null;
+    if (window.PointerEvent) btn.onpointerdown = handleInteraction;
+    else { btn.ontouchstart = handleInteraction; btn.onmousedown = handleInteraction; }
 });
 
-// Limpieza
 document.addEventListener('astro:before-swap', () => {
     gameTimeouts.forEach(id => clearTimeout(id));
     gameTimeouts = [];
+    if (pollingInterval) clearInterval(pollingInterval);
 });

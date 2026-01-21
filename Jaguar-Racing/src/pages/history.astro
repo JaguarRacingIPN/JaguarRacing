@@ -1,14 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
-import { Image } from 'astro:assets'; // 1. Importamos componente Image
+import { Image } from 'astro:assets';
 
-// Importación de estilos específicos de esta página (Línea de tiempo)
 import '../styles/trayectoria.css';
 import '../styles/hero-internal.css';
 
-// 2. Importamos la imagen desde Assets
-// Ajusta la ruta si tu carpeta se llama 'asset' en singular, pero por estándar suele ser 'assets'
+// Importamos la imagen desde Assets
 import imgTrayectoria from '../assets/Portadas/IMG_3259.JPG';
 
 const pageTitle = "Nuestra Trayectoria";
@@ -21,7 +19,12 @@ const pageTitle = "Nuestra Trayectoria";
             src={imgTrayectoria} 
             alt="Trayectoria en Baja SAE" 
             class="hero-internal__bg" 
+            /* OPTIMIZACIÓN LCP */
             loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={80}
+            format="webp"
             width={1920}
         />
         
@@ -51,8 +54,15 @@ const pageTitle = "Nuestra Trayectoria";
                 <div class="timeline-event timeline-event--right">
                     <div class="timeline-event__content">
                         <span class="timeline-event__year text-gold">2022</span>
-                        <img src="/img/IMGTrayectoria/h1.webp" alt="Victorias 2022" class="timeline-event__img" 
-                             loading="lazy" decoding="async" width="500" height="300">
+                        <img 
+                            src="/img/IMGTrayectoria/h1.webp" 
+                            alt="Victorias 2022" 
+                            class="timeline-event__img" 
+                            loading="lazy" 
+                            decoding="async" 
+                            width="500" 
+                            height="300"
+                        >
                         <h3 class="timeline-event__title">Victorias</h3>
                         <ul class="timeline-event__list">
                             <li class="timeline-event__highlight">1er Lugar General <span class="timeline-event__detail">All Terrain Vehicle Design Challenge</span></li>
@@ -64,8 +74,15 @@ const pageTitle = "Nuestra Trayectoria";
                 <div class="timeline-event timeline-event--left">
                     <div class="timeline-event__content">
                         <span class="timeline-event__year text-gold">2021</span>
-                        <img src="/img/IMGTrayectoria/h2.webp" alt="Finalistas 2021" class="timeline-event__img" 
-                             loading="lazy" decoding="async" width="500" height="300">
+                        <img 
+                            src="/img/IMGTrayectoria/h2.webp" 
+                            alt="Finalistas 2021" 
+                            class="timeline-event__img" 
+                            loading="lazy" 
+                            decoding="async" 
+                            width="500" 
+                            height="300"
+                        >
                         <h3 class="timeline-event__title">Finalistas</h3>
                         <p>Finalistas en <strong>Reducción de Costos</strong> <span class="timeline-event__detail">(BAJA SAE México)</span></p>
                     </div>
@@ -74,8 +91,15 @@ const pageTitle = "Nuestra Trayectoria";
                 <div class="timeline-event timeline-event--right">
                     <div class="timeline-event__content">
                         <span class="timeline-event__year text-gold">2020</span>
-                        <img src="/img/IMGTrayectoria/h3.webp" alt="Doble Finalista 2020" class="timeline-event__img" 
-                             loading="lazy" decoding="async" width="500" height="300">
+                        <img 
+                            src="/img/IMGTrayectoria/h3.webp" 
+                            alt="Doble Finalista 2020" 
+                            class="timeline-event__img" 
+                            loading="lazy" 
+                            decoding="async" 
+                            width="500" 
+                            height="300"
+                        >
                         <h3 class="timeline-event__title">Doble Finalista</h3>
                         <ul class="timeline-event__list">
                             <li>Finalistas en <strong>Prueba de Diseño</strong></li>
@@ -87,8 +111,15 @@ const pageTitle = "Nuestra Trayectoria";
                 <div class="timeline-event timeline-event--left">
                     <div class="timeline-event__content">
                         <span class="timeline-event__year text-gold">2019</span>
-                        <img src="/img/IMGTrayectoria/h4.webp" alt="Campeones 2019" class="timeline-event__img" 
-                             loading="lazy" decoding="async" width="500" height="300">
+                        <img 
+                            src="/img/IMGTrayectoria/h4.webp" 
+                            alt="Campeones 2019" 
+                            class="timeline-event__img" 
+                            loading="lazy" 
+                            decoding="async" 
+                            width="500" 
+                            height="300"
+                        >
                         <h3 class="timeline-event__title">Campeones</h3>
                         <p class="timeline-event__highlight">1er Lugar en Marketing <span class="timeline-event__detail">(BAJA SAE México)</span></p>
                     </div>
@@ -103,9 +134,10 @@ const pageTitle = "Nuestra Trayectoria";
 
 <style>
     /* Optimizaciones de renderizado SEGURAS */
+    /* content-visibility le dice al navegador: "No calcules layout de esto si no está en pantalla" */
     .timeline-event {
         content-visibility: auto; 
-        contain-intrinsic-size: 500px;
-        contain: layout;
+        contain-intrinsic-size: 500px; /* Ayuda a evitar saltos al hacer scroll */
+        contain: layout paint;
     }
 </style>

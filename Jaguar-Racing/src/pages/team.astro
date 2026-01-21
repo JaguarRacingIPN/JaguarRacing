@@ -9,6 +9,7 @@ import '../styles/team.css';
 import '../styles/hero-internal.css'; 
 
 // 2. Carga automática de la Galería
+// Nota: Astro optimizará estas imágenes automáticamente al usarlas en <Image />
 const teamImages = await Astro.glob('../assets/Equipo/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
 
 // 3. Imagen Portada Hero
@@ -24,7 +25,12 @@ const pageTitle = "Conoce al equipo";
             class="hero-internal__bg" 
             src={imgHero} 
             alt="Equipo Jaguar Racing"
+            /* OPTIMIZACIÓN HERO */
             loading="eager"
+            fetchpriority="high"
+            decoding="sync"
+            quality={80}
+            format="webp"
             width={1920}
         />
         <div class="hero-internal__overlay"></div>
@@ -52,6 +58,7 @@ const pageTitle = "Conoce al equipo";
                     equipo y la excelencia universitaria.
                 </p>
 
+                {/* LOGO: Pequeño y simple, carga normal */}
                 <img 
                     src="/img/page/JaguarLogo.webp" 
                     class="origins-logo" 
@@ -59,6 +66,7 @@ const pageTitle = "Conoce al equipo";
                     width="150" 
                     height="150" 
                     loading="lazy"
+                    decoding="async"
                 />
 
                 <p class="origins-text">
@@ -72,16 +80,19 @@ const pageTitle = "Conoce al equipo";
         <section class="team-marquee-section">
             <div class="team-marquee-wrapper">
                 <div class="team-marquee-track">
-                    {/* Renderizamos DOS veces las imágenes para loop */}
+                    {/* Renderizamos DOS veces las imágenes para loop infinito */}
                     {[...teamImages, ...teamImages].map((img) => (
                         <div class="marquee-card">
                             <Image 
                                 src={img.default} 
                                 alt="Momento Jaguar Racing" 
                                 class="marquee-img"
-                                width={400}
+                                width={400} /* Tamaño fijo pequeño para el slider */
                                 height={280}
+                                quality={60} /* Calidad media, pasan rápido y no se ven detalles */
+                                format="webp"
                                 loading="lazy"
+                                decoding="async"
                             />
                         </div>
                     ))}
@@ -102,13 +113,16 @@ const pageTitle = "Conoce al equipo";
                         {seccion.integrantes.map((miembro) => (
                             <div class="roster-card">
                                 <div class="roster-img-box">
+                                    {/* FOTOS MIEMBROS: Vienen de JSON (rutas públicas o remotas) */}
                                     <img 
                                         src={miembro.foto} 
                                         alt={miembro.nombre} 
                                         class="roster-img" 
                                         loading="lazy" 
+                                        decoding="async"
                                         width="300" 
                                         height="300" 
+                                        /* Tip: Asegúrate que las fotos en el JSON ya sean .webp o jpg comprimidos */
                                     />
                                 </div>
 
@@ -117,7 +131,6 @@ const pageTitle = "Conoce al equipo";
                                     <h3 class="roster-name">{miembro.nombre}</h3>
                                     <p class="roster-career">{miembro.carrera}</p>
                                     
-                                    {/* CAMBIO: Imagen LinkedIn WebP */}
                                     {miembro.linkedin && (
                                         <a href={miembro.linkedin} target="_blank" rel="noopener noreferrer" class="roster-social-link" aria-label="LinkedIn">
                                             <img 
@@ -125,6 +138,7 @@ const pageTitle = "Conoce al equipo";
                                                 alt="LinkedIn" 
                                                 class="linkedin-icon"
                                                 loading="lazy"
+                                                decoding="async"
                                                 width="22"
                                                 height="22"
                                             />

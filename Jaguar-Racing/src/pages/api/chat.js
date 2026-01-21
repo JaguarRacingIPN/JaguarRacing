@@ -74,25 +74,27 @@ export const POST = async ({ request }) => {
         const ip = forwarded ? forwarded.split(',')[0] : '127.0.0.1';
         const userId = request.headers.get('x-user-id') || 'anonimo';
 
-        // --- Rate Limiting ---
-        const WINDOW_SIZE = 900;
-        const LIMIT_IP = 50;
-        const LIMIT_USER = 18;
+        // --- Rate Limiting (AJUSTADO A 24 HORAS) ---
+        const WINDOW_SIZE = 86400; // 24 horas (60 * 60 * 24)
+        const LIMIT_IP = 300;      // 300 preguntas por IP (para redes IPN)
+        const LIMIT_USER = 50;     // 50 preguntas por Usuario (costo individual)
 
+        // Validación por IP
         const ipKey = `ratelimit:ip:${ip}`;
         const ipCount = await redis.incr(ipKey);
         if (ipCount === 1) await redis.expire(ipKey, WINDOW_SIZE);
 
         if (ipCount > LIMIT_IP) {
-            return new Response(JSON.stringify({ content: "⚠️ Demasiadas peticiones. Intenta en 15 min." }), { status: 429 });
+            return new Response(JSON.stringify({ content: "⚠️ Demasiadas peticiones desde esta red. Intenta mañana." }), { status: 429 });
         }
 
+        // Validación por Usuario
         const userKey = `ratelimit:user:${userId}`;
         const userCount = await redis.incr(userKey);
         if (userCount === 1) await redis.expire(userKey, WINDOW_SIZE);
 
         if (userCount > LIMIT_USER) {
-            return new Response(JSON.stringify({ content: "🛑 Límite diario alcanzado." }), { status: 429 });
+            return new Response(JSON.stringify({ content: "🛑 Has alcanzado tu límite diario de preguntas." }), { status: 429 });
         }
 
         // --- Preparar Mensajes ---
