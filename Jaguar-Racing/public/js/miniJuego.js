@@ -291,39 +291,49 @@ document.addEventListener('astro:page-load', () => {
         let currentBest = localStorage.getItem('jaguarReactionRecord');
         let recordHistorico = currentBest ? (parseFloat(currentBest) / 1000) : Infinity;
         let isSynced = localStorage.getItem('jaguar_server_synced');
-        let storedEmail = localStorage.getItem('jaguar_user_email'); // FIX: Recuperar Email
+        let storedEmail = localStorage.getItem('jaguar_user_email');
+        
+        // RECUPERAMOS EL RANGO GUARDADO
+        const lastKnownRank = localStorage.getItem('jaguar_last_rank');
 
-        // Guardar localmente si es mejor
+        // 1. Guardar Récord Local
         if (tiempoSegundos < recordHistorico) {
             recordHistorico = tiempoSegundos;
             localStorage.setItem('jaguarReactionRecord', recordHistorico * 1000);
         }
 
-        // FIX: Si no hay usuario O no hay email (usuarios viejos), pedir datos
+        // 2. Si faltan datos, pedir con Modal
         if (!userId || !storedEmail) {
             setTimeout(async () => {
-                // Esto fuerza el modal para capturar el email faltante
                 const newId = await promptForName(); 
                 if (newId) {
                     userId = newId;
                     localStorage.setItem('jaguar_user', userId);
                     if (userPilotDisplay) userPilotDisplay.textContent = newId.split('#')[0];
-                    // Reintentar envío
                     submitScoreToRanking(tiempoMs);
                 }
             }, 800);
             return;
         }
 
-        // Filtro de envío (Ahorro de datos)
-        const mereceEnvio = (tiempoSegundos <= recordHistorico) || (!isSynced) || (tiempoSegundos < 0.250);
+        // 3. Filtro Inteligente (Autocuración)
+        // Forzamos envío si:
+        // A. Mejoramos tiempo.
+        // B. No estamos sincronizados.
+        // C. Estamos sincronizados PERO no tenemos el rango guardado (EL FIX PARA TU NAVEGADOR).
+        // D. Es un tiempo sospechosamente bueno (< 0.250).
+        
+        const faltaDatoRango = isSynced && !lastKnownRank; // <--- ESTA ES LA CURA
+
+        const mereceEnvio = (tiempoSegundos <= recordHistorico) || (!isSynced) || faltaDatoRango || (tiempoSegundos < 0.250);
 
         if (!mereceEnvio) {
-            // Log eliminado
-            showUserRow(recordHistorico, "-");
+            const rankText = lastKnownRank ? `#${lastKnownRank}` : "-";
+            showUserRow(recordHistorico, rankText);
             return;
         }
 
+        // 4. Envío al Servidor
         const userEmail = storedEmail || "";
 
         try {
@@ -341,14 +351,19 @@ document.addEventListener('astro:page-load', () => {
 
             if (res.status === 200) {
                 localStorage.setItem('jaguar_server_synced', 'true');
+                
+                if (data.new_rank) {
+                    localStorage.setItem('jaguar_last_rank', data.new_rank);
+                }
+
                 loadLeaderboard();
                 const rankPosition = data.new_rank ? `#${data.new_rank}` : "-";
                 showUserRow(recordHistorico, rankPosition);
+
             } else if (data.error && data.error.includes("Correo")) {
-                // Si el servidor rechaza por correo, forzamos la limpieza para que pida de nuevo
                 localStorage.removeItem('jaguar_user_email');
             }
-        } catch (error) { /* Silencio en producción */ }
+        } catch (error) { /* Silencio */ }
     }
 
     function showUserRow(mejorTiempo, posicionTexto) {

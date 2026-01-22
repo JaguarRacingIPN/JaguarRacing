@@ -28,7 +28,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     if (!nombreSeguroRegex.test(nombre)) return new Response(JSON.stringify({ error: "Caracteres inválidos" }), { status: 400 });
 
     const tiempoNumerico = Number(tiempo);
-    // Límite humano: Nadie reacciona en menos de 10ms. Si mandan menos, es bot/hack.
+    // Límite humano: Nadie reacciona en menos de 0ms. Si mandan menos, es bot/hack.
     if (isNaN(tiempoNumerico) || tiempoNumerico < 0.01) { 
         return new Response(JSON.stringify({ error: "Tiempo sospechoso" }), { status: 400 });
     }
