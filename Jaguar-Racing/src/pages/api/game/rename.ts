@@ -1,47 +1,42 @@
 export const prerender = false;
 import type { APIRoute } from "astro";
-import { Redis } from "@upstash/redis";
-
-const redis = new Redis({
-  url: import.meta.env.KV_REST_API_URL,
-  token: import.meta.env.KV_REST_API_TOKEN,
-});
+import { redis } from "../../../lib/redis"; // Usamos la misma instancia que en submit
 
 export const POST: APIRoute = async ({ request }) => {
   try {
     const { oldName, newName } = await request.json();
 
-    // 1. VALIDACIONES (Idénticas a submit.ts para consistencia)
+    // 1. Validaciones Básicas
     if (!oldName || !newName) return new Response(JSON.stringify({ error: "Faltan datos" }), { status: 400 });
 
+    // Misma regex que en submit.ts para consistencia
     const nombreRegex = /^[a-zA-Z0-9 _#-]+$/;
     
-    // Validamos longitud y caracteres
     if (!nombreRegex.test(newName) || newName.length < 3 || newName.length > 25) {
         return new Response(JSON.stringify({ error: "Nombre inválido" }), { status: 400 });
     }
 
-    // 2. VERIFICAR SI EXISTE (Usando la llave de la campaña)
+    // 2. Verificar si el usuario realmente tiene un récord
     const currentScore = await redis.zscore("leaderboard:feb2026_Q1", oldName);
 
     if (currentScore === null) {
-        // El usuario no tiene récord en el servidor todavía.
-        // Respondemos OK para que el frontend actualice el nombre localmente sin dar error.
+        // Si no tiene récord en el server, le decimos que todo OK para que 
+        // actualice su localStorage y sea feliz. No gastamos recursos de Redis.
         return new Response(JSON.stringify({ status: "ok", msg: "Nombre local actualizado" }), { status: 200 });
     }
 
-    // 3. MIGRACIÓN ATÓMICA (Pipeline)
+    // 3. Migración Atómica
     const p = redis.pipeline();
 
-    // A) Copiar Récord al Nuevo Nombre
+    // A) Crear la entrada nueva con el mismo puntaje
     p.zadd("leaderboard:feb2026_Q1", { score: currentScore, member: newName });
     
-    // B) Borrar Récord del Viejo Nombre
+    // B) Borrar la entrada vieja
     p.zrem("leaderboard:feb2026_Q1", oldName);
 
-    // C) MIGRAR DATOS PRIVADOS (Email/IP)
-    // Renombramos la llave "user:Viejo" a "user:Nuevo" para no perder el email del ganador
-    // RENAMENX: "Renombrar solo si el nuevo no existe" (para evitar sobreescribir otro usuario por error)
+    // C) Migrar metadatos técnicos (IP, Last Seen)
+    // Usamos RENAMENX para mover el hash "user:old" a "user:new".
+    // Si "user:old" no existe (raro, pero posible), esto no fallará el pipeline, solo retornará 0.
     p.renamenx(`user:${oldName}`, `user:${newName}`);
 
     await p.exec();
@@ -49,6 +44,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify({ status: "success", msg: "Identidad transferida" }), { status: 200 });
 
   } catch (error) {
+    // Error silencioso en producción
     console.error("Error rename:", error);
     return new Response(JSON.stringify({ error: "Error interno" }), { status: 500 });
   }

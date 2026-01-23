@@ -22,12 +22,6 @@
 }
 
 /* --- INTERFAZ JUEGO --- */
-.reaction-title {
-    font-family: 'Montserrat', sans-serif; font-weight: 800;
-    font-size: clamp(2rem, 5vw, 2.5rem); color: #fff; margin-bottom: 2rem;
-    text-transform: uppercase; letter-spacing: -1px;
-    text-shadow: 0 0 20px rgba(166, 124, 0, 0.4);
-}
 .reaction-result {
     font-family: 'Courier New', monospace; font-weight: 700;
     font-size: clamp(2.5rem, 6vw, 3.5rem); color: #fff;
@@ -178,8 +172,6 @@
 }
 
 .leaderboard-top h3 {
-    margin: 0;
-    font-size: 1.2rem; /* Texto más grande */
     color: #FFD700;
     font-weight: 800;
     letter-spacing: 1.5px;

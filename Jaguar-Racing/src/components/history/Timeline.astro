@@ -1,10 +1,18 @@
 ---
+import { Image } from 'astro:assets';
+
+// Importación de imágenes desde la carpeta src/assets
+// Asegúrate de que la ruta coincida con donde moviste las fotos
+import img2022 from '../../assets/IMGTrayectoria/h1.webp';
+import img2021 from '../../assets/IMGTrayectoria/h2.webp';
+import img2020 from '../../assets/IMGTrayectoria/h3.webp';
+import img2019 from '../../assets/IMGTrayectoria/h4.webp';
 ---
 
 <section class="history-section">
     <div class="history-timeline">
         
-        {/* 2025: Futuro */}
+        {/* 2025: Futuro (Sin cambios, no tiene imagen) */}
         <div class="timeline-event timeline-event--left">
             <div class="timeline-event__content">
                 <span class="timeline-event__year text-gold">2025</span>
@@ -21,15 +29,12 @@
         <div class="timeline-event timeline-event--right">
             <div class="timeline-event__content">
                 <span class="timeline-event__year text-gold">2022</span>
-                <img 
-                    src="/img/IMGTrayectoria/h1.webp" 
-                    alt="Victorias 2022" 
-                    class="timeline-event__img" 
-                    loading="lazy" 
-                    decoding="async" 
-                    width="500" 
-                    height="300"
-                >
+                <Image 
+                    src={img2022} 
+                    alt="Victorias Jaguar Racing 2022" 
+                    class="timeline-event__img"
+                    width={500} /* Astro mantiene la proporción automáticamente */
+                />
                 <h3 class="timeline-event__title">Victorias</h3>
                 <ul class="timeline-event__list">
                     <li class="timeline-event__highlight">1er Lugar General <span class="timeline-event__detail">All Terrain Vehicle Design Challenge</span></li>
@@ -42,15 +47,12 @@
         <div class="timeline-event timeline-event--left">
             <div class="timeline-event__content">
                 <span class="timeline-event__year text-gold">2021</span>
-                <img 
-                    src="/img/IMGTrayectoria/h2.webp" 
-                    alt="Finalistas 2021" 
-                    class="timeline-event__img" 
-                    loading="lazy" 
-                    decoding="async" 
-                    width="500" 
-                    height="300"
-                >
+                <Image 
+                    src={img2021} 
+                    alt="Equipo Finalista 2021" 
+                    class="timeline-event__img"
+                    width={500}
+                />
                 <h3 class="timeline-event__title">Finalistas</h3>
                 <p>Finalistas en <strong>Reducción de Costos</strong> <span class="timeline-event__detail">(BAJA SAE México)</span></p>
             </div>
@@ -60,15 +62,12 @@
         <div class="timeline-event timeline-event--right">
             <div class="timeline-event__content">
                 <span class="timeline-event__year text-gold">2020</span>
-                <img 
-                    src="/img/IMGTrayectoria/h3.webp" 
-                    alt="Doble Finalista 2020" 
-                    class="timeline-event__img" 
-                    loading="lazy" 
-                    decoding="async" 
-                    width="500" 
-                    height="300"
-                >
+                <Image 
+                    src={img2020} 
+                    alt="Logros temporada 2020" 
+                    class="timeline-event__img"
+                    width={500}
+                />
                 <h3 class="timeline-event__title">Doble Finalista</h3>
                 <ul class="timeline-event__list">
                     <li>Finalistas en <strong>Prueba de Diseño</strong></li>
@@ -81,15 +80,12 @@
         <div class="timeline-event timeline-event--left">
             <div class="timeline-event__content">
                 <span class="timeline-event__year text-gold">2019</span>
-                <img 
-                    src="/img/IMGTrayectoria/h4.webp" 
+                <Image 
+                    src={img2019} 
                     alt="Campeones 2019" 
-                    class="timeline-event__img" 
-                    loading="lazy" 
-                    decoding="async" 
-                    width="500" 
-                    height="300"
-                >
+                    class="timeline-event__img"
+                    width={500}
+                />
                 <h3 class="timeline-event__title">Campeones</h3>
                 <p class="timeline-event__highlight">1er Lugar en Marketing <span class="timeline-event__detail">(BAJA SAE México)</span></p>
             </div>

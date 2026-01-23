@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro';
 
 // --- COMPONENTES HOME MODULARES ---
 import HeroSlider from '../components/home/HeroSlider.astro';
-import StatsBar from '../components/home/StatsBar.astro';
 import MissionSection from '../components/home/MissionSection.astro';
 import BajaSection from '../components/home/BajaSection.astro';
 import RecruitmentCTA from '../components/home/RecruitmentCTA.astro';
@@ -19,24 +18,38 @@ const pageTitle = "Inicio";
 
 <Layout title={pageTitle}>
     <main>
+        {/* 1. IMPACTO: El coche y la identidad visual */}
         <HeroSlider />
-        <StatsBar />
+
+        {/* 2. IDENTIDAD: Quiénes somos (breve y honesto) */}
         <MissionSection />
+
+        {/* 3. OBJETIVO: La competencia (Contexto para el visitante) */}
         <BajaSection />
+
+        {/* 4. ACCIÓN (Talento): Captura a los estudiantes interesados */}
         <RecruitmentCTA />
+
+        {/* 5. VALIDACIÓN (Dinero): Muestra quién confía en ustedes antes de pedir más */}
         <SponsorsMarquee />
+
+        {/* 6. CONFIANZA: Caras reales del equipo (Humaniza la marca) */}
         <TeamPreview />
+
+        {/* 7. RETENCIÓN: El juego al final para que se queden un rato más */}
         <ReactionGame />
     </main>
 
     {/* --- SCRIPTS --- */}
     
-    {/* Críticos */}
+    {/* Críticos de UI (Navegación y Portada) */}
     <script is:inline defer src="/js/portada.js"></script>
     <script is:inline defer src="/js/scroll.js"></script>
 
-    {/* Lazy Loading (Background) */}
-    <script is:inline defer src="/js/contadores.js"></script>
+    {/* Funcionalidades Específicas */}
+    {/* Nota: Idealmente estos irían dentro de BajaSection y ReactionGame, 
+        pero dejarlos aquí funciona perfectamente bien por ahora. */}
+    <script is:inline defer src="/js/competencia-timer.js"></script>
     <script is:inline defer src="/js/miniJuego.js"></script>
     
 </Layout>
