@@ -1,9 +1,9 @@
 /**
- * miniJuego.js - VERSIÓN FINAL
+ * miniJuego.js - VERSIÓN DE INGENIERÍA (PRODUCCIÓN)
+ * - Funcionalidad "Rename" restaurada.
+ * - Sin correos.
  * - Sin logs.
- * - Sin errores visibles.
- * - Autocuración de usuarios viejos.
- * - Optimizado para 500+ usuarios.
+ * - Rate Limiting visual.
  */
 
 let gameTimeouts = [];
@@ -28,11 +28,10 @@ document.addEventListener('astro:page-load', () => {
     // --- MODAL DOM ---
     const modal = document.getElementById('name-modal');
 
-    // --- BOTÓN REFRESH (LÓGICA RATE LIMIT) ---
+    // --- BOTÓN REFRESH (RATE LIMIT VISUAL) ---
     const refreshBtn = document.getElementById('refresh-rank-btn');
     if (refreshBtn) {
         refreshBtn.onclick = () => {
-            // Animación visual de carga
             refreshBtn.style.transform = "rotate(360deg)";
             refreshBtn.disabled = true;
             refreshBtn.style.opacity = "0.5";
@@ -40,10 +39,7 @@ document.addEventListener('astro:page-load', () => {
 
             loadLeaderboard();
 
-            // Reset visual rápido
             setTimeout(() => refreshBtn.style.transform = "rotate(0deg)", 500);
-
-            // Cooldown de 10 segundos
             setTimeout(() => {
                 refreshBtn.disabled = false;
                 refreshBtn.style.opacity = "1";
@@ -68,38 +64,21 @@ document.addEventListener('astro:page-load', () => {
     startPolling();
 
     // ==========================================
-    //        SISTEMA DE MODAL (2.0)
+    //        SISTEMA DE MODAL (SIMPLIFICADO)
     // ==========================================
     function promptForName(isRename = false) {
         return new Promise((resolve) => {
             if (!modal) return resolve(null);
 
-            const emailInput = document.getElementById('pilot-gmail-input');
             const nameInput = document.getElementById('pilot-name-input');
             const modalTitle = modal.querySelector('h3');
+            
+            // Limpieza de inputs previos si existieran en el HTML antiguo
+            const emailInput = document.getElementById('pilot-gmail-input');
+            if (emailInput) emailInput.style.display = 'none';
 
             modal.classList.add('active');
-
-            // --- LÓGICA DE VISIBILIDAD DEL CORREO ---
-            if (emailInput) {
-                if (isRename) {
-                    // Rename: Ocultar correo
-                    emailInput.style.display = 'none';
-                    if (modalTitle) modalTitle.innerText = "NUEVO ALIAS";
-                } else {
-                    // Registro: Verificar si ya existe correo
-                    const existingEmail = localStorage.getItem('jaguar_user_email');
-                    if (existingEmail) {
-                        emailInput.style.display = 'none';
-                    } else {
-                        emailInput.style.display = 'block';
-                        emailInput.value = "";
-                        emailInput.style.borderColor = "#444";
-                        emailInput.placeholder = "Correo (Institucional/Personal)";
-                    }
-                    if (modalTitle) modalTitle.innerText = "LICENCIA DE PILOTO";
-                }
-            }
+            if (modalTitle) modalTitle.innerText = isRename ? "NUEVO ALIAS" : "LICENCIA DE PILOTO";
 
             nameInput.value = "";
             nameInput.style.borderColor = "#444";
@@ -114,23 +93,7 @@ document.addEventListener('astro:page-load', () => {
             const handleSave = (e) => {
                 if (e) e.preventDefault();
 
-                // A. Validación Correo
-                if (!isRename && emailInput && emailInput.style.display !== 'none') {
-                    let rawEmail = emailInput.value.trim();
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                    if (rawEmail.length === 0 || !emailRegex.test(rawEmail)) {
-                        emailInput.style.borderColor = "#ff4444";
-                        emailInput.classList.add('shake');
-                        emailInput.placeholder = "¡Correo requerido!";
-                        setTimeout(() => emailInput.classList.remove('shake'), 500);
-                        return;
-                    }
-                    localStorage.setItem('jaguar_user_email', rawEmail);
-                    emailInput.style.borderColor = "#00ff00";
-                }
-
-                // B. Validación Alias
+                // Validación Alias
                 let rawValue = nameInput.value;
                 let name = rawValue.replace(/[^a-zA-Z0-9 _-]/g, "").trim();
 
@@ -141,7 +104,7 @@ document.addEventListener('astro:page-load', () => {
                     return;
                 }
 
-                // C. Generar ID
+                // Generar ID
                 const suffix = Math.floor(1000 + Math.random() * 9000);
                 const fullId = `${name}#${suffix}`;
 
@@ -156,14 +119,8 @@ document.addEventListener('astro:page-load', () => {
 
             function cleanup() {
                 modal.removeEventListener('click', handleOutsideClick);
-                
                 const newNameInput = nameInput.cloneNode(true);
                 nameInput.parentNode.replaceChild(newNameInput, nameInput);
-
-                if (emailInput) {
-                    const newEmailInput = emailInput.cloneNode(true);
-                    emailInput.parentNode.replaceChild(newEmailInput, emailInput);
-                }
             }
 
             // Gestión de Botones (Clonación para limpiar listeners)
@@ -182,34 +139,38 @@ document.addEventListener('astro:page-load', () => {
 
             modal.addEventListener('click', handleOutsideClick);
 
-            const inputs = [document.getElementById('pilot-name-input'), document.getElementById('pilot-gmail-input')];
-            inputs.forEach(input => {
-                if (input) {
-                    input.onkeydown = (e) => {
-                        if (e.key === 'Enter') handleSave(e);
-                        if (e.key === 'Escape') handleClose();
-                    }
+            const input = document.getElementById('pilot-name-input');
+            if (input) {
+                input.onkeydown = (e) => {
+                    if (e.key === 'Enter') handleSave(e);
+                    if (e.key === 'Escape') handleClose();
                 }
-            });
+            }
         });
     }
 
     // ==========================================
-    //           RENOMBRADO
+    //         RENOMBRADO (RESTAURADO)
     // ==========================================
     const editBtn = document.getElementById('edit-name-btn');
     if (editBtn) {
         editBtn.onclick = async () => {
             const oldId = userId;
-            const newId = await promptForName(true); // true = Solo Nombre
+            // 1. Pedir nuevo nombre
+            const newId = await promptForName(true);
 
+            // 2. Si canceló o puso el mismo, no hacemos nada
             if (!newId || newId === oldId) return;
 
-            const originalText = userPilotDisplay.textContent;
-            userPilotDisplay.style.opacity = "0.5";
-            userPilotDisplay.textContent = "Guardando...";
+            // 3. Feedback Visual "Guardando..."
+            const originalText = userPilotDisplay ? userPilotDisplay.textContent : "";
+            if (userPilotDisplay) {
+                userPilotDisplay.style.opacity = "0.5";
+                userPilotDisplay.textContent = "Guardando...";
+            }
 
             try {
+                // 4. Petición al API
                 const res = await fetch('/api/game/rename', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -217,19 +178,30 @@ document.addEventListener('astro:page-load', () => {
                 });
 
                 if (res.ok) {
+                    // 5. Éxito: Actualizamos LocalStorage y UI
                     userId = newId;
                     localStorage.setItem('jaguar_user', userId);
-                    userPilotDisplay.style.opacity = "1";
-                    userPilotDisplay.style.color = "#FFD700";
-                    userPilotDisplay.textContent = userId.split('#')[0];
-                    setTimeout(() => userPilotDisplay.style.color = "#fff", 1000);
-                    loadLeaderboard();
+                    
+                    if (userPilotDisplay) {
+                        userPilotDisplay.style.opacity = "1";
+                        userPilotDisplay.style.color = "#FFD700"; // Dorado de éxito
+                        userPilotDisplay.textContent = userId.split('#')[0];
+                        setTimeout(() => userPilotDisplay.style.color = "#fff", 1000);
+                    }
+                    loadLeaderboard(); // Recargamos la tabla para ver el cambio
                 } else {
+                    // Error del API
+                    if (userPilotDisplay) {
+                        userPilotDisplay.style.opacity = "1";
+                        userPilotDisplay.textContent = originalText;
+                    }
+                }
+            } catch (e) {
+                // Error de Red
+                if (userPilotDisplay) {
                     userPilotDisplay.style.opacity = "1";
                     userPilotDisplay.textContent = originalText;
                 }
-            } catch (e) {
-                userPilotDisplay.textContent = originalText;
             }
         };
     }
@@ -291,9 +263,7 @@ document.addEventListener('astro:page-load', () => {
         let currentBest = localStorage.getItem('jaguarReactionRecord');
         let recordHistorico = currentBest ? (parseFloat(currentBest) / 1000) : Infinity;
         let isSynced = localStorage.getItem('jaguar_server_synced');
-        let storedEmail = localStorage.getItem('jaguar_user_email');
         
-        // RECUPERAMOS EL RANGO GUARDADO
         const lastKnownRank = localStorage.getItem('jaguar_last_rank');
 
         // 1. Guardar Récord Local
@@ -302,8 +272,8 @@ document.addEventListener('astro:page-load', () => {
             localStorage.setItem('jaguarReactionRecord', recordHistorico * 1000);
         }
 
-        // 2. Si faltan datos, pedir con Modal
-        if (!userId || !storedEmail) {
+        // 2. Si falta nombre, pedirlo
+        if (!userId) {
             setTimeout(async () => {
                 const newId = await promptForName(); 
                 if (newId) {
@@ -317,13 +287,7 @@ document.addEventListener('astro:page-load', () => {
         }
 
         // 3. Filtro Inteligente (Autocuración)
-        // Forzamos envío si:
-        // A. Mejoramos tiempo.
-        // B. No estamos sincronizados.
-        // C. Estamos sincronizados PERO no tenemos el rango guardado (EL FIX PARA TU NAVEGADOR).
-        // D. Es un tiempo sospechosamente bueno (< 0.250).
-        
-        const faltaDatoRango = isSynced && !lastKnownRank; // <--- ESTA ES LA CURA
+        const faltaDatoRango = isSynced && !lastKnownRank;
 
         const mereceEnvio = (tiempoSegundos <= recordHistorico) || (!isSynced) || faltaDatoRango || (tiempoSegundos < 0.250);
 
@@ -334,15 +298,12 @@ document.addEventListener('astro:page-load', () => {
         }
 
         // 4. Envío al Servidor
-        const userEmail = storedEmail || "";
-
         try {
             const res = await fetch('/api/game/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     nombre: userId,
-                    email: userEmail,
                     tiempo: tiempoSegundos,
                     recordLocal: recordHistorico
                 })
@@ -359,9 +320,6 @@ document.addEventListener('astro:page-load', () => {
                 loadLeaderboard();
                 const rankPosition = data.new_rank ? `#${data.new_rank}` : "-";
                 showUserRow(recordHistorico, rankPosition);
-
-            } else if (data.error && data.error.includes("Correo")) {
-                localStorage.removeItem('jaguar_user_email');
             }
         } catch (error) { /* Silencio */ }
     }

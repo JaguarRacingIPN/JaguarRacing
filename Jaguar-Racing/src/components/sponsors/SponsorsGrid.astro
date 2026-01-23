@@ -1,35 +1,76 @@
 ---
 import { Image } from 'astro:assets';
 
-// Carga automática de todos los logos
-const sponsorLogos = await Astro.glob('../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}');
+/* 1. TUS DATOS (La fuente de la verdad) */
+const patrocinadores = [
+  { img: 'altair.webp', nombre: 'Altair', url: 'https://altair.com' },
+  { img: 'ansys.webp', nombre: 'Ansys', url: 'https://www.ansys.com' },
+  { img: 'bimsa.webp', nombre: 'BIMSA', url: 'https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv/?originalSubdomain=mx' }, 
+  { img: 'copiisa.webp', nombre: 'Copiisa', url: 'https://copiisa.com.mx' },
+  { img: 'mantemimiento.webp', nombre: 'Mantenimiento Industrial', url: 'https://mantto.mx/' },
+  { img: 'polimex.webp', nombre: 'Polimex', url: 'https://www.polimex.mx' },
+  { img: 'SMI.webp', nombre: 'SMI México', url: 'https://www.smimexico.com.mx/' },
+  { img: 'solidwor.webp', nombre: 'SolidWorks', url: 'https://www.solidworks.com' },
+  { img: 'tmx.webp', nombre: 'TMX Toolmex', url: 'https://hvhindustrial.com/es/brand/toolmex-tmx' },
+  { img: 'toyota.webp', nombre: 'Toyota', url: 'https://www.toyota.mx' },
+  { img: 'IPN.webp', nombre: 'Instituto Politécnico Nacional', url: 'https://www.ipn.mx' }
+];
+
+/* 2. CARGA INTELIGENTE DE IMÁGENES
+   En lugar de Astro.glob, usamos import.meta.glob con 'eager: true'.
+   Esto nos da un objeto donde las claves son las rutas de los archivos.
+*/
+const images = import.meta.glob('../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}', { eager: true });
+
+/* 3. FUNCIÓN DE CRUCE (El cerebro)
+   Busca en las imágenes importadas aquella cuya ruta termine con el nombre de archivo de tu array.
+*/
+const getLogoImage = (filename) => {
+    // Buscamos la ruta completa que termine con "altair.webp", etc.
+    const imagePath = Object.keys(images).find(path => path.endsWith(filename));
+    
+    if (!imagePath) {
+        console.error(`❌ Imagen no encontrada en assets: ${filename}`);
+        return null; // O una imagen por defecto
+    }
+    
+    return images[imagePath].default;
+};
 ---
 
 <section class="sponsors-grid-section">
     <div class="sponsors-grid">
         
-        {sponsorLogos.map((logo) => (
-            <div class="sponsor-card">
-                <Image 
-                    src={logo.default} 
-                    alt="Logo Patrocinador" 
-                    class="sponsor-logo" 
-                    width={300} 
-                    height={150} /* Altura referencial para evitar saltos, aunque CSS controle */
-                    /* OPTIMIZACIÓN LOGOS: Lazy load para que no pesen al inicio */
-                    loading="lazy"
-                    decoding="async"
-                    format="webp" 
-                    quality={90} 
-                />
-            </div>
-        ))}
-
-        {/* Tarjeta de Llamada a la Acción */}
-        <a href="mailto:contacto@jaguarracing.com" class="sponsor-card sponsor-cta">
-            <span class="cta-text">TU LOGO AQUÍ</span>
-            <span class="cta-sub">Sé parte del equipo</span>
-        </a>
+        {patrocinadores.map((sponsor) => {
+            const logoImg = getLogoImage(sponsor.img);
+            
+            return (
+                /* Convertimos el div en un <a> para que sea cliqueable */
+                <a 
+                    href={sponsor.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" /* Seguridad obligatoria para target blank */
+                    class="sponsor-card"
+                    title={`Visitar ${sponsor.nombre}`}
+                >
+                    {logoImg ? (
+                        <Image 
+                            src={logoImg} 
+                            alt={`Logo de ${sponsor.nombre}`} 
+                            class="sponsor-logo" 
+                            width={300} 
+                            height={150}
+                            loading="lazy"
+                            decoding="async"
+                            /* Astro infiere el formato, no necesitas forzarlo a menos que quieras */
+                        />
+                    ) : (
+                        /* Fallback por si escribiste mal el nombre de la imagen */
+                        <span>{sponsor.nombre}</span>
+                    )}
+                </a>
+            );
+        })}
 
     </div>
 </section>
