@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import '../../styles/layout/hero.css'; 
+
+// NOTA IMPORTANTE: Subimos 2 niveles (../../) para llegar a assets
+const backgroundImages = await Astro.glob('../../assets/Index/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
+---
+
+<div class="hero-background-container">
+    {/* H1 Oculto para SEO (Accesibilidad 100) */}
+    <h1 class="sr-only">Jaguar Racing Escudería IPN - Inicio</h1>
+    
+    <div class="slideshow-wrapper">
+        {backgroundImages.map((img, index) => (
+            <div class={`bg-slide ${index === 0 ? 'active' : ''}`}>
+                <Image 
+                    src={img.default} 
+                    alt="Jaguar Racing Portada" 
+                    widths={[360, 768, 1280, 1920]} 
+                    sizes={`(max-width: 768px) 100vw, 100vw`}
+                    format="webp"
+                    quality={80}
+                    class="bg-image-fit" 
+                    decoding="async"
+                    loading={index === 0 ? "eager" : "lazy"} 
+                    fetchpriority={index === 0 ? "high" : "auto"}
+                />
+                <div class="overlay-dark"></div>
+            </div>
+        ))}
+    </div>
+</div>

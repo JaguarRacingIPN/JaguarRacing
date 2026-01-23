@@ -1,94 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import { Image } from 'astro:assets';
 
-import '../styles/carruselAreas.css';
-import '../styles/registrobtnConvocatoria.css';
-import '../styles/hero-internal.css';
-
-// Importamos la imagen desde Assets (Correcto para optimización automática)
-import imgConv from '../assets/Equipo/Conv.JPG';
+// --- COMPONENTES CONVOCATORIA ---
+import HeroConvocatoria from '../components/join/HeroConvocatoria.astro';
+import AreasCarousel from '../components/join/AreasCarousel.astro';
+import RegistrationCTA from '../components/join/RegistrationCTA.astro';
 
 const pageTitle = "Convocatoria";
-const areas = ['1.webp', '2.webp', '3.webp', '4.webp', '5.webp', '6.webp', '7.webp', '8.webp'];
 ---
 
 <Layout title={pageTitle}>
-
-    <header class="hero-internal">
-        <Image 
-            src={imgConv} 
-            alt="Equipo Jaguar Racing Convocatoria"
-            class="hero-internal__bg"
-            width={1920} 
-            height={1080}
-            /* OPTIMIZACIÓN LCP (Largest Contentful Paint) */
-            loading="eager" 
-            fetchpriority="high"
-            decoding="sync"
-            quality={80}
-            format="webp"
-        />
-
-        <div class="hero-internal__overlay"></div>
-
-        <div class="hero-internal__content">
-            <h1 class="hero-internal__title">CONVOCATORIA</h1>
-        </div>
-    </header>
-
     <main>
-        <section class="areas-showcase">
-            <h2 class="areas-showcase__title">Nuestras Áreas</h2>
-            
-            <div class="carousel-wrapper">
-                <button class="areas-showcase__btn areas-showcase__btn--prev" id="btn-prev" aria-label="Anterior">&#10094;</button>
-
-                <div class="areas-carousel" id="carruselAreas">
-                    {areas.map((img) => (
-                        <div class="area-card">
-                            {/* IMÁGENES PÚBLICAS: No las optimiza Astro, dependen de que tú las subas ligeras */}
-                            <img 
-                                src={`/img/IMGAreas/${img}`} 
-                                alt="Área Jaguar Racing" 
-                                class="area-card__img"
-                                width="640"
-                                height="360"
-                                loading="lazy" 
-                                decoding="async"
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                <button class="areas-showcase__btn areas-showcase__btn--next" id="btn-next" aria-label="Siguiente">&#10095;</button>
-            </div>
-            
-            <div class="areas-showcase__indicators" id="indicadores"></div>
-        </section>
-
-        <section class="registration-cta">
-            <div class="registration-cta__content">
-                <h2 class="registration-cta__title">¿Listo para el desafío?</h2>
-                <p class="registration-cta__desc">
-                    Buscamos mentes apasionadas del IPN. No importa tu carrera, 
-                    si tienes ganas de aprender y competir, hay un lugar para ti en Jaguar Racing.
-                </p>
-                
-                <a href="https://forms.office.com/r/tuliNK" target="_blank" rel="noopener noreferrer" class="teams-btn">
-                    <span class="teams-btn__bracket"></span>
-                    FORMULARIO DE REGISTRO
-                    <span class="teams-btn__icon"></span>
-                </a>
-                
-                <p class="registration-cta__note">Al dar clic, serás redirigido al formulario oficial en Microsoft Teams.</p>
-            </div>
-        </section>
+        <HeroConvocatoria />
+        
+        <AreasCarousel />
+        
+        <RegistrationCTA />
     </main>
-
-    <Footer />
-
-    {/* Agregamos 'defer' para asegurar que el HTML existe antes de ejecutar JS */}
-    <script is:inline defer src="/js/carrusel.js"></script>
 </Layout>

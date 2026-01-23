@@ -1,29 +1,31 @@
 ---
+// src/layouts/Layout.astro
 import { ClientRouter } from 'astro:transitions';
 
-// --- ESTILOS GLOBALES (MODULARIZADOS) ---
-// 1. Base y Variables (Imprescindible: Colores, fuentes, reset)
-import '../styles/variables-base.css';
+// --- FUENTES (SELF-HOSTED) ---
+import '@fontsource/montserrat/400.css';
+import '@fontsource/montserrat/700.css';
+import '@fontsource/montserrat/900.css';
 
-// 2. UI y Tipografía (Imprescindible: H1-H3, Botones, Utilidades)
-import '../styles/typography-ui.css';
+// --- ESTILOS GLOBALES ---
+import '../styles/base/variables-base.css';
+import '../styles/base/typography-ui.css';
+import '../styles/layout/header.css';
+import '../styles/layout/footer.css';
+import '../styles/base/NoSelect.css';
+import '../styles/ui/widget_chat.css'; 
 
-// 3. Estructura Fija (Header y Footer)
-import '../styles/header.css';
-import '../styles/footer.css';
+// --- COMPONENTES ESTRUCTURALES (Rutas Nuevas) ---
+// Ahora importamos desde las carpetas organizadas:
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ChatWidget from '../components/ui/ChatWidget.astro';
 
-// 4. Portadas (Hero Index y Hero Interno)
-import '../styles/hero.css';          /* Para el Index */
-import '../styles/hero-internal.css'; /* Para páginas internas */
-
-// --- ESTILOS ESPECÍFICOS / LEGACY ---
-import '../styles/NoSelect.css';
-import '../styles/widget_chat.css'; 
-
-import ChatWidget from '../components/ChatWidget.astro';
-import Header from '../components/Header.astro';
-
+// Props recibidas por el layout
 const { title } = Astro.props;
+
+// URL base para producción
+const siteUrl = "https://jaguar-racing.vercel.app";
 ---
 
 <!doctype html>
@@ -32,42 +34,51 @@ const { title } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
+        
+        <meta name="theme-color" content="#1a1a1a" />
+
+        {/* --- SEGURIDAD (CSP) --- */}
+        <meta 
+          http-equiv="Content-Security-Policy" 
+          content="
+            default-src 'self'; 
+            img-src 'self' https://jaguar-racing.vercel.app data:; 
+            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com; 
+            style-src 'self' 'unsafe-inline'; 
+            font-src 'self' data:;
+            connect-src 'self' https://va.vercel-scripts.com;
+          " 
+        />
 
 		<link rel="icon" type="image/webp" href="/img/page/JaguarLogoPestania.webp" />
 		
 		<title>{title}</title>
-		<meta name="description" content="Sitio oficial de Jaguar Racing, Escudería de la ESIME Azcapotzalco (IPN). Diseño y manufactura de prototipos para Baja SAE. Innovación, reclutamiento y patrocinios." />
-		
+		<meta name="description" content="Sitio oficial de Jaguar Racing, Escudería de la ESIME Azcapotzalco (IPN). Diseño y manufactura de prototipos para Baja SAE." />
 		<meta name="keywords" content="Jaguar Racing, IPN, ESIME Azcapotzalco, Baja SAE, SAE México, Ingeniería Mecánica, Automotriz, Prototipos, Escudería" />
 		<meta name="author" content="Jaguar Racing Team" />
 
+		{/* --- OPEN GRAPH --- */}
 		<meta property="og:title" content={`Jaguar Racing | ${title}`} />
 		<meta property="og:description" content="Únete a la escudería oficial del IPN. Diseñamos prototipos Baja SAE. ¡Conoce nuestra tecnología y equipo!" />
-		<meta property="og:image" content="public/img/page/JaguarLogoConocenos.webp" />
-		<meta property="og:url" content="https://jaguar-racing.vercel.app/" />
+		<meta property="og:image" content={`${siteUrl}/img/page/JaguarLogoConocenos.webp`} />
+		<meta property="og:url" content={siteUrl} />
 		<meta property="og:type" content="website" />
-		
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 		
 		<ClientRouter />
 	</head>
 	<body>
 		
+        {/* Header persistente (No recarga al navegar) */}
 		<Header transition:persist />
 
-		<main>
-			<slot />
-		</main>
+        {/* Contenido dinámico de cada página (index, team, etc.) */}
+		<slot />
 
+        {/* Footer Global (Se agrega aquí para no repetirlo en cada página) */}
+        <Footer />
+
+        {/* Widget de Chat persistente */}
 		<ChatWidget transition:persist />
 
 	</body>
-
-	<script>
-	  window.addEventListener('load', () => {
-	    // Scripts globales si los necesitas
-	  });
-	</script>
 </html>

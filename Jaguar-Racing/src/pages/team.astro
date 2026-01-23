@@ -1,158 +1,24 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import { Image } from 'astro:assets';
+import '../styles/team/team.css';
 
-// 1. Datos y Estilos
-import roster from '../data/miembros.json';
-import '../styles/team.css';      
-import '../styles/hero-internal.css'; 
-
-// 2. Carga automática de la Galería
-// Nota: Astro optimizará estas imágenes automáticamente al usarlas en <Image />
-const teamImages = await Astro.glob('../assets/Equipo/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
-
-// 3. Imagen Portada Hero
-import imgHero from '../assets/Portadas/1.JPG';
+// --- COMPONENTES TEAM MODULARES ---
+import HeroTeam from '../components/team/HeroTeam.astro';
+import OriginsSection from '../components/team/OriginsSection.astro';
+import TeamMarquee from '../components/team/TeamMarquee.astro';
+import RosterGrid from '../components/team/RosterGrid.astro';
 
 const pageTitle = "Conoce al equipo";
 ---
 
 <Layout title={pageTitle}>
-
-    <header class="hero-internal">
-        <Image 
-            class="hero-internal__bg" 
-            src={imgHero} 
-            alt="Equipo Jaguar Racing"
-            /* OPTIMIZACIÓN HERO */
-            loading="eager"
-            fetchpriority="high"
-            decoding="sync"
-            quality={80}
-            format="webp"
-            width={1920}
-        />
-        <div class="hero-internal__overlay"></div>
-        <div class="hero-internal__content">
-            <h1 class="hero-internal__title">CONOCE AL EQUIPO</h1>
-        </div>
-    </header>
-
     <main>
-
-        <section class="origins-section">
-            <div class="origins-content">
-                <h2 class="section-title compact-title">ORÍGENES</h2>
-                
-                <p class="origins-text">
-                    El equipo surgió el 27 de octubre de 2017 en las instalaciones de la ESIME Azcapotzalco, 
-                    impulsado por un grupo de jóvenes apasionados por la ingeniería y con el deseo de llevar 
-                    al campo práctico lo aprendido en el aula.
-                </p>
-                
-                <p class="origins-text">
-                    A lo largo del tiempo, con la llegada de nuevas generaciones, el equipo ha evolucionado, 
-                    adaptando su identidad y fortaleciendo su visión. Tras varios nombres y etapas, hoy nos 
-                    consolidamos como Jaguar Racing, un equipo comprometido con la innovación, el trabajo en 
-                    equipo y la excelencia universitaria.
-                </p>
-
-                {/* LOGO: Pequeño y simple, carga normal */}
-                <img 
-                    src="/img/page/JaguarLogo.webp" 
-                    class="origins-logo" 
-                    alt="Logo Jaguar Racing" 
-                    width="150" 
-                    height="150" 
-                    loading="lazy"
-                    decoding="async"
-                />
-
-                <p class="origins-text">
-                    Jaguar Racing es la escudería de la Escuela Superior de Ingeniería Mecánica y Eléctrica, 
-                    con sede en la colonia Azcapotzalco, CDMX. Participamos en competencias Mini BAJA organizadas 
-                    por diversas instituciones, principalmente SAE International.
-                </p>
-            </div>
-        </section>
-
-        <section class="team-marquee-section">
-            <div class="team-marquee-wrapper">
-                <div class="team-marquee-track">
-                    {/* Renderizamos DOS veces las imágenes para loop infinito */}
-                    {[...teamImages, ...teamImages].map((img) => (
-                        <div class="marquee-card">
-                            <Image 
-                                src={img.default} 
-                                alt="Momento Jaguar Racing" 
-                                class="marquee-img"
-                                width={400} /* Tamaño fijo pequeño para el slider */
-                                height={280}
-                                quality={60} /* Calidad media, pasan rápido y no se ven detalles */
-                                format="webp"
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-
-        <div class="roster-section">
-            {roster.map((seccion) => (
-                <section class="roster-category">
-                    <div class="category-header">
-                        <span class="gold-line"></span>
-                        <h2 class="category-title">{seccion.categoria}</h2>
-                        <span class="gold-line"></span>
-                    </div>
-
-                    <div class="roster-grid">
-                        {seccion.integrantes.map((miembro) => (
-                            <div class="roster-card">
-                                <div class="roster-img-box">
-                                    {/* FOTOS MIEMBROS: Vienen de JSON (rutas públicas o remotas) */}
-                                    <img 
-                                        src={miembro.foto} 
-                                        alt={miembro.nombre} 
-                                        class="roster-img" 
-                                        loading="lazy" 
-                                        decoding="async"
-                                        width="300" 
-                                        height="300" 
-                                        /* Tip: Asegúrate que las fotos en el JSON ya sean .webp o jpg comprimidos */
-                                    />
-                                </div>
-
-                                <div class="roster-info">
-                                    <div class="roster-role">{miembro.rol}</div>
-                                    <h3 class="roster-name">{miembro.nombre}</h3>
-                                    <p class="roster-career">{miembro.carrera}</p>
-                                    
-                                    {miembro.linkedin && (
-                                        <a href={miembro.linkedin} target="_blank" rel="noopener noreferrer" class="roster-social-link" aria-label="LinkedIn">
-                                            <img 
-                                                src="/img/page/linkedIn_.webp" 
-                                                alt="LinkedIn" 
-                                                class="linkedin-icon"
-                                                loading="lazy"
-                                                decoding="async"
-                                                width="22"
-                                                height="22"
-                                            />
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-            ))}
-        </div>
-
+        <HeroTeam />
+        
+        <OriginsSection />
+        
+        <TeamMarquee />
+        
+        <RosterGrid />
     </main>
-
-    <Footer />
 </Layout>

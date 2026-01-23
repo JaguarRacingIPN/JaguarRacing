@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import imgBaja from '../../assets/CuerpoIndex/10.jpg';
+---
+
+<section class="what-is-baja scroll-animate">
+    <div class="compact-layout">
+        <div class="what-is-image">
+              <Image 
+                src={imgBaja} 
+                alt="Competencia Baja SAE" 
+                widths={[350, 600, 800]} 
+                sizes={`(max-width: 768px) 100vw, 50vw`}
+                format="webp"
+                loading="lazy"
+                decoding="async"
+              />
+        </div>
+
+        <div class="what-is-text">
+            <h2 class="section-title-left compact-title">BAJA SAE INTERNATIONAL</h2>
+            <div class="baja-description">
+                <p>
+                    Baja SAE desafía a estudiantes de ingeniería a diseñar, fabricar y probar un vehículo todoterreno monoplaza capaz de superar terrenos severos.
+                </p>
+                <p>
+                    Más que una carrera, es una evaluación rigurosa de <strong>resistencia mecánica, diseño ingenieril y viabilidad comercial</strong>. El objetivo es crear un prototipo real que soporte las condiciones más exigentes.
+                </p>
+                <a href="https://www.sae.org/events/student/about/baja" target="_blank" rel="noopener noreferrer" class="link-discreet">
+                    + Especificaciones Técnicas SAE
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {/* BARRA DE TIEMPO */}
+    <div class="integrated-timer-bar">
+        <div class="timer-container-inner">
+            <div class="timer-item">
+                <div class="timer-info">
+                    <span class="race-series">SAN LUIS POTOSÍ</span>
+                    <span class="race-location">BAJA SAE MÉXICO</span>
+                </div>
+                <span id="timer-mexico" class="timer-value">000d 00h 00m 00s</span>
+            </div>
+
+            <div class="timer-separator"></div>
+
+            <div class="timer-item">
+                <div class="timer-info">
+                    <span class="race-series">QUERÉTARO</span>
+                    <span class="race-location">All Terrain Vehicle Design Challenge</span>
+                </div>
+                <span id="timer-queretaro" class="timer-value">000d 00h 00m 00s</span>
+            </div>
+        </div>
+    </div>
+</section>

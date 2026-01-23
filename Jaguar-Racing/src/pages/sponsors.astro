@@ -1,96 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import { Image } from 'astro:assets';
+import '../styles/sponsors/sponsors.css';
 
-// 1. Estilos Nuevos
-import '../styles/sponsors.css';
-import '../styles/hero-internal.css';
-
-// 2. Carga Dinámica de Logos (Desde src/assets/Patrocinadores/)
-// Nota: Astro optimizará cada uno de estos al usarlos en el componente <Image />
-const sponsorLogos = await Astro.glob('../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}');
-
-// 3. Imagen Portada
-import imgPortada from '../assets/Portadas/Patrocinios.webp'; 
+// --- COMPONENTES SPONSORS MODULARES ---
+import HeroSponsors from '../components/sponsors/HeroSponsors.astro';
+import SponsorsIntro from '../components/sponsors/SponsorsIntro.astro';
+import SponsorsGrid from '../components/sponsors/SponsorsGrid.astro';
 
 const pageTitle = "Patrocinios";
 ---
 
 <Layout title={pageTitle}>
-
-    <header class="hero-internal">
-        <Image 
-            src={imgPortada} 
-            alt="Patrocinadores Jaguar Racing" 
-            class="hero-internal__bg" 
-            /* OPTIMIZACIÓN HERO (LCP) */
-            loading="eager"
-            fetchpriority="high"
-            decoding="sync"
-            quality={80}
-            format="webp"
-            width={1920}
-        />
-        <div class="hero-internal__overlay"></div>
-        <div class="hero-internal__content">
-            <h1 class="hero-internal__title">ALIANZAS ESTRATÉGICAS</h1>
-        </div>
-    </header>
-
     <main>
+        <HeroSponsors />
         
-        <section class="sponsors-intro-section">
-            <div class="sponsors-intro-content">
-                <h2 class="intro-title">Construyendo el Futuro Juntos</h2>
-                <div class="intro-text">
-                    <p>
-                        La ingeniería no se construye sola. Detrás de cada tornillo, cada línea de código y cada kilómetro recorrido, 
-                        existe una red de aliados que creen en el talento politécnico mexicano.
-                    </p>
-                    <p>
-                        Su apoyo transforma ideas en máquinas de alto rendimiento, permitiéndonos competir al máximo nivel internacional.
-                    </p>
-                </div>
-
-                <div class="dossier-btn-wrapper">
-                    <a href="/Dossier_SAE_UNI-ES.pdf" target="_blank" rel="noopener noreferrer" class="btn-download" download>
-                        DESCARGAR DOSSIER 2025
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <section class="sponsors-grid-section">
-            <div class="sponsors-grid">
-                
-                {/* Mapeo Automático de Logos */}
-                {sponsorLogos.map((logo) => (
-                    <div class="sponsor-card">
-                        <Image 
-                            src={logo.default} 
-                            alt="Logo Patrocinador" 
-                            class="sponsor-logo" 
-                            width={300} /* Tamaño controlado */
-                            /* OPTIMIZACIÓN LOGOS */
-                            loading="lazy"
-                            decoding="async"
-                            format="webp" /* Forzamos WebP para transparencia ligera */
-                            quality={90}  /* Calidad alta para que las letras del logo no se vean borrosas */
-                        />
-                    </div>
-                ))}
-
-                {/* Tarjeta de Llamada a la Acción */}
-                <a href="mailto:contacto@jaguarracing.com" class="sponsor-card sponsor-cta">
-                    <span class="cta-text">TU LOGO AQUÍ</span>
-                    <span class="cta-sub">Sé parte del equipo</span>
-                </a>
-
-            </div>
-        </section>
-
+        <SponsorsIntro />
+        
+        <SponsorsGrid />
     </main>
-
-    <Footer />
 </Layout>

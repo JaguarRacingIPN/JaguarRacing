@@ -10,10 +10,13 @@ export function initChatWidget() {
     const chatMessages = document.getElementById('chat-messages');
     const typingIndicator = document.getElementById('typing-indicator');
 
+    // 1. Validación de existencia
     if (!trigger || !chatWindow || !chatMessages || !input || !sendBtn) return;
 
-    // --- ESTADO GLOBAL DEL WIDGET ---
-    // 🔒 SEMÁFORO DE SEGURIDAD
+    // 2. IDEMPOTENCIA
+    if (trigger.dataset.initialized === "true") return;
+
+    // --- ESTADO GLOBAL ---
     let isProcessing = false; 
 
     // --- FUNCIONES CORE ---
@@ -34,19 +37,17 @@ export function initChatWidget() {
         });
     };
 
-    // Función para bloquear/desbloquear TODO (Input, Botón y Sugerencias)
     const toggleInteractions = (disable) => {
-        isProcessing = disable; // Actualizamos el semáforo
-        
+        isProcessing = disable; 
         input.disabled = disable;
         sendBtn.disabled = disable;
         
         if (disable) {
             sendBtn.classList.add('chat-input__send--disabled');
-            suggestionsContainer.classList.add('disabled'); // CSS se encarga del pointer-events
+            suggestionsContainer?.classList.add('disabled');
         } else {
             sendBtn.classList.remove('chat-input__send--disabled');
-            suggestionsContainer.classList.remove('disabled');
+            suggestionsContainer?.classList.remove('disabled');
         }
     };
 
@@ -65,7 +66,6 @@ export function initChatWidget() {
     };
 
     const enviarMensaje = async (textoManual = null, mantenerFoco = true) => {
-        // 🛡️ SEGURIDAD: Si ya estamos procesando, ignoramos clics
         if (isProcessing) return;
 
         const texto = textoManual || input.value.trim();
@@ -77,10 +77,8 @@ export function initChatWidget() {
             localStorage.setItem('jaguar_user_id', userId);
         }
 
-        // 🔒 BLOQUEAMOS INTERFAZ
         toggleInteractions(true);
-
-        if (!textoManual) input.value = ''; // Limpiar solo si vino del input
+        if (!textoManual) input.value = ''; 
         
         agregarMensaje(texto, 'chat-message--user', true);
         mostrarTyping(true);
@@ -102,7 +100,7 @@ export function initChatWidget() {
             mostrarTyping(false);
 
             if (response.status === 429) {
-                agregarMensaje(data.content || "Demasiadas peticiones. Calma.", 'chat-message--bot');
+                agregarMensaje(data.content || "Demasiadas peticiones.", 'chat-message--bot');
             } else if (response.ok) {
                 agregarMensaje(data.content, 'chat-message--bot', true);
             } else {
@@ -113,19 +111,34 @@ export function initChatWidget() {
             mostrarTyping(false);
             agregarMensaje("Error de conexión.", 'chat-message--bot');
         } finally {
-            // 🔓 DESBLOQUEAMOS INTERFAZ
             toggleInteractions(false);
             if (mantenerFoco && !textoManual) input.focus();
         }
     };
 
+    // --- AQUÍ ESTÁ EL CAMBIO CLAVE PARA EL NUEVO CSS ---
     const toggleChat = () => {
-        chatWindow.classList.toggle('chat-window--open');
-        trigger.classList.toggle('chat-trigger--active');
-        if (chatWindow.classList.contains('chat-window--open')) {
+        // Verificamos si tiene la clase de ABIERTO (tu CSS v3.4 usa chat-window--open)
+        const isOpen = chatWindow.classList.contains('chat-window--open');
+        
+        if (isOpen) {
+            // CERRAR: Quitamos las clases activas
+            chatWindow.classList.remove('chat-window--open');
+            trigger.classList.remove('chat-trigger--active');
+        } else {
+            // ABRIR: Agregamos las clases activas para activar la transición
+            chatWindow.classList.add('chat-window--open');
+            trigger.classList.add('chat-trigger--active');
+            
             mostrarSugerencias();
             scrollAlFondo();
-            setTimeout(() => input?.focus(), 100);
+            
+            // Foco al input con delay para esperar la animación CSS
+            setTimeout(() => input?.focus(), 300);
+
+            // Ocultar notificación (el número 1 rojo) al abrir
+            const badge = trigger.querySelector('.chat-notification-badge');
+            if (badge) badge.style.display = 'none';
         }
     };
 
@@ -137,29 +150,45 @@ export function initChatWidget() {
             const chip = document.createElement('div');
             chip.className = 'suggestion-chip';
             chip.innerText = p;
-            // Al hacer click, pasamos el texto directo a enviarMensaje
             chip.onclick = () => enviarMensaje(p, false); 
             suggestionsContainer.appendChild(chip);
         });
     };
 
     // --- CARGA INICIAL ---
-    chatMessages.innerHTML = '';
-    const historial = JSON.parse(sessionStorage.getItem('jaguar_chat_history') || '[]');
-    historial.forEach((m) => {
-        agregarMensaje(m.texto, m.remitente === 'user' ? 'chat-message--user' : 'chat-message--bot', false);
-    });
+    if (chatMessages.children.length === 0) {
+        const historial = JSON.parse(sessionStorage.getItem('jaguar_chat_history') || '[]');
+        if (historial.length > 0) {
+            historial.forEach((m) => {
+                const div = document.createElement('div');
+                div.className = `chat-message ${m.remitente === 'user' ? 'chat-message--user' : 'chat-message--bot'}`;
+                div.innerHTML = formatearTexto(m.texto);
+                chatMessages.appendChild(div);
+            });
+        } else {
+            const welcomeDiv = document.createElement('div');
+            welcomeDiv.className = 'chat-message chat-message--bot';
+            welcomeDiv.innerText = 'Hola, soy el asistente virtual de Jaguar Racing. ¿En qué puedo ayudarte hoy?';
+            chatMessages.appendChild(welcomeDiv);
+        }
+    }
 
-    // Limpieza de eventos previos (importante en Astro ViewTransitions)
-    trigger.onclick = toggleChat;
-    closeBtn.onclick = toggleChat;
-    // Removemos listener anterior para evitar duplicados si usas clonación, 
-    // pero al ser módulo externo se gestiona mejor.
+    // --- EVENT LISTENERS ---
+    trigger.addEventListener('click', toggleChat);
+    closeBtn?.addEventListener('click', toggleChat);
+    
+    // Fix: Clonación para limpiar listeners viejos si se recarga el componente
     const newSendBtn = sendBtn.cloneNode(true);
     sendBtn.parentNode.replaceChild(newSendBtn, sendBtn);
-    newSendBtn.onclick = () => enviarMensaje();
+    newSendBtn.addEventListener('click', () => enviarMensaje());
     
-    input.onkeypress = (e) => { 
+    // Referencia al nuevo botón para el scope local
+    const currentSendBtn = newSendBtn; 
+
+    input.addEventListener('keypress', (e) => { 
         if (e.key === 'Enter') enviarMensaje(); 
-    };
+    });
+
+    // 3. MARCADO FINAL
+    trigger.dataset.initialized = "true";
 }

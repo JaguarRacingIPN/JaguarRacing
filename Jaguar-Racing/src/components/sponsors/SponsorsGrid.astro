@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+
+// Carga automática de todos los logos
+const sponsorLogos = await Astro.glob('../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}');
+---
+
+<section class="sponsors-grid-section">
+    <div class="sponsors-grid">
+        
+        {sponsorLogos.map((logo) => (
+            <div class="sponsor-card">
+                <Image 
+                    src={logo.default} 
+                    alt="Logo Patrocinador" 
+                    class="sponsor-logo" 
+                    width={300} 
+                    height={150} /* Altura referencial para evitar saltos, aunque CSS controle */
+                    /* OPTIMIZACIÓN LOGOS: Lazy load para que no pesen al inicio */
+                    loading="lazy"
+                    decoding="async"
+                    format="webp" 
+                    quality={90} 
+                />
+            </div>
+        ))}
+
+        {/* Tarjeta de Llamada a la Acción */}
+        <a href="mailto:contacto@jaguarracing.com" class="sponsor-card sponsor-cta">
+            <span class="cta-text">TU LOGO AQUÍ</span>
+            <span class="cta-sub">Sé parte del equipo</span>
+        </a>
+
+    </div>
+</section>

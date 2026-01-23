@@ -1,315 +1,42 @@
 ---
-// --- ZONA DE LÓGICA (Server Side) ---
 import Layout from '../layouts/Layout.astro';
-import Footer from '../components/Footer.astro';
-import { Image } from 'astro:assets';
 
-// Importamos los CSS
-import '../styles/indexCuerpo.css';
-import '../styles/carruselPatrocinios.css';
-import '../styles/apoyanosbtn.css';
-import '../styles/miniJuego.css'; 
-import '../styles/NoSelect.css';
+// --- COMPONENTES HOME MODULARES ---
+import HeroSlider from '../components/home/HeroSlider.astro';
+import StatsBar from '../components/home/StatsBar.astro';
+import MissionSection from '../components/home/MissionSection.astro';
+import BajaSection from '../components/home/BajaSection.astro';
+import RecruitmentCTA from '../components/home/RecruitmentCTA.astro';
+import SponsorsMarquee from '../components/home/SponsorsMarquee.astro';
+import TeamPreview from '../components/home/TeamPreview.astro';
+import ReactionGame from '../components/home/ReactionGame.astro';
+
+// Estilos globales de la Home
+import '../styles/home/indexCuerpo.css';
 
 const pageTitle = "Inicio";
-
-// 1. CARGA DE PORTADA
-const backgroundImages = await Astro.glob('../assets/Index/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
-
-// 2. IMPORTACIÓN DE IMÁGENES ESPECÍFICAS
-import imgBaja from '../assets/CuerpoIndex/10.jpg';
-import imgTaller from '../assets/Equipo/EQUIPO EN TALLER.jpg';
-import imgEquipo1 from '../assets/Equipo/1.JPG';
-
-// 3. ARRAY DE PATROCINADORES
-const patrocinadores = [
-  { img: 'altair.webp', url: 'https://altair.com' },
-  { img: 'ansys.webp', url: 'https://www.ansys.com' },
-  { img: 'bimsa.webp', url: 'https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv/?originalSubdomain=mx' }, 
-  { img: 'copiisa.webp', url: 'https://copiisa.com.mx' },
-  { img: 'mantemimiento.webp', url: 'https://mantto.mx/' },
-  { img: 'polimex.webp', url: 'https://www.polimex.mx' },
-  { img: 'SMI.webp', url: 'https://www.smimexico.com.mx/' },
-  { img: 'solidwor.webp', url: 'https://www.solidworks.com' },
-  { img: 'tmx.webp', url: 'https://hvhindustrial.com/es/brand/toolmex-tmx' },
-  { img: 'toyota.webp', url: 'https://www.toyota.mx' },
-  { img: 'IPN.webp', url: 'https://www.ipn.mx' }
-];
 ---
 
 <Layout title={pageTitle}>
     <main>
-        
-        {/* 1. HERO SLIDER */}
-        <div class="hero-background-container">
-            <div class="slideshow-wrapper">
-                {backgroundImages.map((img, index) => (
-                    <div class={`bg-slide ${index === 0 ? 'active' : ''}`}>
-                       <Image 
-                            src={img.default} 
-                            alt="Jaguar Racing Portada" 
-                            width={1920} 
-                            height={1080} 
-                            class="bg-image-fit" 
-                            loading={index === 0 ? "eager" : "lazy"} 
-                        />
-                        <div class="overlay-dark"></div>
-                    </div>
-                ))}
-            </div>
-        </div>
-
-        {/* 2. ESTADÍSTICAS */}
-        <section class="stats-bar scroll-animate" id="stats-section">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number" data-target="30">0</span>
-                    <span class="stat-label">Ingenieros</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" data-target="5000">0</span>
-                    <span class="stat-label">Horas de Ingeniería</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" data-target="14000">0</span>
-                    <span class="stat-label">Comunidad</span>
-                </div>
-            </div>
-        </section>
-
-       {/* 3. IDENTIDAD DE ESCUDERÍA */}
-        <section class="mission-section scroll-animate">
-            <div class="mission-container">
-                <div class="mission-text">
-                    <h2 class="section-title-left">Espíritu del equipo</h2>
-                    <p class="mission-lead">
-                        Estudiantes de ingeniería apasionados por el automovilismo. Desde 2017, transformamos el conocimiento del aula en prototipos de competición.
-                    </p>
-                    <p class="mission-body">
-                        Como equipo de la <strong>ESIME Azcapotzalco</strong>, diseñamos, fabricamos y validamos un vehículo todoterreno cada año para competir en Baja SAE. Nuestra meta es formar la élite de la ingeniería mexicana a través de la excelencia técnica en el taller.
-                    </p>
-                </div>
-                
-                <div class="mission-visual">
-                    <div class="image-frame">
-                        <Image 
-                            src={imgTaller} 
-                            alt="Estudiantes trabajando en taller Jaguar Racing" 
-                            class="mission-img" 
-                            width={1000}
-                        />
-                    </div>
-                </div>
-            </div>
-        </section>
-
-{/* 4. BAJA SAE + CRONOGRAMA FULL WIDTH */}
-        <section class="what-is-baja scroll-animate">
-            
-            {/* Contenedor con padding lateral para el contenido central */}
-            <div class="compact-layout">
-                <div class="what-is-image">
-                      <Image 
-                        src={imgBaja} 
-                        alt="Competencia Baja SAE" 
-                        width={800} 
-                        loading="lazy"
-                      />
-                </div>
-
-                <div class="what-is-text">
-                    <h2 class="section-title-left compact-title">BAJA SAE INTERNATIONAL</h2>
-                    <div class="baja-description">
-                        <p>
-                            Baja SAE desafía a estudiantes de ingeniería a diseñar, fabricar y probar un vehículo todoterreno monoplaza capaz de superar terrenos severos.
-                        </p>
-                        <p>
-                            Más que una carrera, es una evaluación rigurosa de <strong>resistencia mecánica, diseño ingenieril y viabilidad comercial</strong>. El objetivo es crear un prototipo real que soporte las condiciones más exigentes.
-                        </p>
-                        {/* ÚNICO ELEMENTO DORADO PERMITIDO: EL LINK */}
-                        <a href="https://www.sae.org/events/student/about/baja" target="_blank" rel="noopener noreferrer" class="link-discreet">
-                            + Especificaciones Técnicas SAE
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            {/* BARRA DE TIEMPO (FULL WIDTH - Extremo a extremo) */}
-            <div class="integrated-timer-bar">
-                <div class="timer-container-inner">
-                    
-                    {/* Evento 1: San Luis Potosí */}
-                    <div class="timer-item">
-                        <div class="timer-info">
-                            <span class="race-series">SAN LUIS POTOSÍ</span>
-                            <span class="race-location">BAJA SAE MÉXICO</span>
-                        </div>
-                        <span id="timer-mexico" class="timer-value">000d 00h 00m 00s</span>
-                    </div>
-
-                    {/* Separador Visual */}
-                    <div class="timer-separator"></div>
-
-                    {/* Evento 2: Querétaro */}
-                    <div class="timer-item">
-                        <div class="timer-info">
-                            <span class="race-series">QUERÉTARO</span>
-                            <span class="race-location">All Terrain Vehicle Design Challenge</span>
-                        </div>
-                        <span id="timer-queretaro" class="timer-value">000d 00h 00m 00s</span>
-                    </div>
-
-                </div>
-            </div>
-
-        </section>
-
-        {/* 7. RECLUTAMIENTO */}
-        <section class="join-cta scroll-animate">
-            <div class="cta-media-wrapper">
-                <img 
-                    src="/img/page/Registro.webp" 
-                    alt="Fondo Reclutamiento" 
-                    class="cta-video-bg" 
-                    loading="lazy"
-                />
-                <div class="cta-overlay"></div>
-            </div>
-            <div class="join-cta__text">
-                <h2>ÚNETE A LA ESCUDERÍA</h2>
-                
-                <p class="join-cta__subtitle">
-                    Cada temporada es una oportunidad de reiniciar y mejorar. El diseño del coche 25/26 ya está en proceso. 
-                    Es tu oportunidad de sumarte y hacer realidad el nuevo prototipo.
-                </p>
-
-                <a href="/join" class="btn-underline">APLICAR AHORA</a>
-            </div>
-        </section>
-
-        {/* 8. PATROCINADORES */}
-        <section class="sponsors-section scroll-animate">
-            <h2 class="section-title compact-title">PATROCINADORES</h2>
-            <p class="sponsors-desc">
-                Agradecemos profundamente a nuestros socios estratégicos. Su apoyo en tecnología, 
-                manufactura y recursos hace posible que la ingeniería mexicana compita al más alto nivel mundial.
-            </p>
-            <div class="sponsors-marquee">
-                {patrocinadores.map((pat) => (
-                    <a href={pat.url} target="_blank" rel="noopener noreferrer" class="sponsor-card">
-                        <img src={`/img/IMGpatrocinadores/${pat.img}`} alt="Patrocinador" width="200" height="100" loading="lazy" />
-                    </a>
-                ))}
-                {patrocinadores.map((pat) => (
-                    <a href={pat.url} target="_blank" rel="noopener noreferrer" class="sponsor-card">
-                        <img src={`/img/IMGpatrocinadores/${pat.img}`} alt="Patrocinador" width="200" height="100" loading="lazy" />
-                    </a>
-                ))}
-            </div>
-            <div class="center-content">
-                <a href="/sponsors" class="boton-legendario">SER PATROCINADOR</a>
-            </div>
-        </section>
-
-        {/* 9. EQUIPO */}
-        <section class="team-hero scroll-animate">
-            <div class="team-container-limited">
-                <div class="team-image-wrapper-limited">
-                    <Image 
-                        src={imgEquipo1} 
-                        alt="Equipo Jaguar Racing" 
-                        class="team-img-fit" 
-                        loading="lazy" 
-                        width={1200}
-                    />
-                    <div class="team-overlay">
-                        <h2 class="section-title compact-title">EQUIPO JAGUAR</h2>
-                        <div class="social-links-large">
-                            <a href="https://www.instagram.com/jaguar_racing_team/" target="_blank"><img src="/img/page/ImgIG.webp" alt="IG"></a>
-                            <a href="https://www.linkedin.com" target="_blank"><img src="/img/page/linkedIn_.webp" alt="IN"></a>
-                            <a href="https://www.facebook.com/people/Jaguar-Racing-IPN/" target="_blank"><img src="/img/page/ImgFaceeBook.webp" alt="FB"></a>
-                        </div>
-                        <a href="/team" class="btn-underline">CONOCER INTEGRANTES</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {/* 10. MINIJUEGO */}
-        <section class="reaction-game-section scroll-animate">
-            <div class="game-container">
-                
-                <div class="game-interface">
-                    <h2 class="reaction-title">REFLEJOS DE PILOTO</h2>
-
-                    <div class="lights-row">
-                        <div class="light" id="l1"></div>
-                        <div class="light" id="l2"></div>
-                        <div class="light" id="l3"></div>
-                        <div class="light" id="l4"></div>
-                        <div class="light" id="l5"></div>
-                    </div>
-
-                    <div class="game-controls">
-                        <div id="reaction-result" class="reaction-result">0.000 ms</div>
-                        <div id="player-rank" class="reaction-rank"></div>
-                        <button id="reaction-btn" class="btn-race">INICIAR TEST</button>
-                    </div>
-                </div>
-
-                <div class="f1-leaderboard">
-                
-                <div class="leaderboard-top">
-                    <h3>CLASIFICACIÓN</h3>
-                    <button id="refresh-rank-btn" class="refresh-btn" aria-label="Actualizar Tabla">
-                        ↻
-                    </button>
-                </div>
-                <div class="leaderboard-header">
-                    <span class="col-pos">POS</span>
-                    <span class="col-pilot">PILOTO</span>
-                    <span class="col-time">TIEMPO</span>
-                </div>
-                
-                <div id="top-ranks" class="leaderboard-body">
-                    <div class="rank-row loading-row">Cargando parrilla...</div>
-                </div>
-
-                <div id="user-rank-row" class="rank-row user-row hidden">
-                    <span class="pos" id="user-pos">--</span>
-                    <div class="pilot-info">
-                        <span class="pilot">TÚ</span>
-                        <button id="edit-name-btn" class="edit-btn" title="Cambiar nombre">✏️</button>
-                    </div>
-                    <span class="time" id="user-time">--</span>
-                </div>
-            </div>
-
-            <div id="name-modal" class="modal-overlay">
-            <div class="modal-content">
-                <button id="close-modal-btn" class="close-btn">&times;</button>
-                
-                <h3>LICENCIA DE PILOTO</h3>
-                <p>Personaliza tu ficha de corredor</p>
-                
-                <input type="text" id="pilot-name-input" class="pilot-input" placeholder="Ingresa tu Alias" maxlength="15" autocomplete="off">
-                
-                <input type="email" id="pilot-gmail-input" class="pilot-input" placeholder="Ingresa tu Correo " maxlength="40" autocomplete="off" style="margin-top: 10px;">
-                
-                <div class="modal-actions">
-                    <button id="save-name-btn" class="btn-save">GUARDAR</button>
-                </div>
-            </div>
-        </div>
-        </section>
-
+        <HeroSlider />
+        <StatsBar />
+        <MissionSection />
+        <BajaSection />
+        <RecruitmentCTA />
+        <SponsorsMarquee />
+        <TeamPreview />
+        <ReactionGame />
     </main>
 
-    <Footer />
+    {/* --- SCRIPTS --- */}
     
+    {/* Críticos */}
     <script is:inline defer src="/js/portada.js"></script>
+    <script is:inline defer src="/js/scroll.js"></script>
+
+    {/* Lazy Loading (Background) */}
     <script is:inline defer src="/js/contadores.js"></script>
     <script is:inline defer src="/js/miniJuego.js"></script>
-    <script is:inline defer src="/js/scroll.js"></script>
     
 </Layout>

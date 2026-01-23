@@ -1,0 +1,30 @@
+---
+import { Image } from 'astro:assets';
+import imgEquipo1 from '../../assets/Equipo/1.JPG';
+---
+
+<section class="team-hero scroll-animate">
+    <div class="team-container-limited">
+        <div class="team-image-wrapper-limited">
+            <Image 
+                src={imgEquipo1} 
+                alt="Equipo Jaguar Racing" 
+                class="team-img-fit" 
+                loading="lazy" 
+                widths={[400, 800, 1200]}
+                sizes={`(max-width: 768px) 100vw, (max-width: 1200px) 800px, 1200px`}
+                format="webp"
+                decoding="async"
+            />
+            <div class="team-overlay">
+                <h2 class="section-title compact-title">EQUIPO JAGUAR</h2>
+                <div class="social-links-large">
+                    <a href="https://www.instagram.com/jaguar_racing_team/" target="_blank" aria-label="Instagram"><img src="/img/page/ImgIG.webp" alt="IG" width="40" height="40"></a>
+                    <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn"><img src="/img/page/linkedIn_.webp" alt="IN" width="40" height="40"></a>
+                    <a href="https://www.facebook.com/people/Jaguar-Racing-IPN/" target="_blank" aria-label="Facebook"><img src="/img/page/ImgFaceeBook.webp" alt="FB" width="40" height="40"></a>
+                </div>
+                <a href="/team" class="btn-underline">CONOCER INTEGRANTES</a>
+            </div>
+        </div>
+    </div>
+</section>
