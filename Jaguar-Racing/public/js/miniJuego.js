@@ -44,7 +44,7 @@ document.addEventListener('astro:page-load', () => {
                 refreshBtn.disabled = false;
                 refreshBtn.style.opacity = "1";
                 refreshBtn.style.cursor = "pointer";
-            }, 10000); 
+            }, 10000);
         };
     }
 
@@ -72,7 +72,7 @@ document.addEventListener('astro:page-load', () => {
 
             const nameInput = document.getElementById('pilot-name-input');
             const modalTitle = modal.querySelector('h3');
-            
+
             // Limpieza de inputs previos si existieran en el HTML antiguo
             const emailInput = document.getElementById('pilot-gmail-input');
             if (emailInput) emailInput.style.display = 'none';
@@ -150,57 +150,74 @@ document.addEventListener('astro:page-load', () => {
     }
 
     // ==========================================
-    //         RENOMBRADO (RESTAURADO)
+    //        RENOMBRADO (CORREGIDO)
     // ==========================================
     const editBtn = document.getElementById('edit-name-btn');
     if (editBtn) {
         editBtn.onclick = async () => {
             const oldId = userId;
-            // 1. Pedir nuevo nombre
             const newId = await promptForName(true);
 
-            // 2. Si canceló o puso el mismo, no hacemos nada
             if (!newId || newId === oldId) return;
 
-            // 3. Feedback Visual "Guardando..."
+            // Feedback Visual
             const originalText = userPilotDisplay ? userPilotDisplay.textContent : "";
             if (userPilotDisplay) {
                 userPilotDisplay.style.opacity = "0.5";
-                userPilotDisplay.textContent = "Guardando...";
+                userPilotDisplay.textContent = "Sincronizando..."; // Más preciso que "Guardando"
             }
 
             try {
-                // 4. Petición al API
                 const res = await fetch('/api/game/rename', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ oldName: oldId, newName: newId })
                 });
 
+                // IMPORTANTE: Leemos la data SIEMPRE para sacar el nuevo rango
+                const data = await res.json();
+
                 if (res.ok) {
-                    // 5. Éxito: Actualizamos LocalStorage y UI
+                    // 1. Actualizar identidad local
                     userId = newId;
                     localStorage.setItem('jaguar_user', userId);
-                    
+
+                    // 2. Actualizar UI de Nombre
                     if (userPilotDisplay) {
                         userPilotDisplay.style.opacity = "1";
-                        userPilotDisplay.style.color = "#FFD700"; // Dorado de éxito
+                        userPilotDisplay.style.color = "#FFD700";
                         userPilotDisplay.textContent = userId.split('#')[0];
                         setTimeout(() => userPilotDisplay.style.color = "#fff", 1000);
                     }
-                    loadLeaderboard(); // Recargamos la tabla para ver el cambio
-                } else {
-                    // Error del API
-                    if (userPilotDisplay) {
-                        userPilotDisplay.style.opacity = "1";
-                        userPilotDisplay.textContent = originalText;
+
+                    // 3. ACTUALIZAR RANGO (La parte que faltaba)
+                    // Si el backend devuelve { new_rank: 5 }, úsalo.
+                    if (data.new_rank) {
+                        localStorage.setItem('jaguar_last_rank', data.new_rank);
+
+                        // Recuperar el mejor tiempo local para pintar la fila completa
+                        let storedRecord = localStorage.getItem('jaguarReactionRecord');
+                        let recordVal = storedRecord ? (parseFloat(storedRecord) / 1000) : 0;
+
+                        // Forzar el repintado de la barra de usuario
+                        showUserRow(recordVal, `#${data.new_rank}`);
+                    } else {
+                        // Si el backend es flojo y no devuelve el rank, fuerza un reload visual
+                        // Ocultando y mostrando o asumiendo que loadLeaderboard lo arreglará (no lo hará para la userRow)
+                        console.warn("El backend no devolvió new_rank. El usuario no verá su cambio de posición inmediatamente.");
                     }
+
+                    loadLeaderboard(); // Actualiza la tabla general
+
+                } else {
+                    throw new Error(data.message || 'Error en rename');
                 }
             } catch (e) {
-                // Error de Red
+                console.error(e);
                 if (userPilotDisplay) {
                     userPilotDisplay.style.opacity = "1";
                     userPilotDisplay.textContent = originalText;
+                    alert("Error al renombrar: El alias podría estar ocupado o el servidor falló.");
                 }
             }
         };
@@ -219,7 +236,7 @@ document.addEventListener('astro:page-load', () => {
         if (pollingInterval) clearInterval(pollingInterval);
         pollingInterval = setInterval(() => {
             if (gameState === 'idle') loadLeaderboard();
-        }, 30000); 
+        }, 30000);
     }
 
     function resetAllTimeouts() {
@@ -263,7 +280,7 @@ document.addEventListener('astro:page-load', () => {
         let currentBest = localStorage.getItem('jaguarReactionRecord');
         let recordHistorico = currentBest ? (parseFloat(currentBest) / 1000) : Infinity;
         let isSynced = localStorage.getItem('jaguar_server_synced');
-        
+
         const lastKnownRank = localStorage.getItem('jaguar_last_rank');
 
         // 1. Guardar Récord Local
@@ -275,7 +292,7 @@ document.addEventListener('astro:page-load', () => {
         // 2. Si falta nombre, pedirlo
         if (!userId) {
             setTimeout(async () => {
-                const newId = await promptForName(); 
+                const newId = await promptForName();
                 if (newId) {
                     userId = newId;
                     localStorage.setItem('jaguar_user', userId);
@@ -312,7 +329,7 @@ document.addEventListener('astro:page-load', () => {
 
             if (res.status === 200) {
                 localStorage.setItem('jaguar_server_synced', 'true');
-                
+
                 if (data.new_rank) {
                     localStorage.setItem('jaguar_last_rank', data.new_rank);
                 }
