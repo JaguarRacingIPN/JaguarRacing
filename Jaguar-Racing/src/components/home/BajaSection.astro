@@ -1,4 +1,5 @@
 ---
+// src/components/home/BajaSection.astro
 import { Image } from 'astro:assets';
 import imgBaja from '../../assets/CuerpoIndex/10.jpg';
 ---
@@ -56,3 +57,23 @@ import imgBaja from '../../assets/CuerpoIndex/10.jpg';
         </div>
     </div>
 </section>
+
+<script>
+    import { initTimer } from '../../scripts/competenciaTimer.js';
+
+    let cleanupFn;
+
+    // Se ejecuta al cargar la página (o navegar a ella)
+    document.addEventListener('astro:page-load', () => {
+        if (cleanupFn) cleanupFn(); // Seguridad
+        cleanupFn = initTimer();
+    });
+
+    // Se ejecuta antes de salir de la página
+    document.addEventListener('astro:before-swap', () => {
+        if (cleanupFn) {
+            cleanupFn();
+            cleanupFn = null;
+        }
+    });
+</script>

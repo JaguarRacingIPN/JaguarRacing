@@ -9,30 +9,73 @@
 
 
 /* -----------------------------------------------------------------------------
-   2. HERO SLIDER
+   2. HERO SLIDER (OPTIMIZADO PARA RENDIMIENTO LCP)
    ----------------------------------------------------------------------------- */
 .hero-background-container { 
-    position: relative; width: 100%; height: 100vh; 
-    background: var(--bg-black); overflow: hidden; 
+    position: relative; 
+    width: 100%; 
+    height: 100vh; /* Fallback para navegadores viejos */
+    height: 100dvh; /* Dynamic Viewport: Evita saltos en móviles al hacer scroll */
+    background-color: #080808; /* Fondo negro exacto para evitar parpadeos blancos */
+    overflow: hidden; 
 }
-.slideshow-wrapper, .bg-slide { 
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+
+.slideshow-wrapper { 
+    position: absolute; 
+    inset: 0; /* Shorthand para top:0, left:0, w:100%, h:100% */
+    z-index: 0;
 }
-.bg-slide { opacity: 0; transition: opacity 1.5s ease; z-index: 1; }
-.bg-slide.active { opacity: 1; z-index: 2; }
+
+.bg-slide { 
+    position: absolute; 
+    inset: 0;
+    opacity: 0; 
+    transition: opacity 1.5s ease-in-out; 
+    z-index: 1; 
+    /* RENDIMIENTO: Avisa a la GPU que prepare memoria para opacidad */
+    will-change: opacity; 
+}
+
+.bg-slide.active { 
+    opacity: 1; 
+    z-index: 2; 
+}
+
 .bg-image-fit { 
-    width: 100%; height: 100%; object-fit: cover; 
-    filter: brightness(0.6) grayscale(10%) contrast(1.1); 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    /* IMPORTANTE: Sin 'filter' aquí. Los filtros CSS bloquean el renderizado inicial. */
 }
+
+/* Control de Oscuridad: Se hace con una capa de color sólido (barato para CPU) */
+.overlay-dark {
+    position: absolute; 
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5); /* Ajusta aquí la oscuridad (0.5 = 50%) */
+    z-index: 3; 
+    pointer-events: none;
+}
+
+/* Gradiente decorativo inferior */
 .hero-background-container::after {
-    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 90%);
-    z-index: 3; pointer-events: none;
+    content: ''; 
+    position: absolute; 
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%);
+    z-index: 4; 
+    pointer-events: none;
 }
+
 .hero-content-fixed { 
-    position: absolute; top: 50%; left: 50%; 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
     transform: translate(-50%, -50%); 
-    z-index: 10; width: 90%; text-align: center; pointer-events: none; 
+    z-index: 10; 
+    width: 90%; 
+    text-align: center; 
+    pointer-events: none; 
 }
 
 /* -----------------------------------------------------------------------------

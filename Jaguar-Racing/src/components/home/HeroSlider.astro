@@ -1,32 +1,74 @@
 ---
+// src/components/home/HeroSlider.astro
 import { Image } from 'astro:assets';
+// Mantén el import del CSS global para el resto, pero usaremos inline para lo crítico
 import '../../styles/layout/hero.css'; 
 
-// NOTA IMPORTANTE: Subimos 2 niveles (../../) para llegar a assets
-const backgroundImages = await Astro.glob('../../assets/Index/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
+const allImages = await Astro.glob('../../assets/Index/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
+const backgroundImages = allImages.slice(0, 5); // Solo las primeras 5
 ---
 
-<div class="hero-background-container">
-    {/* H1 Oculto para SEO (Accesibilidad 100) */}
+{/* CSS CRÍTICO INLINE: Esto elimina el "salto" de carga. El navegador reserva el espacio YA. */}
+<style>
+    .hero-placeholder {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        background-color: #080808; /* Color exacto de tu fondo para evitar parpadeo blanco */
+        overflow: hidden;
+    }
+    /* La primera imagen debe verse YA, sin esperar transiciones */
+    .bg-slide.first-load {
+        opacity: 1 !important;
+        transition: none !important;
+        z-index: 5 !important;
+    }
+</style>
+
+<div class="hero-background-container hero-placeholder">
     <h1 class="sr-only">Jaguar Racing Escudería IPN - Inicio</h1>
     
     <div class="slideshow-wrapper">
         {backgroundImages.map((img, index) => (
-            <div class={`bg-slide ${index === 0 ? 'active' : ''}`}>
+            <div class={`bg-slide ${index === 0 ? 'active first-load' : ''}`}>
                 <Image 
                     src={img.default} 
-                    alt="Jaguar Racing Portada" 
-                    widths={[360, 768, 1280, 1920]} 
-                    sizes={`(max-width: 768px) 100vw, 100vw`}
-                    format="webp"
+                    alt={`Jaguar Racing Slide ${index + 1}`} 
+                    widths={[640, 1024, 1920]} /* Quitamos 2560 y 1600 para aligerar carga */
+                    sizes={`100vw`}
+                    format="webp" /* Volvemos a WebP por velocidad en dev */
                     quality={80}
                     class="bg-image-fit" 
-                    decoding="async"
                     loading={index === 0 ? "eager" : "lazy"} 
                     fetchpriority={index === 0 ? "high" : "auto"}
+                    decoding={index === 0 ? "sync" : "async"}
                 />
                 <div class="overlay-dark"></div>
             </div>
         ))}
     </div>
 </div>
+
+<script>
+    import { initHeroSlider } from '../../scripts/heroSlider.js';
+    
+    let cleanupFn;
+
+    document.addEventListener('astro:page-load', () => {
+        // Quitamos la clase .first-load después de un momento para permitir transiciones futuras
+        const firstSlide = document.querySelector('.bg-slide.first-load');
+        if(firstSlide) {
+            setTimeout(() => {
+                firstSlide.classList.remove('first-load');
+            }, 100);
+        }
+
+        if (cleanupFn) cleanupFn();
+        cleanupFn = initHeroSlider();
+    });
+
+    document.addEventListener('astro:before-swap', () => {
+        if (cleanupFn) cleanupFn();
+    });
+</script>

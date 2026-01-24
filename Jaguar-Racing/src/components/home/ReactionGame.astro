@@ -1,4 +1,5 @@
 ---
+// src/components/home/ReactionGame.astro
 import '../../styles/home/miniJuego.css';
 ---
 
@@ -51,7 +52,7 @@ import '../../styles/home/miniJuego.css';
                 <h3>LICENCIA DE PILOTO</h3>
                 <p>Personaliza tu ficha de corredor</p>
                 <input type="text" id="pilot-name-input" class="pilot-input" placeholder="Ingresa tu Alias" maxlength="15" autocomplete="off">
-                <input type="email" id="pilot-gmail-input" class="pilot-input" placeholder="Ingresa tu Correo " maxlength="40" autocomplete="off" style="margin-top: 10px;">
+                <input type="email" id="pilot-gmail-input" class="pilot-input" placeholder="Ingresa tu Correo " maxlength="40" autocomplete="off" style="margin-top: 10px; display: none;">
                 <div class="modal-actions">
                     <button id="save-name-btn" class="btn-save">GUARDAR</button>
                 </div>
@@ -59,3 +60,26 @@ import '../../styles/home/miniJuego.css';
         </div>
     </div>
 </section>
+
+<script>
+    import { initGame } from '../../scripts/gameLogic.js';
+
+    let cleanupFn;
+
+    // 1. INICIAR: Se ejecuta cuando Astro termina de cargar la página (o navega a ella)
+    document.addEventListener('astro:page-load', () => {
+        // Limpieza defensiva por si acaso
+        if (cleanupFn) cleanupFn();
+        
+        // Arrancamos el juego y guardamos la función de limpieza que nos devuelve
+        cleanupFn = initGame();
+    });
+
+    // 2. LIMPIAR: Se ejecuta justo antes de que Astro cambie a otra página
+    document.addEventListener('astro:before-swap', () => {
+        if (cleanupFn) {
+            cleanupFn();
+            cleanupFn = null;
+        }
+    });
+</script>

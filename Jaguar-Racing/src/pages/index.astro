@@ -21,7 +21,7 @@ const pageTitle = "Inicio";
         {/* 1. IMPACTO: El coche y la identidad visual */}
         <HeroSlider />
 
-        {/* 2. IDENTIDAD: Quiénes somos (breve y honesto) */}
+        {/* 2. IDENTIDAD: Quiénes somos (Jaguar Racing) */}
         <MissionSection />
 
         {/* 3. OBJETIVO: La competencia (Contexto para el visitante) */}
@@ -42,14 +42,14 @@ const pageTitle = "Inicio";
 
     {/* --- SCRIPTS --- */}
     
-    {/* Críticos de UI (Navegación y Portada) */}
-    <script is:inline defer src="/js/portada.js"></script>
-    <script is:inline defer src="/js/scroll.js"></script>
+    <script>
+    // 1. Importamos la lógica del Scroll
+    import { initScrollAnimations } from '../scripts/scrollAnimations.js';
 
-    {/* Funcionalidades Específicas */}
-    {/* Nota: Idealmente estos irían dentro de BajaSection y ReactionGame, 
-        pero dejarlos aquí funciona perfectamente bien por ahora. */}
-    <script is:inline defer src="/js/competencia-timer.js"></script>
-    <script is:inline defer src="/js/miniJuego.js"></script>
+    // Ejecución controlada por Astro
+    document.addEventListener('astro:page-load', () => {
+        initScrollAnimations();
+    });
+</script>
     
 </Layout>
