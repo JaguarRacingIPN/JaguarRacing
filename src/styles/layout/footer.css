@@ -1,6 +1,8 @@
 /* =============================================================================
    5. FOOTER
    ============================================================================= */
+
+/* --- 5.1 CONTENEDOR PRINCIPAL --- */
 .site-footer {
     background-color: var(--bg-black);
     color: white;
@@ -13,13 +15,14 @@
 
 .site-footer__content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Logo a la izquierda, Contacto a la derecha */
     flex-wrap: wrap;
     gap: 40px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
+/* --- 5.2 IDENTIDAD (LOGO) --- */
 .site-footer__logo {
     height: 55px;
     width: auto;
@@ -27,31 +30,118 @@
     object-fit: contain;
 }
 
+.site-footer__desc {
+    margin-top: 1rem;
+    color: #ccc;
+    font-size: 0.95rem;
+    max-width: 300px;
+}
+
+/* --- 5.3 COMPONENTE DE CORREO ELECTRÓNICO --- */
+.footer-email-wrapper {
+    display: flex;
+    justify-content: flex-end; /* En PC alineado a la derecha */
+    width: 100%;
+    margin-top: 10px;
+}
+
+.footer-email-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #ccc;
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.05); /* Fondo sutil */
+}
+
+.footer-email-link:hover {
+    color: var(--jaguar-gold, #fbbf24);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px); /* Pequeño movimiento al hacer hover */
+}
+
+/* --- 5.4 REDES SOCIALES (Estilo Base / PC) --- */
+.social-icons {
+    display: flex;
+    gap: 15px; /* Espacio compacto en PC */
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.social-icons__img {
+    width: 32px; /* Tamaño refinado para escritorio */
+    height: 32px;
+    object-fit: contain;
+    transition: transform 0.2s ease-in-out, opacity 0.2s;
+    opacity: 0.8;
+}
+
+.social-icons__link:hover .social-icons__img {
+    transform: scale(1.15);
+    opacity: 1;
+}
+
+/* CORRECCIONES DE ICONOS ESPECÍFICOS */
+.social-icons__img[alt="GitHub Logo"] {
+    filter: invert(1) brightness(1.2); /* Vuelve blanco el logo negro */
+}
+
+.social-icons__img[alt="Facebook Logo"] {
+    transform: scale(0.9); /* Reduce Facebook un 10% para igualar a los demás */
+}
+.social-icons__link:hover .social-icons__img[alt="Facebook Logo"] {
+    transform: scale(1.05); /* Mantiene la proporción en hover */
+}
+
+/* --- 5.5 BARRA INFERIOR (Copyright + Legal) --- */
 .site-footer__bottom {
-    text-align: center;
     margin-top: 40px;
     padding-top: 20px;
-    border-top: 1px solid #111;
+    border-top: 1px solid #222; /* Línea separadora muy sutil */
     font-size: 0.8rem;
     color: #666;
 }
 
-.social-icons {
+.site-footer__bottom-content {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
-    gap: 20px;
-    justify-content: flex-end;
+    justify-content: space-between; /* CLAVE: Separa Copyright (Izq) de Privacidad (Der) */
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
-.social-icons__img {
-    transition: transform 0.3s;
+/* Estilo del texto "Orgullo Politécnico" */
+.copyright-text {
+    margin: 0;
+    font-weight: 500;
+    color: #888;
 }
 
-.social-icons__link:hover .social-icons__img {
-    transform: scale(1.2);
+/* Estilo del link "Política de Privacidad" */
+.footer-privacy-link {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s;
 }
 
-/* --- RESPONSIVE FOOTER --- */
+.footer-privacy-link:hover {
+    color: var(--jaguar-gold);
+    text-decoration: underline;
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN (MÓVIL / TABLET)
+   ============================================================================= */
 @media (max-width: 900px) {
+    
+    /* Layout Vertical */
     .site-footer__content {
         flex-direction: column;
         align-items: center;
@@ -59,18 +149,43 @@
     }
 
     .site-footer__contact {
-        text-align: center;
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
+    /* Centrado de logo y correo */
+    .site-footer__logo {
+        margin: 0 auto;
+        height: 50px;
+    }
+
+    .footer-email-wrapper {
+        justify-content: center; 
+    }
+
+    /* Iconos Grandes para Touch */
     .social-icons {
         justify-content: center;
+        gap: 25px;
+        margin-top: 25px;
     }
 
-    .site-footer__logo {
-        height: 40px;
-        /* Necesario si es una etiqueta <img> o <a> */
-        margin-left: auto;
-        margin-right: auto;
+    .social-icons__img {
+        width: 45px; /* Más grandes en móvil */
+        height: 45px;
+        opacity: 1;
+    }
+
+    /* Barra inferior apilada */
+    .site-footer__bottom-content {
+        flex-direction: column-reverse; /* Pone la privacidad al final */
+        gap: 15px;
+        text-align: center;
+    }
+
+    .hidden-mobile {
+        display: none; /* Oculta separadores visuales innecesarios en móvil */
     }
 }

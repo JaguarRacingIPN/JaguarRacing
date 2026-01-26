@@ -1,0 +1,92 @@
+---
+// src/pages/privacidad.astro
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Política de Privacidad | Jaguar Racing">
+  <main class="bg-black min-h-screen pt-32 md:pt-48 pb-20 px-4 sm:px-6 flex items-center justify-center">
+    
+    <div class="w-full max-w-xl bg-zinc-900/50 border border-zinc-800 rounded-lg p-8 md:p-12 shadow-2xl">
+        <br><br><br>
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-12 text-center uppercase tracking-wider">
+        Política de Privacidad
+      </h1>
+
+      <!-- Intro -->
+      <div class="space-y-16 text-gray-300 privacy-text">
+        <p>
+          En <strong>Jaguar Racing</strong>, la transparencia y la seguridad técnica son nuestros pilares. 
+          A continuación describimos cómo tratamos los datos técnicos y personales en nuestra plataforma digital.
+        </p>
+      </div>
+
+      <!-- Secciones -->
+      <div class="space-y-16 text-gray-300 privacy-text">
+        
+        <section class="max-w-prose mx-auto">
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3 uppercase">
+            <span class="text-yellow-500">1.</span> Navegación y Seguridad
+          </h2>
+          <p class="text-lg leading-relaxed mb-4">
+            La navegación en este sitio es mayoritariamente anónima. Para proteger nuestros sistemas y el Chatbot de abusos, 
+            almacenamos temporalmente la dirección IP y el ID de sesión técnica usando <strong>Redis (Upstash)</strong>.
+          </p>
+          <ul class="list-disc list-inside pl-4 space-y-3 text-base text-gray-400 bg-zinc-900/30 p-6 rounded-lg border-l-2 border-yellow-500/50">
+            <li><strong class="text-gray-200">Finalidad:</strong> Controlar el límite de mensajes diarios (Rate Limiting).</li>
+            <li><strong class="text-gray-200">Retención:</strong> Eliminación automática cada 24 horas.</li>
+            <li><strong class="text-gray-200">Garantía:</strong> No usamos estos datos para rastreo publicitario.</li>
+          </ul>
+        </section>
+
+        <section class="max-w-prose mx-auto">
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3 uppercase">
+            <span class="text-yellow-500">2.</span> Recolección de Datos
+          </h2>
+          <p class="text-lg leading-relaxed">
+            No tenemos bases de datos de usuarios en este sitio. La recolección de contacto se realiza externamente mediante <strong>Microsoft Forms</strong>.
+            Los datos son custodiados bajo la infraestructura de seguridad de Microsoft y se usan exclusivamente para contacto académico y profesional.
+          </p>
+        </section>
+
+        <section class="max-w-prose mx-auto">
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3 uppercase">
+            <span class="text-yellow-500">3.</span> Uso del Chatbot (IA)
+          </h2>
+          <p class="text-lg leading-relaxed mb-6">
+            Las conversaciones son procesadas por <strong>Azure OpenAI</strong> en tiempo real. No guardamos un historial permanente vinculado a tu identidad civil.
+          </p>
+          <div class="bg-yellow-500/10 border-l-4 border-yellow-500 p-5 rounded-r-lg">
+            <p class="text-yellow-400 font-bold mb-1 uppercase text-sm tracking-wider">Recomendación de Seguridad:</p>
+            <p class="text-gray-300 m-0">Por favor, NO compartas datos sensibles (tarjetas de crédito, contraseñas, direcciones particulares) dentro del chat.</p>
+          </div>
+        </section>
+
+        <section class="max-w-prose mx-auto">
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3 uppercase">
+            <span class="text-yellow-500">4.</span> Analítica y Rendimiento
+          </h2>
+          <p class="text-lg leading-relaxed">
+            Utilizamos <strong>Vercel Analytics</strong> y <strong>Speed Insights</strong> para monitorear el rendimiento técnico.
+            Recolectamos métricas anónimas (país, tipo de dispositivo, velocidad de carga) sin utilizar cookies de seguimiento individual.
+          </p>
+        </section>
+
+      </div>
+<div class="space-y-16 text-gray-300 privacy-text">
+      <hr class="border-zinc-800 my-16">
+      <p class="text-sm text-gray-500 text-center uppercase tracking-widest">
+        Escudería Jaguar Racing<br>
+        Última actualización: Enero 2026
+      </p>
+</div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .privacy-text {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
