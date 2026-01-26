@@ -1,0 +1,127 @@
+/* =============================================================================
+   SECCIÓN DE REGISTRO - v5.1 (Small Text + Gold Button)
+   ============================================================================= */
+
+/* Contenedor Principal */
+.registration-cta {
+    padding: 80px 20px;
+    background-color: #000000; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-image: radial-gradient(#222 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+.registration-cta__content {
+    max-width: 650px; /* Más compacto */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+/* TÍTULO H2 (Pequeño, igual que carrusel) */
+.registration-cta__title {
+    font-weight: 700; 
+    
+    /* CAMBIO: Tamaño reducido */
+    /* Móvil: 1.2rem | PC: 2rem */
+    font-size: clamp(1.2rem, 2.5vw, 2rem);
+    
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+}
+
+/* DESCRIPCIÓN (Estilo Técnico Fino) */
+.registration-cta__desc {
+    /* CAMBIO: Texto pequeño y legible */
+    font-size: 0.95rem; 
+    color: #bbbbbb; 
+    
+    line-height: 1.6;
+    margin-bottom: 35px;
+    max-width: 550px;
+    font-weight: 400;
+}
+
+/* Nota inferior */
+.registration-cta__note {
+    margin-top: 20px;
+    font-size: 0.75rem; /* Muy discreto */
+    color: #555; 
+    font-style: italic;
+}
+
+/* --- BOTÓN TEAMS (Dorado Activo) --- */
+.teams-btn {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; 
+    width: 100%;      
+    max-width: 350px; /* Un poco más compacto */
+    padding: 18px 25px;
+    
+    background-color: #000000;
+    
+    /* CAMBIO: Borde Dorado */
+    border: 1px solid var(--jaguar-gold); 
+    
+    /* CAMBIO: Texto Dorado */
+    color: var(--jaguar-gold);
+    
+    font-weight: 700; 
+    font-size: 0.9rem; /* Letra técnica pequeña */
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.teams-btn:active {
+    background-color: var(--jaguar-gold);
+    color: #000;
+    transform: scale(0.98);
+}
+
+/* Icono (hereda el color dorado) */
+.teams-btn__icon {
+    fill: currentColor;
+    width: 20px;
+    height: 20px;
+}
+
+@media (hover: hover) {
+    .teams-btn:hover {
+        /* CAMBIO: Hover se llena de dorado */
+        background-color: var(--jaguar-gold); 
+        color: #000000;            
+        box-shadow: 0 0 20px rgba(166, 124, 0, 0.3); 
+    }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+    .registration-cta {
+        padding: 50px 20px;
+    }
+    
+    .registration-cta__title {
+        font-size: 1.3rem !important; 
+    }
+    
+    .teams-btn {
+        width: 100%;
+        font-size: 0.85rem;
+        padding: 16px 0; 
+    }
+}

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="Jaguar-Racing/public/img/readme/JaguarLog.webp" alt="Jaguar Racing Logo" width="220"/>
+  <img src="public/img/readme/JaguarLog.webp" alt="Jaguar Racing Logo" width="220"/>
   <br/>
   <h1>Jaguar Racing Web Platform 2.0</h1>
   <p>
@@ -32,7 +32,7 @@
 
 <br/>
 
-[![Vista Previa Jaguar Racing](Jaguar-Racing/public/img/readme/Cap.png)](https://jaguar-racing.vercel.app)
+[![Vista Previa Jaguar Racing](public/img/readme/Cap.png)](https://jaguar-racing.vercel.app)
 > *Clic en la imagen para visitar la plataforma oficial.*
 
 ---
@@ -65,7 +65,7 @@ El sistema opera bajo un modelo **Serverless**. El frontend se entrega desde la 
     * Devuelve la respuesta al usuario en tiempo real.
 
 <div align="center">
-  <img src="Jaguar-Racing/public/img/readme/Diagrama.png" alt="Arquitectura del Sistema Jaguar Racing" width="100%"/>
+  <img src="public/img/readme/Diagrama.png" alt="Arquitectura del Sistema Jaguar Racing" width="100%"/>
 </div>
 
 ## 📂 Estructura del Proyecto (Astro)

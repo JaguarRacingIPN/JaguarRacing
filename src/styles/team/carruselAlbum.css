@@ -1,0 +1,118 @@
+/* =============================================================================
+   CARRUSEL EQUIPO (ÁLBUM) - FINAL v4.0 (Non-Stop Flow)
+   ============================================================================= */
+
+:root {
+    --card-bg: var(--bg-black, #0a0a0a);
+}
+
+/* --- CONTENEDOR PRINCIPAL (.album-strip) --- */
+.album-strip {
+    padding: 60px 0;
+    background: radial-gradient(circle at center, #111 0%, #000 100%);
+    position: relative;
+    width: 100%;
+    max-width: 100vw;
+    
+    /* CRÍTICO: Recorta las tarjetas que salen de la pantalla */
+    overflow: hidden; 
+    
+    display: block;
+    z-index: 1;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+    
+    /* Optimización de renderizado: si no está en pantalla, no gasta CPU */
+    content-visibility: auto; 
+    contain-intrinsic-size: 400px;
+    
+    /* Evita selecciones accidentales de texto mientras se mueve */
+    user-select: none;
+    -webkit-user-select: none;
+    
+    /* Al no tener interacción de mouse (pausa), podemos ignorar eventos de puntero */
+    pointer-events: none; 
+}
+
+/* Máscara de desvanecimiento (Vignette lateral) */
+.album-strip::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2;
+    /* Gradiente suave a negro en los bordes */
+    background: linear-gradient(to right, #000 0%, transparent 5%, transparent 95%, #000 100%);
+}
+
+/* --- PISTA DE DESLIZAMIENTO (.album-strip__track) --- */
+.album-strip__track {
+    display: flex;
+    gap: 20px; 
+    width: max-content;
+    
+    /* ACELERACIÓN DE HARDWARE PURA */
+    transform: translate3d(0, 0, 0); 
+    will-change: transform; 
+    
+    /* Animación continua sin pausas */
+    animation: album-scroll 45s linear infinite; 
+}
+
+/* --- TARJETAS DEL ÁLBUM (.album-card) --- */
+.album-card {
+    flex-shrink: 0;
+    width: 400px; 
+    height: 280px; 
+    
+    background: #1a1a1a;
+    border: 1px solid rgba(166, 124, 0, 0.2);
+    border-radius: 8px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px; 
+    position: relative;
+    
+    /* Sombra estática optimizada */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    
+    /* Aislamiento de pintura */
+    contain: paint layout;
+}
+
+/* --- IMAGEN DENTRO DE LA TARJETA --- */
+.album-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    
+    /* Optimizaciones de imagen en movimiento */
+    transform: translateZ(0); 
+    backface-visibility: hidden;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+    .album-strip { padding: 40px 0; }
+    
+    .album-strip__track { 
+        animation-duration: 35s; /* Un poco más rápido en móvil */
+        gap: 15px; 
+    }
+    
+    .album-card {
+        width: 280px;
+        height: 200px;
+        /* Quitamos sombra en móvil para ganar FPS */
+        box-shadow: none;
+        background: #000;
+    }
+}
+
+/* DEFINICIÓN DE ANIMACIÓN */
+@keyframes album-scroll {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); } /* Asumiendo que duplicaste el contenido */
+}

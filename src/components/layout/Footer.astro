@@ -1,0 +1,59 @@
+---
+// src/components/layout/Footer.astro
+---
+
+<footer class="site-footer">
+    <div class="site-footer__content">
+
+        <div class="site-footer__section">
+            <div>
+                <img 
+                    src="/img/page/JaguarLogo.webp" 
+                    alt="Jaguar Racing Logo" 
+                    class="site-footer__logo" 
+                    width="150" 
+                    height="150" 
+                    loading="lazy"
+                    decoding="async"
+                >
+            </div>
+            <p class="site-footer__desc">Escudería oficial de la ESIME Azcapotzalco.</p>
+        </div>
+
+        <div class="site-footer__section site-footer__contact">
+            <div>
+                <p>Av. de las Granjas 682, Azcapotzalco, CDMX.</p>
+            </div>
+
+            <div class="social-icons">
+                <a href="https://www.instagram.com/jaguar_racing_team/" target="_blank" rel="noopener noreferrer" class="social-icons__link" aria-label="Instagram">
+                    <img src="/img/page/ImgIG.webp" alt="Instagram Logo" width="30" height="30" class="social-icons__img" loading="lazy">
+                </a>
+
+                <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icons__link" aria-label="LinkedIn">
+                    <img src="/img/page/linkedIn_.webp" alt="LinkedIn Logo" width="30" height="30" class="social-icons__img" loading="lazy">
+                </a>
+
+                <a href="https://www.facebook.com/people/Jaguar-Racing-IPN/" target="_blank" rel="noopener noreferrer" class="social-icons__link" aria-label="Facebook">
+                    <img src="/img/page/ImgFaceeBook.webp" alt="Facebook Logo" width="30" height="30" class="social-icons__img" loading="lazy">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="site-footer__bottom">
+        <p>
+            Jaguar Racing Team. Hecho con orgullo politécnico.
+        </p>
+    </div>
+
+    <script>
+        // Al usar los paquetes npm, Vite optimiza este código automáticamente
+        import { inject } from '@vercel/analytics';
+        import { injectSpeedInsights } from '@vercel/speed-insights';
+
+        // Inicialización
+        inject();
+        injectSpeedInsights();
+    </script>
+</footer>
