@@ -4,55 +4,144 @@
 
 <footer class="site-footer">
     <div class="site-footer__content">
-
         <div class="site-footer__section">
             <div>
-                <img 
-                    src="/img/page/JaguarLogo.webp" 
-                    alt="Jaguar Racing Logo" 
-                    class="site-footer__logo" 
-                    width="150" 
-                    height="150" 
+                <img
+                    src="/img/page/JaguarLogo.webp"
+                    alt="Jaguar Racing Logo"
+                    class="site-footer__logo"
+                    width="150"
+                    height="150"
                     loading="lazy"
                     decoding="async"
-                >
+                />
             </div>
-            <p class="site-footer__desc">Escudería oficial de la ESIME Azcapotzalco.</p>
+            <p class="site-footer__desc">
+                Escudería oficial de la ESIME Azcapotzalco.
+            </p>
         </div>
 
         <div class="site-footer__section site-footer__contact">
             <div>
                 <p>Av. de las Granjas 682, Azcapotzalco, CDMX.</p>
+
+                <div class="footer-email-wrapper">
+                    <a
+                        href="mailto:jaguarteam.ipn@gmail.com"
+                        class="footer-email-link"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <rect width="20" height="16" x="2" y="4" rx="2"
+                            ></rect><path
+                                d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                            ></path>
+                        </svg>
+                        <span>jaguarteam.ipn@gmail.com</span>
+                    </a>
+                </div>
             </div>
 
             <div class="social-icons">
-                <a href="https://www.instagram.com/jaguar_racing_team/" target="_blank" rel="noopener noreferrer" class="social-icons__link" aria-label="Instagram">
-                    <img src="/img/page/ImgIG.webp" alt="Instagram Logo" width="30" height="30" class="social-icons__img" loading="lazy">
+                <a
+                    href="https://www.instagram.com/jaguar_racing_team/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="social-icons__link"
+                    aria-label="Instagram"
+                >
+                    <img
+                        src="/img/page/ImgIG.webp"
+                        alt="Instagram Logo"
+                        width="30"
+                        height="30"
+                        class="social-icons__img"
+                        loading="lazy"
+                    />
                 </a>
 
-                <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icons__link" aria-label="LinkedIn">
-                    <img src="/img/page/linkedIn_.webp" alt="LinkedIn Logo" width="30" height="30" class="social-icons__img" loading="lazy">
+                <a
+                    href="https://www.linkedin.com/company/jaguar-racing-ipn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="social-icons__link"
+                    aria-label="LinkedIn"
+                >
+                    <img
+                        src="/img/page/linkedIn_.webp"
+                        alt="LinkedIn Logo"
+                        width="30"
+                        height="30"
+                        class="social-icons__img"
+                        loading="lazy"
+                    />
                 </a>
 
-                <a href="https://www.facebook.com/people/Jaguar-Racing-IPN/" target="_blank" rel="noopener noreferrer" class="social-icons__link" aria-label="Facebook">
-                    <img src="/img/page/ImgFaceeBook.webp" alt="Facebook Logo" width="30" height="30" class="social-icons__img" loading="lazy">
+                <a
+                    href="https://www.facebook.com/jaguar.racing.team/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="social-icons__link"
+                    aria-label="Facebook"
+                >
+                    <img
+                        src="/img/page/ImgFaceeBook.webp"
+                        alt="Facebook Logo"
+                        width="30"
+                        height="30"
+                        class="social-icons__img"
+                        loading="lazy"
+                    />
+                </a>
+
+                <a
+                    href="https://github.com/JaguarRacingIPN"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="social-icons__link"
+                    aria-label="GitHub"
+                >
+                    <img
+                        src="/img/page/github.webp"
+                        alt="GitHub Logo"
+                        width="30"
+                        height="30"
+                        class="social-icons__img"
+                        loading="lazy"
+                    />
                 </a>
             </div>
         </div>
     </div>
 
     <div class="site-footer__bottom">
-        <p>
-            Jaguar Racing Team. Hecho con orgullo politécnico.
-        </p>
+        <div class="site-footer__bottom-content">
+            <p class="copyright-text">
+                Jaguar Racing Team. <span
+                    class="hidden-mobile">|</span
+                > Hecho con orgullo politécnico.
+            </p>
+
+            <nav class="legal-nav">
+                <a href="/privacidad" class="footer-privacy-link"
+                    >Política de Privacidad</a
+                >
+            </nav>
+        </div>
     </div>
 
     <script>
-        // Al usar los paquetes npm, Vite optimiza este código automáticamente
-        import { inject } from '@vercel/analytics';
-        import { injectSpeedInsights } from '@vercel/speed-insights';
-
-        // Inicialización
+        import { inject } from "@vercel/analytics";
+        import { injectSpeedInsights } from "@vercel/speed-insights";
         inject();
         injectSpeedInsights();
     </script>
