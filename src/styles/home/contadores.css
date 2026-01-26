@@ -1,0 +1,116 @@
+/* =============================================================================
+   SECCIÓN PRÓXIMAS PARTICIPACIONES (Eventos) - v6.3 (Rounded & Lite)
+   Nota: Requiere global.css cargado previamente.
+   ============================================================================= */
+
+/* Contenedor Principal */
+.events-section {
+    padding: 5rem 1rem;
+    background-color: var(--bg-black);
+    text-align: center;
+    border-top: 1px solid #222;
+}
+
+/* Título */
+.titulo-participaciones {
+    font-family: var(--font-impact);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    text-transform: uppercase;
+    margin-bottom: 4rem;
+    letter-spacing: 1px;
+    
+    /* Gradiente estático */
+    background: linear-gradient(135deg, #ffffff 0%, var(--jaguar-gold) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+/* Rejilla de Eventos */
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Tarjeta Individual (ESTÁTICA, LIGERA Y REDONDEADA) */
+.event-card {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-dark-grey);
+    
+    /* Borde sólido */
+    border: 1px solid var(--jaguar-gold);
+    
+    /* CAMBIO: Bordes redondeados */
+    border-radius: 16px;
+    
+    padding: 25px;
+    gap: 20px;
+}
+
+/* Imagen del Evento */
+.event-card__img {
+    width: 100px;
+    height: auto;
+    object-fit: contain;
+    filter: none; 
+}
+
+/* Información y Texto */
+.event-card__info {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.event-card__info h3 {
+    color: var(--jaguar-gold);
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Temporizador */
+.countdown-timer {
+    font-family: 'Courier New', monospace;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--text-white);
+    
+    font-variant-numeric: tabular-nums; 
+    min-width: 240px; 
+    display: inline-block;
+}
+
+/* =============================================================================
+   RESPONSIVIDAD MÓVIL
+   ============================================================================= */
+@media (max-width: 768px) {
+    .events-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .event-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+        /* Un poco menos de radio en móvil para mantener proporciones */
+        border-radius: 12px; 
+    }
+
+    .event-card__info {
+        text-align: center;
+    }
+
+    .titulo-participaciones {
+        background: none;
+        -webkit-text-fill-color: var(--jaguar-gold);
+        color: var(--jaguar-gold);
+    }
+}

@@ -1,0 +1,104 @@
+---
+import { Image } from 'astro:assets';
+
+// Importación de imágenes desde la carpeta src/assets
+// Asegúrate de que la ruta coincida con donde moviste las fotos
+import img2022 from '../../assets/IMGTrayectoria/h1.webp';
+import img2021 from '../../assets/IMGTrayectoria/h2.webp';
+import img2020 from '../../assets/IMGTrayectoria/h3.webp';
+import img2019 from '../../assets/IMGTrayectoria/h4.webp';
+---
+
+<section class="history-section">
+    <div class="history-timeline">
+        
+        {/* 2025: Futuro (Sin cambios, no tiene imagen) */}
+        <div class="timeline-event timeline-event--left">
+            <div class="timeline-event__content">
+                <span class="timeline-event__year text-gold">2025</span>
+                <h3 class="timeline-event__title">Próximas Competencias</h3>
+                <ul class="timeline-event__list">
+                    <li>All Terrain 2025 <span class="timeline-event__detail">(UPSRJ)</span></li>
+                    <li>BAJA SAE México 2025</li>
+                    <li>BAJA SAE Carolina 2025</li>
+                </ul>
+            </div>
+        </div>
+
+        {/* 2022 */}
+        <div class="timeline-event timeline-event--right">
+            <div class="timeline-event__content">
+                <span class="timeline-event__year text-gold">2022</span>
+                <Image 
+                    src={img2022} 
+                    alt="Victorias Jaguar Racing 2022" 
+                    class="timeline-event__img"
+                    width={500}
+                />
+                <h3 class="timeline-event__title">Victorias</h3>
+                <ul class="timeline-event__list">
+                    <li class="timeline-event__highlight">1er Lugar General <span class="timeline-event__detail">All Terrain Vehicle Design Challenge</span></li>
+                    <li class="timeline-event__highlight">2do Lugar <span class="timeline-event__detail">Suspensión y Tracción (BAJA SAE México)</span></li>
+                </ul>
+            </div>
+        </div>
+
+        {/* 2021 */}
+        <div class="timeline-event timeline-event--left">
+            <div class="timeline-event__content">
+                <span class="timeline-event__year text-gold">2021</span>
+                <Image 
+                    src={img2021} 
+                    alt="Equipo Finalista 2021" 
+                    class="timeline-event__img"
+                    width={500}
+                />
+                <h3 class="timeline-event__title">Finalistas</h3>
+                <p>Finalistas en <strong>Reducción de Costos</strong> <span class="timeline-event__detail">(BAJA SAE México)</span></p>
+            </div>
+        </div>
+
+        {/* 2020 */}
+        <div class="timeline-event timeline-event--right">
+            <div class="timeline-event__content">
+                <span class="timeline-event__year text-gold">2020</span>
+                <Image 
+                    src={img2020} 
+                    alt="Logros temporada 2020" 
+                    class="timeline-event__img"
+                    width={500}
+                />
+                <h3 class="timeline-event__title">Doble Finalista</h3>
+                <ul class="timeline-event__list">
+                    <li>Finalistas en <strong>Prueba de Diseño</strong></li>
+                    <li>Finalistas en <strong>Marketing</strong> <span class="timeline-event__detail">(BAJA SAE México)</span></li>
+                </ul>
+            </div>
+        </div>
+
+        {/* 2019 */}
+        <div class="timeline-event timeline-event--left">
+            <div class="timeline-event__content">
+                <span class="timeline-event__year text-gold">2019</span>
+                <Image 
+                    src={img2019} 
+                    alt="Campeones 2019" 
+                    class="timeline-event__img"
+                    width={500}
+                />
+                <h3 class="timeline-event__title">Campeones</h3>
+                <p class="timeline-event__highlight">1er Lugar en Marketing <span class="timeline-event__detail">(BAJA SAE México)</span></p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+    /* Optimizaciones de renderizado SEGURAS */
+    .timeline-event {
+        content-visibility: auto; 
+        contain-intrinsic-size: 500px; /* Evita saltos de scroll */
+        contain: layout paint;
+    }
+</style>

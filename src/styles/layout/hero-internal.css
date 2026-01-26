@@ -1,0 +1,111 @@
+/* =============================================================================
+   6. HERO INTERNO (Compacto + Filtro Index)
+   ============================================================================= */
+
+.hero-internal {
+    position: relative;
+    width: 100%;
+    
+    /* CAMBIO: Altura reducida considerablemente */
+    height: 35vh; 
+    min-height: 300px; 
+    
+    background-color: var(--bg-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* IMAGEN DE FONDO */
+.hero-internal__bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 40%; /* Ajuste para centrar mejor la parte interesante si se recorta */
+    filter: grayscale(20%) contrast(1.1); 
+    z-index: 1;
+}
+
+/* FILTRO DE OSCURIDAD */
+.hero-internal__overlay {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: radial-gradient(circle, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 90%);
+    z-index: 2; 
+    pointer-events: none;
+}
+
+/* CONTENIDO (Texto) */
+.hero-internal__content {
+    position: relative;
+    z-index: 10; 
+    text-align: center;
+    width: 90%;
+    max-width: 1000px;
+    
+    /* Centrado flex para que quede perfecto verticalmente en el espacio reducido */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px; /* Menos margen superior para equilibrar */
+}
+
+/* TÍTULO */
+.hero-internal__title {
+    font-family: var(--font-main);
+    font-weight: 800;
+    
+    /* Tamaño Global H1 */
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    
+    color: var(--text-white);
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin: 0;
+    
+    text-shadow: 0 5px 20px rgba(0,0,0,0.9);
+    letter-spacing: -1px;
+    
+    width: 100%;
+    text-align: center;
+    hyphens: none !important;
+    overflow-wrap: normal !important;
+}
+
+.hero-internal__subtitle {
+    display: block;
+    font-family: var(--font-main);
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+    color: var(--jaguar-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 0.5rem; /* Margen reducido */
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .hero-internal { 
+        /* En móvil aún más compacto */
+        height: 30vh; 
+        min-height: 250px; 
+    }
+    
+    .hero-internal__title { 
+        font-size: 1.8rem; 
+    }
+}
+
+@media (max-width: 380px) {
+    .hero-internal__title { 
+        font-size: 1.5rem; 
+    }
+    
+    .hero-internal {
+        min-height: 220px; /* Ultra compacto para celulares pequeños */
+    }
+}
