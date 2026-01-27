@@ -1,37 +1,69 @@
-/* =============================================================================
-   4. HERO / COVER
-   ============================================================================= */
-.hero {
-    position: relative; width: 100%; height: 100vh;
-    background: black; overflow: hidden;
+/* -----------------------------------------------------------------------------
+   2. HERO SLIDER (OPTIMIZADO PARA RENDIMIENTO LCP)
+   ----------------------------------------------------------------------------- */
+.hero-background-container { 
+    position: relative; 
+    width: 100%; 
+    height: 100vh; /* Fallback para navegadores viejos */
+    height: 100dvh; /* Dynamic Viewport: Evita saltos en móviles al hacer scroll */
+    background-color: #080808; /* Fondo negro exacto para evitar parpadeos blancos */
+    overflow: hidden; 
 }
 
-.hero::after {
-    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 180px;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0) 100%);
-    z-index: 500; pointer-events: none;
+.slideshow-wrapper { 
+    position: absolute; 
+    inset: 0; /* Shorthand para top:0, left:0, w:100%, h:100% */
+    z-index: 0;
 }
 
-.hero__image {
-    width: 100%; height: 100%; object-fit: cover; object-position: center;
-    filter: brightness(0.7) contrast(1.1);
-    pointer-events: none; user-select: none; transform: translateZ(0);
+.bg-slide { 
+    position: absolute; 
+    inset: 0;
+    opacity: 0; 
+    transition: opacity 1.5s ease-in-out; 
+    z-index: 1; 
+    /* RENDIMIENTO: Avisa a la GPU que prepare memoria para opacidad */
+    will-change: opacity; 
 }
 
-.hero__title {
-    font-family: var(--font-main); font-weight: 700; text-transform: uppercase;
-    text-align: center; margin: 0; position: absolute;
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 10; font-size: var(--fs-hero); width: 100%; padding: 0 10px;
-    line-height: 0.95; letter-spacing: -3px;
-    background: linear-gradient(135deg, var(--jaguar-light) 0%, var(--jaguar-gold) 50%, #4a3600 100%);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent; color: transparent;
-    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.8));
+.bg-slide.active { 
+    opacity: 1; 
+    z-index: 2; 
 }
 
-/* --- RESPONSIVE HERO --- */
-@media (max-width: 900px) {
-    .hero { height: 60vh; min-height: 400px; }
-    .hero__title { font-size: 11.5vw !important; letter-spacing: -2px; }
+.bg-image-fit { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    /* IMPORTANTE: Sin 'filter' aquí. Los filtros CSS bloquean el renderizado inicial. */
+}
+
+/* Control de Oscuridad: Se hace con una capa de color sólido (barato para CPU) */
+.overlay-dark {
+    position: absolute; 
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5); /* Ajusta aquí la oscuridad (0.5 = 50%) */
+    z-index: 3; 
+    pointer-events: none;
+}
+
+/* Gradiente decorativo inferior */
+.hero-background-container::after {
+    content: ''; 
+    position: absolute; 
+    inset: 0;
+    background: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.8) 100%);
+    z-index: 4; 
+    pointer-events: none;
+}
+
+.hero-content-fixed { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    z-index: 10; 
+    width: 90%; 
+    text-align: center; 
+    pointer-events: none; 
 }
