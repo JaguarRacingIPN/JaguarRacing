@@ -1,38 +1,59 @@
 /**
- * src/scripts/miniJuego.js
- * Lógica del juego encapsulada para Astro.
+ * src/scripts/gameLogic.js
+ * SEASON 1 - PRODUCTION RELEASE (Patch: Modal Close + Button UX)
+ * Description: Core logic for the reaction time game including F1 light sequence,
+ * precise timing, anti-cheat validation, and backend synchronization.
  */
 
 export function initGame() {
-    // --- ESTADO LOCAL (Se reinicia cada vez que entras a la página) ---
+    // --- CONFIGURATION CONSTANTS ---
+    const STORAGE_KEY_RECORD = 'jaguar_record_s1'; 
+    const STORAGE_KEY_USER = 'jaguar_user_id';     
+    const STORAGE_KEY_SYNC = 'jaguar_s1_synced';
+
+    // --- LOCAL STATE MANAGEMENT ---
     let gameTimeouts = [];
     let pollingInterval = null;
-    let gameState = 'idle';
+    let gameState = 'idle'; // States: idle, waiting, green, result, fault, cooldown
     let startTime = 0;
+    let currentGameId = 0; 
 
-    // --- DOM ELEMENTOS ---
+    // --- DOM ELEMENTS REFERENCE ---
+    const gameContainer = document.querySelector('.game-container');
     const btn = document.getElementById('reaction-btn');
-    if (!btn) return; // Si no existe el botón, no estamos en la página correcta.
+    const editBtn = document.getElementById('edit-name-btn');
+    const refreshBtn = document.getElementById('refresh-rank-btn');
+
+    // Validation: Ensure critical elements exist
+    if (!btn) return; 
 
     const lights = document.querySelectorAll('.light');
     const resultDisplay = document.getElementById('reaction-result');
     const rankDisplay = document.getElementById('player-rank');
-
-    // --- RANKING DOM ---
     const leaderboardContainer = document.getElementById('top-ranks');
     const userRankRow = document.getElementById('user-rank-row');
     const userTimeDisplay = document.getElementById('user-time');
     const userPosDisplay = document.getElementById('user-pos');
     const userPilotDisplay = userRankRow ? userRankRow.querySelector('.pilot') : null;
-
-    // --- MODAL DOM ---
     const modal = document.getElementById('name-modal');
 
-    // --- USUARIO INICIAL ---
-    let userId = localStorage.getItem('jaguar_user');
-    if (userId && userPilotDisplay) userPilotDisplay.textContent = userId.split('#')[0];
+    // --- USER INITIALIZATION & SANITIZATION ---
+    let userId = localStorage.getItem(STORAGE_KEY_USER);
+    
+    // Validate retrieved ID structure (UUIDs or invalid strings are purged)
+    const isValidId = userId && userId.length >= 3 && userId.length <= 25 && /^[a-zA-Z0-9 _#-]+$/.test(userId);
 
-    // --- FUNCIONES DE UTILIDAD ---
+    if (userId && !isValidId) {
+        console.warn("[GameLogic] Corrupt User ID detected and purged.");
+        localStorage.removeItem(STORAGE_KEY_USER);
+        userId = null; 
+    }
+
+    if (userId && userPilotDisplay) {
+        userPilotDisplay.textContent = userId.split('#')[0];
+    }
+
+    // --- UTILITY FUNCTIONS ---
     
     function resetAllTimeouts() {
         gameTimeouts.forEach(id => clearTimeout(id));
@@ -40,9 +61,16 @@ export function initGame() {
     }
 
     function resetVisuals() {
-        lights.forEach(l => l.classList.remove('red', 'green'));
-        btn.classList.remove('penalty');
-        btn.style.backgroundColor = 'transparent'; btn.style.transform = 'scale(1)';
+        lights.forEach(l => {
+            l.classList.remove('red', 'green'); 
+            l.style.backgroundColor = ''; 
+        });
+        
+        // Reset button state
+        btn.classList.remove('penalty', 'locked');
+        btn.innerText = "INICIAR TEST";
+        btn.style.opacity = "1";
+        
         resultDisplay.style.color = '#FFE878';
         if (rankDisplay) { 
             rankDisplay.style.opacity = "0"; 
@@ -50,16 +78,163 @@ export function initGame() {
         }
     }
 
-    function showUserRow(mejorTiempo, posicionTexto) {
+    function showUserRow(score, positionText) {
         if (!userRankRow) return;
         userRankRow.classList.remove('hidden');
-        userTimeDisplay.textContent = mejorTiempo.toFixed(3) + " s";
-        userPosDisplay.innerText = posicionTexto;
-        const isFirst = String(posicionTexto) === "#1";
+        userTimeDisplay.textContent = score.toFixed(3) + " s";
+        userPosDisplay.innerText = positionText;
+        const isFirst = String(positionText) === "#1";
         userPosDisplay.style.color = isFirst ? "#FFD700" : "#fff";
     }
 
-    // --- LÓGICA DE RANKING ---
+    // --- CORE GAME LOGIC ---
+
+    function triggerFault() {
+        if (gameState === 'fault' || gameState === 'result') return;
+        gameState = 'fault';
+        resetAllTimeouts();
+        
+        // Visual feedback: Flash red lights
+        lights.forEach(l => l.classList.add('red'));
+        setTimeout(() => lights.forEach(l => l.classList.remove('red')), 200);
+
+        resultDisplay.textContent = "JUMP START!";
+        resultDisplay.style.color = '#ff4444';
+        
+        btn.innerText = "REINTENTAR";
+        btn.classList.add('penalty');
+        
+        if (rankDisplay) { 
+            rankDisplay.textContent = "PENALIZACION"; 
+            rankDisplay.style.opacity = "1"; 
+            rankDisplay.style.color = "#ff4444"; 
+        }
+
+        // Lock button briefly
+        enterCooldown();
+    }
+
+    function startGameSequence() {
+        currentGameId++; 
+        if (gameState === 'waiting') return;
+        
+        gameState = 'waiting';
+        resetVisuals();
+        btn.innerText = "ESPERA...";
+        resultDisplay.textContent = "0.000 ms";
+
+        let cumulativeDelay = 0;
+        
+        // Sequence: Light 1 to 5 (Red)
+        lights.forEach((light) => {
+            cumulativeDelay += 1000;
+            const id = setTimeout(() => { 
+                if (gameState === 'waiting') light.classList.add('red'); 
+            }, cumulativeDelay);
+            gameTimeouts.push(id);
+        });
+
+        // Random hold time between 0.5s and 3.5s
+        const randomHold = Math.floor(Math.random() * 3000) + 500; 
+        const totalWait = cumulativeDelay + randomHold;
+
+        const goGreenId = setTimeout(() => { 
+            if (gameState === 'waiting') goGreen(); 
+        }, totalWait);
+        gameTimeouts.push(goGreenId);
+    }
+
+    function goGreen() {
+        gameState = 'green'; 
+        startTime = performance.now();
+        
+        // Visuals: Switch Red to Green
+        lights.forEach(l => {
+            l.classList.remove('red');
+            l.classList.add('green');
+        });
+        
+        btn.innerText = "¡YA!";
+    }
+
+    function finishGame() {
+        if (gameState !== 'green') return;
+        gameState = 'result';
+        
+        const endTime = performance.now();
+        const reactionTime = Math.floor(endTime - startTime);
+        
+        resultDisplay.textContent = `${reactionTime} ms`;
+
+        // Classification Logic
+        let rankTitle, rankClass, color;
+        if (reactionTime < 200) { rankTitle = "NIVEL F1"; rankClass = "rank-legend"; color = "#d108c7"; }
+        else if (reactionTime < 300) { rankTitle = "GRAN PILOTO"; rankClass = "rank-pro"; color = "#FFD700"; }
+        else if (reactionTime < 400) { rankTitle = "BUENOS REFLEJOS"; rankClass = "rank-avg"; color = "#00ff00"; }
+        else { rankTitle = "MUY LENTO"; rankClass = "rank-slow"; color = "#fff"; }
+
+        if (rankDisplay) {
+            rankDisplay.textContent = rankTitle; 
+            rankDisplay.className = `reaction-rank ${rankClass}`;
+            rankDisplay.style.color = color; 
+            rankDisplay.style.opacity = "1";
+        }
+
+        // Backend Submission (Anti-cheat filter: 100ms - 5000ms)
+        if (reactionTime > 100 && reactionTime < 5000) {
+            submitScoreToRanking(reactionTime, currentGameId);
+        }
+
+        btn.innerText = "JUGAR DE NUEVO";
+        
+        // Lock button briefly
+        enterCooldown();
+    }
+
+    /**
+     * Applies a temporary visual lock to the button.
+     * Prevents spam clicking and gives feedback.
+     */
+    function enterCooldown() {
+        const previousState = gameState;
+        gameState = 'cooldown';
+        
+        // Visual feedback for locking (handled via CSS)
+        btn.classList.add('locked');
+
+        setTimeout(() => {
+            if (gameState === 'cooldown') {
+                gameState = previousState; 
+                btn.classList.remove('locked');
+            }
+        }, 800); // 800ms cooldown
+    }
+
+    function handleGlobalInteraction(e) {
+        if (modal && modal.classList.contains('active')) return;
+        if (gameState === 'cooldown') return;
+
+        switch (gameState) {
+            case 'idle':
+            case 'result':
+            case 'fault':
+                // Only start if clicking the button (or its children)
+                if (e.target === btn || btn.contains(e.target)) {
+                    startGameSequence();
+                }
+                break; 
+            case 'waiting':
+                // Clicking ANYWHERE while waiting is a fault
+                triggerFault();
+                break;
+            case 'green':
+                // Clicking ANYWHERE while green stops the timer
+                finishGame();
+                break;
+        }
+    }
+
+    // --- API & DATA HANDLING ---
 
     async function loadLeaderboard() {
         if (!leaderboardContainer) return;
@@ -69,206 +244,164 @@ export function initGame() {
             const top10 = await res.json();
 
             leaderboardContainer.innerHTML = '';
-
             if (!top10 || top10.length === 0) {
-                leaderboardContainer.innerHTML = '<div class="rank-row" style="display:block; text-align:center;">Sé el primero 🏆</div>';
+                leaderboardContainer.innerHTML = '<div class="rank-row" style="text-align:center;">Temporada 1 Iniciada</div>';
                 return;
             }
 
             top10.forEach((player, index) => {
-                const cleanName = String(player.member).split('#')[0];
-                const timeStr = Number(player.score).toFixed(3);
+                const rankPos = index + 1;
+                
+                if (userId && player.member === userId) {
+                    let localRecord = localStorage.getItem(STORAGE_KEY_RECORD);
+                    let displayTime = localRecord ? (parseFloat(localRecord)/1000) : player.score;
+                    showUserRow(displayTime, `#${rankPos}`);
+                }
 
                 const row = document.createElement('div');
                 row.className = 'rank-row';
+                if (userId && player.member === userId) row.style.border = "1px solid #FFD700"; 
+
                 row.innerHTML = `
-                    <span class="pos">${index + 1}</span>
-                    <span class="pilot-col"></span>
-                    <span class="time">${timeStr} s</span>
+                    <span class="pos">${rankPos}</span>
+                    <span class="pilot-col">${player.member.split('#')[0]}</span>
+                    <span class="time">${player.score.toFixed(3)} s</span>
                 `;
-                row.querySelector('.pilot-col').textContent = cleanName;
                 leaderboardContainer.appendChild(row);
             });
-        } catch (e) { /* Silencio en producción */ }
+
+        } catch (e) {
+            console.error("[GameLogic] Leaderboard fetch failed", e);
+        }
     }
 
-    async function submitScoreToRanking(tiempoMs) {
+    async function submitScoreToRanking(tiempoMs, executionId) {
         const tiempoSegundos = tiempoMs / 1000;
-        let currentBest = localStorage.getItem('jaguarReactionRecord');
-        let recordHistorico = currentBest ? (parseFloat(currentBest) / 1000) : Infinity;
-        let isSynced = localStorage.getItem('jaguar_server_synced');
         
-        const lastKnownRank = localStorage.getItem('jaguar_last_rank');
-
-        // 1. Guardar Récord Local
+        let currentBest = localStorage.getItem(STORAGE_KEY_RECORD);
+        let recordHistorico = currentBest ? (parseFloat(currentBest) / 1000) : Infinity;
+        
         if (tiempoSegundos < recordHistorico) {
             recordHistorico = tiempoSegundos;
-            localStorage.setItem('jaguarReactionRecord', recordHistorico * 1000);
+            localStorage.setItem(STORAGE_KEY_RECORD, recordHistorico * 1000);
         }
 
-        // 2. Si falta nombre, pedirlo
         if (!userId) {
             setTimeout(async () => {
+                if (executionId !== currentGameId) return; 
                 const newId = await promptForName(); 
                 if (newId) {
                     userId = newId;
-                    localStorage.setItem('jaguar_user', userId);
+                    localStorage.setItem(STORAGE_KEY_USER, userId);
                     if (userPilotDisplay) userPilotDisplay.textContent = newId.split('#')[0];
-                    submitScoreToRanking(tiempoMs);
+                    submitScoreToRanking(tiempoMs, executionId);
                 }
-            }, 800);
+            }, 1000);
             return;
         }
 
-        // 3. Filtro Inteligente
-        const faltaDatoRango = isSynced && !lastKnownRank;
-        const mereceEnvio = (tiempoSegundos <= recordHistorico) || (!isSynced) || faltaDatoRango || (tiempoSegundos < 0.250);
-
-        if (!mereceEnvio) {
-            const rankText = lastKnownRank ? `#${lastKnownRank}` : "-";
-            showUserRow(recordHistorico, rankText);
-            return;
-        }
-
-        // 4. Envío al Servidor
         try {
             const res = await fetch('/api/game/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nombre: userId,
-                    tiempo: tiempoSegundos,
-                    recordLocal: recordHistorico
+                body: JSON.stringify({ 
+                    nombre: userId, 
+                    tiempo: tiempoSegundos 
                 })
             });
+            
             const data = await res.json();
-
-            if (res.status === 200) {
-                localStorage.setItem('jaguar_server_synced', 'true');
-                if (data.new_rank) {
-                    localStorage.setItem('jaguar_last_rank', data.new_rank);
-                }
+            if (res.ok) {
+                localStorage.setItem(STORAGE_KEY_SYNC, 'true');
                 loadLeaderboard();
-                const rankPosition = data.new_rank ? `#${data.new_rank}` : "-";
-                showUserRow(recordHistorico, rankPosition);
+                const rankText = data.new_rank ? `#${data.new_rank}` : "-";
+                showUserRow(recordHistorico, rankText);
             }
-        } catch (error) { /* Silencio */ }
+        } catch (error) {
+            console.error("[GameLogic] Score submission failed", error);
+        }
     }
 
-    // --- MODAL ---
-
+    // --- MODAL HANDLING ---
     function promptForName(isRename = false) {
         return new Promise((resolve) => {
             if (!modal) return resolve(null);
-
+            
             const nameInput = document.getElementById('pilot-name-input');
-            const modalTitle = modal.querySelector('h3');
-            const emailInput = document.getElementById('pilot-gmail-input');
-            if (emailInput) emailInput.style.display = 'none';
-
+            const saveBtn = document.getElementById('save-name-btn');
+            const closeBtn = document.getElementById('close-modal-btn'); // FIXED: Select Close Button
+            const modalTitle = modal.querySelector('h3'); 
+            
             modal.classList.add('active');
-            if (modalTitle) modalTitle.innerText = isRename ? "NUEVO ALIAS" : "LICENCIA DE PILOTO";
-
+            if(modalTitle) modalTitle.textContent = isRename ? "CAMBIAR ALIAS" : "LICENCIA DE PILOTO";
+            
             nameInput.value = "";
-            nameInput.style.borderColor = "#444";
             nameInput.focus();
 
-            const handleClose = () => {
-                modal.classList.remove('active');
-                cleanupModal();
-                resolve(null);
-            };
-
-            const handleSave = (e) => {
-                if (e) e.preventDefault();
-                let rawValue = nameInput.value;
-                let name = rawValue.replace(/[^a-zA-Z0-9 _-]/g, "").trim();
-
+            const onSave = () => {
+                let raw = nameInput.value;
+                let name = raw.replace(/[^a-zA-Z0-9 _-]/g, "").trim();
                 if (name.length < 3) {
-                    nameInput.style.borderColor = "#ff4444";
-                    nameInput.classList.add('shake');
-                    setTimeout(() => nameInput.classList.remove('shake'), 500);
+                    nameInput.style.borderColor = "red";
                     return;
                 }
-
                 const suffix = Math.floor(1000 + Math.random() * 9000);
                 const fullId = `${name}#${suffix}`;
+                
                 modal.classList.remove('active');
-                cleanupModal();
+                cleanListeners();
                 resolve(fullId);
             };
 
-            const handleOutsideClick = (e) => {
-                if (e.target === modal) handleClose();
+            const onCancel = (e) => {
+                 // Close on background click OR close button click
+                 if (e.target === modal || e.target === closeBtn) {
+                     modal.classList.remove('active');
+                     cleanListeners();
+                     resolve(null);
+                 }
             };
 
-            function cleanupModal() {
-                modal.removeEventListener('click', handleOutsideClick);
-                const newNameInput = nameInput.cloneNode(true);
-                nameInput.parentNode.replaceChild(newNameInput, nameInput);
+            const onKey = (e) => { if (e.key === 'Enter') onSave(); };
+
+            function cleanListeners() {
+                saveBtn.onclick = null;
+                modal.onclick = null;
+                if (closeBtn) closeBtn.onclick = null; // Clean up
+                nameInput.onkeydown = null;
             }
 
-            // Gestión de Botones (Clonación para limpiar listeners)
-            const currentSaveBtn = document.getElementById('save-name-btn');
-            const currentCloseBtn = document.getElementById('close-modal-btn');
-            const newSaveBtn = currentSaveBtn.cloneNode(true);
-            currentSaveBtn.parentNode.replaceChild(newSaveBtn, currentSaveBtn);
-            newSaveBtn.addEventListener('click', handleSave);
-
-            if (currentCloseBtn) {
-                const newCloseBtn = currentCloseBtn.cloneNode(true);
-                currentCloseBtn.parentNode.replaceChild(newCloseBtn, currentCloseBtn);
-                newCloseBtn.addEventListener('click', handleClose);
-            }
-
-            modal.addEventListener('click', handleOutsideClick);
-            
-            // Re-bind input keydown
-            const reInput = document.getElementById('pilot-name-input');
-            if (reInput) {
-                reInput.onkeydown = (e) => {
-                    if (e.key === 'Enter') handleSave(e);
-                    if (e.key === 'Escape') handleClose();
-                }
-            }
+            saveBtn.onclick = onSave;
+            modal.onclick = onCancel;
+            if (closeBtn) closeBtn.onclick = onCancel; // FIXED: Bind click event
+            nameInput.onkeydown = onKey;
         });
     }
 
-    // --- EVENTOS UI ---
-
-    // 1. Botón Refresh
-    const refreshBtn = document.getElementById('refresh-rank-btn');
+    // --- UI EVENT LISTENERS ---
+    
+    // Refresh Button Logic
     if (refreshBtn) {
         refreshBtn.onclick = () => {
             refreshBtn.style.transform = "rotate(360deg)";
-            refreshBtn.disabled = true;
-            refreshBtn.style.opacity = "0.5";
-            refreshBtn.style.cursor = "wait";
-
+            refreshBtn.style.transition = "transform 0.5s";
             loadLeaderboard();
-
-            setTimeout(() => refreshBtn.style.transform = "rotate(0deg)", 500);
             setTimeout(() => {
-                refreshBtn.disabled = false;
-                refreshBtn.style.opacity = "1";
-                refreshBtn.style.cursor = "pointer";
-            }, 10000); 
+                refreshBtn.style.transform = "rotate(0deg)";
+                refreshBtn.style.transition = "none";
+            }, 500);
         };
     }
 
-    // 2. Botón Rename (Con corrección de Rango)
-    const editBtn = document.getElementById('edit-name-btn');
+    // Rename Button Logic
     if (editBtn) {
         editBtn.onclick = async () => {
             const oldId = userId;
-            const newId = await promptForName(true);
+            const newId = await promptForName(true); 
 
             if (!newId || newId === oldId) return;
 
-            if (userPilotDisplay) {
-                userPilotDisplay.style.opacity = "0.5";
-                userPilotDisplay.textContent = "Sincronizando...";
-            }
+            if (userPilotDisplay) userPilotDisplay.textContent = "Guardando...";
 
             try {
                 const res = await fetch('/api/game/rename', {
@@ -277,107 +410,22 @@ export function initGame() {
                     body: JSON.stringify({ oldName: oldId, newName: newId })
                 });
 
-                const data = await res.json();
-
                 if (res.ok) {
                     userId = newId;
-                    localStorage.setItem('jaguar_user', userId);
-                    
-                    if (userPilotDisplay) {
-                        userPilotDisplay.style.opacity = "1";
-                        userPilotDisplay.style.color = "#FFD700";
-                        userPilotDisplay.textContent = userId.split('#')[0];
-                        setTimeout(() => userPilotDisplay.style.color = "#fff", 1000);
-                    }
-
-                    if (data.new_rank) {
-                        localStorage.setItem('jaguar_last_rank', data.new_rank);
-                        let storedRecord = localStorage.getItem('jaguarReactionRecord');
-                        let recordVal = storedRecord ? (parseFloat(storedRecord) / 1000) : 0;
-                        showUserRow(recordVal, `#${data.new_rank}`);
-                    } 
-
-                    loadLeaderboard();
+                    localStorage.setItem(STORAGE_KEY_USER, userId);
+                    if (userPilotDisplay) userPilotDisplay.textContent = newId.split('#')[0];
+                    loadLeaderboard(); 
                 } else {
-                    throw new Error(data.message || 'Error');
+                    throw new Error("Rename failed");
                 }
             } catch (e) {
-                if (userPilotDisplay) {
-                    userPilotDisplay.style.opacity = "1";
-                    userPilotDisplay.textContent = oldId.split('#')[0];
-                    alert("No se pudo cambiar el nombre.");
-                }
+                if (userPilotDisplay) userPilotDisplay.textContent = oldId.split('#')[0];
             }
         };
     }
 
-    // --- MECÁNICA DEL JUEGO ---
-
-    function triggerFault() {
-        gameState = 'fault'; resetAllTimeouts(); resetVisuals();
-        resultDisplay.textContent = "¡SALIDA EN FALSO!";
-        resultDisplay.style.setProperty('color', '#ff4444', 'important');
-        btn.innerText = "REINTENTAR";
-        if (rankDisplay) { rankDisplay.textContent = "DESCALIFICADO 🚫"; rankDisplay.style.opacity = "1"; rankDisplay.style.color = "#ff4444"; }
-    }
-
-    function startGameSequence() {
-        gameState = 'waiting'; resetVisuals(); btn.innerText = "ESPERA..."; resultDisplay.textContent = "0.000 ms";
-        let cumulativeDelay = 0;
-        lights.forEach((light) => {
-            cumulativeDelay += 800;
-            const id = setTimeout(() => { if (gameState === 'waiting') light.classList.add('red'); }, cumulativeDelay);
-            gameTimeouts.push(id);
-        });
-        const randomTime = Math.floor(Math.random() * 3000) + 1000;
-        const totalWait = cumulativeDelay + randomTime;
-        const greenId = setTimeout(() => { if (gameState === 'waiting') goGreen(); }, totalWait);
-        gameTimeouts.push(greenId);
-    }
-
-    function goGreen() {
-        gameState = 'green'; startTime = performance.now();
-        lights.forEach(l => { l.classList.remove('red'); l.classList.add('green'); });
-        btn.innerText = "¡AHORA!";
-    }
-
-    function finishGame() {
-        gameState = 'result';
-        const endTime = performance.now();
-        const reactionTime = Math.floor(endTime - startTime);
-        resultDisplay.textContent = `${reactionTime} ms`;
-
-        let rankTitle, rankClass, color;
-        if (reactionTime < 250) { rankTitle = "JAGUAR LEGEND 🐆"; rankClass = "rank-legend"; color = "#FFD700"; }
-        else if (reactionTime < 350) { rankTitle = "PILOTO F1 🏎️"; rankClass = "rank-pro"; color = "#00ff00"; }
-        else if (reactionTime < 500) { rankTitle = "CONDUCTOR PROMEDIO 🚗"; rankClass = "rank-avg"; color = "#fff"; }
-        else { rankTitle = "ABUELITA AL VOLANTE 🐢"; rankClass = "rank-slow"; color = "#ff4444"; }
-
-        rankDisplay.textContent = rankTitle; rankDisplay.className = `reaction-rank ${rankClass}`;
-        rankDisplay.style.color = color; rankDisplay.style.opacity = "1"; rankDisplay.style.transform = "scale(1.2)";
-        setTimeout(() => rankDisplay.style.transform = "scale(1)", 200);
-
-        if (reactionTime > 50 && reactionTime < 5000) submitScoreToRanking(reactionTime);
-        btn.innerText = "JUGAR OTRA VEZ";
-    }
-
-    function handleInteraction(e) {
-        if (e.type === 'touchstart') e.preventDefault();
-        if (gameState === 'idle' || gameState === 'result' || gameState === 'fault') startGameSequence();
-        else if (gameState === 'waiting') triggerFault();
-        else if (gameState === 'green') finishGame();
-    }
-
-    // --- INICIALIZACIÓN ---
-    
+    // --- INITIALIZATION ---
     resetAllTimeouts();
-    const storedRecord = localStorage.getItem('jaguarReactionRecord');
-    let recordInit = storedRecord ? parseFloat(storedRecord) : Infinity;
-    
-    // Carga inicial (Intentamos mostrar la fila del usuario de inmediato si tenemos datos)
-    let lastRankInit = localStorage.getItem('jaguar_last_rank');
-    if (userId) showUserRow((recordInit/1000), lastRankInit ? `#${lastRankInit}` : "-");
-
     loadLeaderboard();
     
     function startPolling() {
@@ -388,32 +436,32 @@ export function initGame() {
     }
     startPolling();
 
-    // Listeners del Botón Principal
-    btn.onclick = null;
-    if (window.PointerEvent) btn.onpointerdown = handleInteraction;
-    else { btn.ontouchstart = handleInteraction; btn.onmousedown = handleInteraction; }
+    // Global Interaction Listeners
+    const eventType = window.PointerEvent ? 'pointerdown' : 'touchstart';
+    if (gameContainer) {
+        gameContainer.removeEventListener(eventType, handleGlobalInteraction);
+        gameContainer.addEventListener(eventType, handleGlobalInteraction);
+    }
+    
+    // Fallback for button click
+    btn.onclick = (e) => { if(gameState === 'idle') startGameSequence(); };
 
-    // Listener de Visibilidad (Definido para poder removerlo luego)
-    const handleVisibilityChange = () => {
-        if (document.hidden && pollingInterval) clearInterval(pollingInterval);
-        else if (!document.hidden) startPolling();
+    // Visibility Handler
+    const handleVis = () => {
+        if (document.hidden) clearInterval(pollingInterval);
+        else startPolling();
     };
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener("visibilitychange", handleVis);
 
-    console.log("Sistema de Semáforo Iniciado 🏎️");
+    console.log("[GameLogic] System initialized successfully.");
 
-    // === RETURN CLEANUP ===
-    // Esto se ejecutará cuando Astro desmonte el componente
     return function cleanup() {
-        resetAllTimeouts(); // Limpia timeouts del juego
+        resetAllTimeouts();
         if (pollingInterval) clearInterval(pollingInterval);
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
+        document.removeEventListener("visibilitychange", handleVis);
+        if (gameContainer) gameContainer.removeEventListener(eventType, handleGlobalInteraction);
         
-        // Limpieza de botón principal para evitar duplicados si el nodo persiste (raro en Astro pero seguro)
-        if (btn) {
-            btn.onpointerdown = null;
-            btn.ontouchstart = null;
-            btn.onmousedown = null;
-        }
+        if (editBtn) editBtn.onclick = null;
+        if (refreshBtn) refreshBtn.onclick = null;
     };
 }
