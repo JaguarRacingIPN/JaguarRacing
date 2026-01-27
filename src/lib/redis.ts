@@ -1,16 +1,11 @@
 // src/lib/redis.ts
-import { Redis } from '@upstash/redis';
+import { Redis } from "@upstash/redis";
 
-// Validamos que las variables existan para no tronar en runtime
-const url = import.meta.env.KV_REST_API_URL;
-const token = import.meta.env.KV_REST_API_TOKEN;
-
-if (!url || !token) {
-    throw new Error("FATAL: Faltan credenciales de Redis (KV_REST_API_URL / TOKEN)");
+if (!import.meta.env.KV_REST_API_URL || !import.meta.env.KV_REST_API_TOKEN) {
+  throw new Error("FALTAN VARIABLES DE ENTORNO DE UPSTASH (KV_REST_API_...)");
 }
 
-// Exportamos una instancia única (Singleton pattern implícito por módulos de ES6)
 export const redis = new Redis({
-    url,
-    token,
+  url: import.meta.env.KV_REST_API_URL,
+  token: import.meta.env.KV_REST_API_TOKEN,
 });
