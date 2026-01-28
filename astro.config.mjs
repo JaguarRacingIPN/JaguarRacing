@@ -5,6 +5,12 @@ export default defineConfig({
   output: 'server', //Para usas APIS dinamicas 
   adapter: vercel(),
 
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp'
+    }
+  },
+
   // --- CORRECCIÓN PARA WINDOWS / VITE ---
   // Esto le da permiso a Vite para servir las fuentes desde node_modules
   // y elimina los errores rojos de "outside of Vite serving allow list".

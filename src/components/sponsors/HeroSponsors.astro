@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+// Lo mismo de siempre: Si tienes el original, úsalo. Si no, pues ya ni modo con este webp.
 import imgPortada from '../../assets/Portadas/Patrocinios.webp'; 
 import '../../styles/layout/hero-internal.css';
 ---
@@ -9,13 +10,12 @@ import '../../styles/layout/hero-internal.css';
         src={imgPortada} 
         alt="Patrocinadores Jaguar Racing" 
         class="hero-internal__bg" 
-        widths={[360, 768, 1280, 1920]} 
+        widths={[360, 540, 720, 1080, 1920]} 
         sizes={`(max-width: 768px) 100vw, 100vw`}
-        format="webp"
-        quality={80}
+        quality={60}
         loading="eager"
         fetchpriority="high"
-        decoding="async"
+        decoding="sync"
     />
     
     <div class="hero-internal__overlay"></div>

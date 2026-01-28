@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import '../../styles/layout/hero.css'; 
 
 const allImages = await Astro.glob('../../assets/Index/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
-const backgroundImages = allImages.slice(0, 5); // Solo las primeras 5
+const backgroundImages = allImages.slice(0, 5); 
 ---
 
 {/* CSS CRÍTICO INLINE */}
@@ -11,20 +11,12 @@ const backgroundImages = allImages.slice(0, 5); // Solo las primeras 5
     .hero-placeholder {
         position: relative;
         width: 100%;
-        
-        /* Fallback para navegadores viejos */
         height: 100vh; 
-        
-        /* EL FIX: Usamos Small Viewport Height. 
-           Esto ignora si la barra de direcciones del móvil se esconde o no.
-           Resultado: Cero saltos, cero zoom involuntario. */
         height: 100svh; 
-        
         background-color: #080808;
         overflow: hidden;
     }
 
-    /* La primera imagen debe verse YA, sin esperar transiciones */
     .bg-slide.first-load {
         opacity: 1 !important;
         transition: none !important;
@@ -40,11 +32,10 @@ const backgroundImages = allImages.slice(0, 5); // Solo las primeras 5
             <div class={`bg-slide ${index === 0 ? 'active first-load' : ''}`}>
                 <Image 
                     src={img.default} 
-                    alt={`Jaguar Racing Slide ${index + 1}`} 
-                    widths={[640, 1024, 1920]}
+                    alt={`Jaguar Racing Slide ${index + 1}`}
+                    widths={[360, 540, 720, 1024, 1280, 1920]}
                     sizes={`100vw`}
-                    format="webp"
-                    quality={80}
+                    quality={65}
                     class="bg-image-fit" 
                     loading={index === 0 ? "eager" : "lazy"} 
                     fetchpriority={index === 0 ? "high" : "auto"}
@@ -62,9 +53,10 @@ const backgroundImages = allImages.slice(0, 5); // Solo las primeras 5
     let cleanupFn: (() => void) | undefined;
 
     document.addEventListener('astro:page-load', () => {
-        // Quitamos la clase .first-load después de un momento para permitir transiciones futuras
         const firstSlide = document.querySelector('.bg-slide.first-load');
         if(firstSlide) {
+            // Un pequeño delay para asegurar que el usuario vea la primera imagen
+            // antes de permitir que el CSS de transición tome el control.
             setTimeout(() => {
                 firstSlide.classList.remove('first-load');
             }, 100);
