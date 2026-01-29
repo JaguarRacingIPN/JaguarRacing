@@ -1,112 +1,485 @@
-// src/pages/api/chat.ts
 export const prerender = false;
+
 import type { APIRoute } from "astro";
 import { AzureOpenAI } from "openai";
-import { redis } from "../../lib/redis"; // <-- Importación modular
+import type { ChatCompletionMessageParam } from "openai/resources/chat/completions";
+import { redis } from "../../lib/redis";
 
-// --- CONFIGURACIÓN ---
-const SYSTEM_PROMPT = `[ROLE] Eres el Asistente Virtual oficial de 'Jaguar Racing', escudería de la ESIME Azcapotzalco (IPN).
-Tu objetivo es reclutar miembros y atraer patrocinadores.
-TONO: Profesional, Tecnológico, "Orgullo Politécnico".
-IDIOMA: Detecta el idioma del usuario (ES/EN) y responde en el mismo.
+// ============================================
+// CONFIGURACIÓN
+// ============================================
+const CONFIG = {
+  SYSTEM_PROMPT: `[ROLE]
+Eres el Asistente Virtual oficial de 'Jaguar Racing', escudería de la ESIME Azcapotzalco (IPN). Tu objetivo es reclutar talento y persuadir patrocinadores.
+TONO: Profesional, Tecnológico, Directo y MUY BREVE".
+IDIOMA: Responde en el mismo idioma del usuario (ES/EN).
 
 [RULES - GATEKEEPER]
-1. TEMAS PERMITIDOS: Reclutamiento, requisitos, áreas técnicas, patrocinio, historia del equipo, ubicación.
-2. TEMAS SENSIBLES: Si mencionan "UNAM", "F1" o "Checo Pérez", responde cortésmente pero redirige INMEDIATAMENTE a Jaguar Racing.
-3. BLOQUEO: Si piden tareas, código ajeno o insultan -> "Soy un asistente exclusivo de Jaguar Racing. ¿Te interesa unirte?"
+1. TEMAS PERMITIDOS: Reclutamiento (áreas/requisitos), Patrocinio (beneficios), Historia, Ubicación.
+2. TEMAS SENSIBLES: Si mencionan "UNAM", "F1" o "Checo Pérez", responde con cortesía pero redirige INMEDIATAMENTE a los logros de Jaguar Racing.
+3. BLOQUEO: Si piden hacer tareas, código ajeno o insultan -> "Soy el asistente de Jaguar Racing. ¿Te interesa unirte al equipo o patrocinarnos?"
+4. REGLA DE UNIÓN: Si preguntan cómo unirse, SIEMPRE lista con saltos de linea de los "Requisitos Generales" y los "Títulos de las Áreas" antes del link.
+5. INFORMACIÓN FALTANTE: Si no tienes el dato exacto en tu base, NO inventes. Di: "Para dudas no listadas aquí, escribe a nuestro correo."
 
-[KNOWLEDGE BASE - RECRUITMENT]:Link de Registro: https://jaguar-racing.vercel.app/join
-A. REQUISITOS GENERALES (OBLIGATORIOS):
-- Ser estudiante activo del IPN (Cualquier escuela).
-- Tener máximo 1 materia reprobada/dictamen.
-- Inglés básico, compromiso y disponibilidad de tiempo.
-- Menciona el nombre de las 5 areas con "-".
+[KNOWLEDGE BASE - CONTACT & LOCATION]
+- EMAIL CENTRAL: jaguarteam.ipn@gmail.com (Canal ÚNICO para Reclutamiento y Patrocinios).
+- DIRECCIÓN: Av. de las Granjas 682, Azcapotzalco, CDMX.
+- MAPA: https://maps.app.goo.gl/x5cyKqTVajGd2GpPA
 
-B. PERFILES POR ÁREA:
-1. CHASIS: Requiere mecánica, propiedades de materiales y CAD (SolidWorks).
-2. FRENOS: Requiere física, transferencia de calor, mecánica de materiales y CAD.
-3. DIRECCIÓN: Requiere sistemas de dirección automotriz, Excel (Macros/Datos) y CAD.
-4. INSTRUMENTACIÓN: Requiere programación de microcontroladores, diseño de PCBs y manejo de datos.
-5. REDES: Requiere HTML/CSS, Animación 3D, Vectores (Illustrator/Corel) y facilidad de palabra.
+[KNOWLEDGE BASE - RECRUITMENT]
+LINK REGISTRO: https://jaguar-racing.vercel.app/join
+
+A. PERFIL GENERAL (OBLIGATORIO):
+- Estudiante activo IPN (máx 1 reprobada).
+- Soft Skills: Compromiso, autodidacta, trabajo en equipo.
+
+B. ÁREAS ABIERTAS Y REQUISITOS CLAVE:
+1. DIRECCIÓN: SolidWorks y Excel básicos, Física/Mecánica.
+2. ERGONOMÍA: SolidWorks básico, disposición trabajo manual.
+3. SUSPENSIÓN: SolidWorks intermedio, Física.
+4. CHASIS: SolidWorks básico, Estática.
+
+[KNOWLEDGE BASE - SPONSORSHIP]
+BENEFICIOS (Dossier 2026):
+1. Talento Politécnico: Acceso a base de datos para reclutamiento y prácticas.
+2. Visibilidad de Marca: Logo en vehículo, uniformes y pits.
+3. Impacto Digital: Posicionamiento en web y redes sociales.
+4. Incentivos Fiscales: Recibos de donativo deducibles (Donataria Autorizada).
 
 [KNOWLEDGE BASE - GENERAL]
-- IDENTIDAD: Diseñamos y manufacturamos prototipos para competencias SAE (Baja y Formula).
-[MAPS]: https://maps.app.goo.gl/x5cyKqTVajGd2GpPA
-- UBICACIÓN: ESIME Unidad Azcapotzalco, CDMX.
-- PATROCINIOS: Somos Donataria Autorizada (damos recibos deducibles).
+- QUÉ HACEMOS: Diseño y manufactura de prototipos todo terreno (Baja SAE/Formula).
 
 [OUTPUT CONSTRAINTS]
-- Respuesta MÁXIMA: 60 palabras.
-- Estilo: Usa listas con guiones "-". Sé directo.
-- Links: Cualquier link va al final del texto sin parentesis ni puntos, no hagas mas texto abajo del link`;
+- FORMATO: Texto plano. PROHIBIDO usar asteriscos (*) ni negritas. Usa listas con guiones "-".
+- LONGITUD: MÁXIMO 60 palabras por respuesta. Sé conciso.
+- LINKS: Siempre al final, sin paréntesis ni texto posterior.`,
+  
+  RATE_LIMITS: {
+    IP: { max: 300, window: 86400 },
+    USER: { max: 50, window: 86400 },
+    BURST: { max: 5, window: 60 }
+  },
+  
+  // Azure OpenAI
+  MAX_TOKENS: 150,
+  TEMPERATURE: 0.5,
+  TIMEOUT: 20000, // 20s (margen para Vercel 25s)
+  RETRY_ATTEMPTS: 2, // Reintentos en backend
+  RETRY_DELAY: 1000, // 1s base para backoff exponencial
+  
+  // Cache
+  CACHE_TTL: 3600,
+  CACHE_ENABLED: true,
+  
+  // Context
+  MAX_CONTEXT_MESSAGES: 6,
+  MAX_INPUT_LENGTH: 500
+} as const;
 
-const azureEndpoint = import.meta.env.AZURE_OPENAI_ENDPOINT;
-const azureKey = import.meta.env.AZURE_OPENAI_API_KEY;
-const azureDeployment = import.meta.env.AZURE_OPENAI_DEPLOYMENT;
+// ============================================
+// VALIDACIÓN DE ENV VARS
+// ============================================
+const ENV = {
+  endpoint: import.meta.env.AZURE_OPENAI_ENDPOINT,
+  key: import.meta.env.AZURE_OPENAI_API_KEY,
+  deployment: import.meta.env.AZURE_OPENAI_DEPLOYMENT
+};
 
-// Instancia de OpenAI (se crea en cada request por ser serverless, es ligero)
-const client = new AzureOpenAI({
-    endpoint: azureEndpoint,
-    apiKey: azureKey,
-    apiVersion: "2024-07-01-preview",
-    deployment: azureDeployment
+if (!ENV.key || !ENV.endpoint || !ENV.deployment) {
+  throw new Error("Missing Azure OpenAI credentials");
+}
+
+// ============================================
+// CLIENTE AZURE OPENAI (singleton)
+// ============================================
+const azureClient = new AzureOpenAI({
+  endpoint: ENV.endpoint,
+  apiKey: ENV.key,
+  apiVersion: "2024-08-01-preview",
+  deployment: ENV.deployment,
+  timeout: CONFIG.TIMEOUT,
+  maxRetries: 0 // Manejamos retries manualmente
 });
 
-export const POST: APIRoute = async ({ request }) => {
-    if (!azureKey) {
-        return new Response(JSON.stringify({ content: "Error de configuración interna." }), { status: 500 });
+// ============================================
+// UTILIDADES
+// ============================================
+const Utils = {
+  getClientIp(request: Request): string {
+    const forwarded = request.headers.get('x-forwarded-for');
+    const realIp = request.headers.get('x-real-ip');
+    return forwarded?.split(',')[0]?.trim() || realIp || '127.0.0.1';
+  },
+
+  async hashMessages(messages: ChatCompletionMessageParam[]): Promise<string> {
+    const str = JSON.stringify(messages);
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    
+    if (typeof crypto !== 'undefined' && crypto.subtle) {
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
     }
+    
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return Math.abs(hash).toString(36);
+  },
+
+  // Sanitización de input (prevenir injection)
+  sanitizeInput(content: string): string {
+    return content
+      .trim()
+      .slice(0, CONFIG.MAX_INPUT_LENGTH)
+      .replace(/[<>]/g, '');
+  },
+
+  // Sanitización de output del bot (prevenir XSS desde IA)
+  sanitizeOutput(content: string): string {
+    return content
+      .trim()
+      // Remover markdown
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1')
+      .replace(/__(.+?)__/g, '$1')
+      .replace(/_(.+?)_/g, '$1')
+      // Remover backticks
+      .replace(/`(.+?)`/g, '$1')
+      // Remover HTML tags
+      .replace(/<[^>]*>/g, '')
+      // 👇 CAMBIO: Normalizar espacios PERO preservar \n
+      .replace(/[ \t]{2,}/g, ' ')  // Solo espacios/tabs horizontales
+      .replace(/\n{3,}/g, '\n\n')  // Máximo 2 saltos consecutivos
+      .trim();
+  },
+
+  // Delay para retry
+  async delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  },
+
+  jsonResponse(data: unknown, status = 200, headers: Record<string, string> = {}) {
+    return new Response(JSON.stringify(data), {
+      status,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": status === 200 ? "private, max-age=0" : "no-store",
+        ...headers
+      }
+    });
+  },
+
+  errorResponse(message: string, status: number) {
+    return this.jsonResponse({ content: message }, status);
+  }
+};
+
+// ============================================
+// TIPOS
+// ============================================
+interface RateLimitResult {
+  allowed: boolean;
+  remaining: number;
+}
+
+interface RateLimitCheckResult {
+  allowed: boolean;
+  reason?: string;
+  retryAfter?: number;
+}
+
+interface UserMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+// ============================================
+// RATE LIMITING
+// ============================================
+class RateLimiter {
+  static async check(
+    key: string, 
+    limit: number, 
+    windowSeconds: number
+  ): Promise<RateLimitResult> {
+    const now = Date.now();
+    const windowStart = now - (windowSeconds * 1000);
 
     try {
-        const body = await request.json();
-        const { messages, mensaje } = body;
+      const p = redis.pipeline();
+      p.zremrangebyscore(key, 0, windowStart);
+      p.zadd(key, { score: now, member: `${now}` });
+      p.zcard(key);
+      p.expire(key, windowSeconds * 2);
+      
+      const results = (await p.exec()) as Array<[Error | null, unknown]>;
+      const count = (results?.[2]?.[1] as number) || 0;
+      
+      return {
+        allowed: count <= limit,
+        remaining: Math.max(0, limit - count)
+      };
+    } catch (error) {
+      console.error("Redis error:", error);
+      return { allowed: true, remaining: limit };
+    }
+  }
 
-        // --- Rate Limiting (Redis Modular) ---
-        const forwarded = request.headers.get('x-forwarded-for');
-        const ip = forwarded ? forwarded.split(',')[0] : '127.0.0.1';
-        const userId = request.headers.get('x-user-id') || 'anonimo';
+  static async checkAll(ip: string, userId: string): Promise<RateLimitCheckResult> {
+    const checks = await Promise.all([
+      this.check(`rl:ip:${ip}`, CONFIG.RATE_LIMITS.IP.max, CONFIG.RATE_LIMITS.IP.window),
+      this.check(`rl:user:${userId}`, CONFIG.RATE_LIMITS.USER.max, CONFIG.RATE_LIMITS.USER.window),
+      this.check(`rl:burst:${userId}`, CONFIG.RATE_LIMITS.BURST.max, CONFIG.RATE_LIMITS.BURST.window)
+    ]);
+
+    const [ipCheck, userCheck, burstCheck] = checks;
+
+    if (!ipCheck.allowed) {
+      return { 
+        allowed: false, 
+        reason: "Límite de red excedido. Intenta mañana.",
+        retryAfter: CONFIG.RATE_LIMITS.IP.window
+      };
+    }
+
+    if (!burstCheck.allowed) {
+      return { 
+        allowed: false, 
+        reason: "Demasiado rápido. Espera 1 minuto.",
+        retryAfter: 60
+      };
+    }
+
+    if (!userCheck.allowed) {
+      return { 
+        allowed: false, 
+        reason: "Límite diario alcanzado (50 mensajes).",
+        retryAfter: CONFIG.RATE_LIMITS.USER.window
+      };
+    }
+
+    return { allowed: true };
+  }
+}
+
+// ============================================
+// CACHE LAYER
+// ============================================
+class ResponseCache {
+  static async get(messagesHash: string): Promise<string | null> {
+    if (!CONFIG.CACHE_ENABLED) return null;
+    
+    try {
+      const cached = await redis.get(`cache:chat:${messagesHash}`) as string | null;
+      return cached;
+    } catch {
+      return null;
+    }
+  }
+
+  static async set(messagesHash: string, content: string): Promise<void> {
+    if (!CONFIG.CACHE_ENABLED) return;
+    
+    try {
+      await redis.setex(
+        `cache:chat:${messagesHash}`,
+        CONFIG.CACHE_TTL,
+        content
+      );
+    } catch (error) {
+      console.error("Cache write failed:", error);
+    }
+  }
+}
+
+// ============================================
+// AZURE OPENAI WRAPPER (retry con backoff)
+// ============================================
+class AzureAI {
+  static async complete(
+    messages: ChatCompletionMessageParam[],
+    options: { useCache?: boolean } = {}
+  ): Promise<string> {
+    const fullMessages: ChatCompletionMessageParam[] = [
+      { role: "system", content: CONFIG.SYSTEM_PROMPT },
+      ...messages
+    ];
+
+    // Intentar cache
+    if (options.useCache) {
+      const hash = await Utils.hashMessages(fullMessages);
+      const cached = await ResponseCache.get(hash);
+      if (cached) {
+        console.log('Cache hit:', hash);
+        return cached;
+      }
+    }
+
+    // Retry logic con backoff exponencial
+    let lastError: Error | null = null;
+    
+    for (let attempt = 0; attempt <= CONFIG.RETRY_ATTEMPTS; attempt++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), CONFIG.TIMEOUT);
+
+        const result = await azureClient.chat.completions.create({
+          messages: fullMessages,
+          model: ENV.deployment,
+          max_tokens: CONFIG.MAX_TOKENS,
+          temperature: CONFIG.TEMPERATURE,
+          stream: false
+        }, {
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        const rawContent = result.choices[0]?.message?.content || "Sin respuesta.";
         
-        const ipKey = `ratelimit:chat:ip:${ip}`;
-        const userKey = `ratelimit:chat:user:${userId}`;
+        // Sanitizar output de la IA
+        const sanitizedContent = Utils.sanitizeOutput(rawContent);
 
-        // Usamos Pipeline para hacer 2 consultas a Redis en 1 viaje (Optimización)
-        const p = redis.pipeline();
-        p.incr(ipKey);
-        p.expire(ipKey, 86400); // 24h
-        p.incr(userKey);
-        p.expire(userKey, 86400); // 24h
-        
-        const results = await p.exec();
-        // results[0] es incr IP, results[2] es incr User
-        const ipCount = results[0] as number;
-        const userCount = results[2] as number;
-
-        if (ipCount > 300) return new Response(JSON.stringify({ content: "⚠️ Límite de red excedido." }), { status: 429 });
-        if (userCount > 50) return new Response(JSON.stringify({ content: "🛑 Límite diario alcanzado." }), { status: 429 });
-
-        // --- Lógica IA ---
-        let mensajesParaIA = [{ role: "system", content: SYSTEM_PROMPT }];
-        
-        if (messages?.length) {
-            mensajesParaIA = [...mensajesParaIA, ...messages];
-        } else if (mensaje) {
-            mensajesParaIA.push({ role: "user", content: mensaje });
+        // Guardar en cache
+        if (options.useCache) {
+          const hash = await Utils.hashMessages(fullMessages);
+          await ResponseCache.set(hash, sanitizedContent);
         }
 
-        const result = await client.chat.completions.create({
-            messages: mensajesParaIA as any, // Cast simple
-            model: azureDeployment,
-            max_tokens: 150,
-            temperature: 0.5,
-        });
+        return sanitizedContent;
 
-        return new Response(JSON.stringify({ content: result.choices[0].message.content }), {
-            status: 200,
-            headers: { "Content-Type": "application/json" }
-        });
+      } catch (error: unknown) {
+        const err = error as Error & { name?: string; code?: string; status?: number };
+        lastError = err;
 
-    } catch (error) {
-        console.error("❌ Error API Chat:", error);
-        return new Response(JSON.stringify({ content: "El sistema está descansando." }), { status: 500 });
+        // No reintentar en estos casos
+        if (err.name === 'AbortError') {
+          throw new Error("TIMEOUT");
+        }
+        
+        if (err.status === 401 || err.status === 403) {
+          throw new Error("AUTH_ERROR");
+        }
+
+        // Errores recuperables
+        const isRetryable = 
+          err.code === 'ECONNRESET' ||
+          err.code === 'ETIMEDOUT' ||
+          err.status === 429 ||
+          err.status === 500 ||
+          err.status === 502 ||
+          err.status === 503;
+
+        if (!isRetryable || attempt === CONFIG.RETRY_ATTEMPTS) {
+          throw err;
+        }
+
+        // Backoff exponencial: 1s, 2s, 4s
+        const delay = CONFIG.RETRY_DELAY * Math.pow(2, attempt);
+        console.log(`Retry attempt ${attempt + 1}/${CONFIG.RETRY_ATTEMPTS} after ${delay}ms`);
+        await Utils.delay(delay);
+      }
     }
+
+    throw lastError || new Error("All retries failed");
+  }
+}
+
+// ============================================
+// MAIN HANDLER
+// ============================================
+export const POST: APIRoute = async ({ request }) => {
+  const ip = Utils.getClientIp(request);
+  const userId = request.headers.get('x-user-id') || 'anonymous';
+
+  try {
+    // 1. Rate Limiting
+    const rateLimitResult = await RateLimiter.checkAll(ip, userId);
+    if (!rateLimitResult.allowed) {
+      return Utils.jsonResponse(
+        { 
+          content: rateLimitResult.reason,
+          retryAfter: rateLimitResult.retryAfter 
+        },
+        429,
+        { 
+          "Retry-After": String(rateLimitResult.retryAfter || 60),
+          "X-RateLimit-Remaining": "0"
+        }
+      );
+    }
+
+    // 2. Parsear body
+    const body = await request.json();
+    const { messages = [], mensaje } = body;
+
+    // 3. Construir mensajes con sanitización
+    let userMessages: ChatCompletionMessageParam[] = [];
+    
+    if (messages.length > 0) {
+      userMessages = messages
+        .slice(-CONFIG.MAX_CONTEXT_MESSAGES)
+        .map((m: UserMessage) => ({
+          role: m.role,
+          content: Utils.sanitizeInput(m.content)
+        }));
+    } else if (mensaje) {
+      userMessages = [{
+        role: "user" as const,
+        content: Utils.sanitizeInput(mensaje)
+      }];
+    } else {
+      return Utils.errorResponse("Mensaje vacío.", 400);
+    }
+
+    // 4. Llamar a Azure OpenAI (con retry automático)
+    const content = await AzureAI.complete(userMessages, { 
+      useCache: CONFIG.CACHE_ENABLED
+    });
+
+    // 5. Retornar respuesta sanitizada
+    return Utils.jsonResponse({ content });
+
+  } catch (error: unknown) {
+    const err = error as Error & { code?: string };
+    
+    console.error("Chat API Error:", {
+      message: err.message,
+      userId,
+      ip,
+      timestamp: new Date().toISOString()
+    });
+
+    // Mensajes de error específicos
+    if (err.message === "TIMEOUT") {
+      return Utils.errorResponse(
+        "La IA está tardando mucho. Intenta con una pregunta más corta.",
+        504
+      );
+    }
+
+    if (err.message === "AUTH_ERROR") {
+      return Utils.errorResponse(
+        "Error de autenticación con el servicio de IA.",
+        503
+      );
+    }
+
+    if (err.code === 'insufficient_quota') {
+      return Utils.errorResponse(
+        "Servicio temporalmente no disponible.",
+        503
+      );
+    }
+
+    return Utils.errorResponse(
+      "Error técnico. Intenta de nuevo en un momento.",
+      500
+    );
+  }
 };
