@@ -1,177 +1,459 @@
 /* =============================================================================
    JAGUAR RACING - INDEX BODY STYLES
+   Dependencies: variables-base.css, typography-ui.css
    ============================================================================= */
 
+/* =============================================================================
+   1. SCROLL ANIMATIONS (Synchronized - Solution 1A)
+   ============================================================================= */
+
+/* Contenedores principales: animación de entrada */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-animate.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Imágenes: estado inicial (ocultas) */
+.mission-img,
+.team-img-fit,
+.what-is-image img {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.scroll-animate.is-visible .mission-img,
+.scroll-animate.is-visible .team-img-fit,
+.scroll-animate.is-visible .what-is-image img {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Filtros específicos aplicados desde CSS */
+.scroll-animate.is-visible .mission-img {
+    filter: brightness(0.7) grayscale(20%) contrast(1.1);
+}
+
+.scroll-animate.is-visible .team-img-fit {
+    filter: grayscale(100%) brightness(0.5);
+}
+
+.scroll-animate.is-visible .what-is-image img {
+    filter: brightness(0.7) grayscale(20%) contrast(1.1);
+}
+
+/* Hover effects (opcional) */
+.scroll-animate.is-visible .mission-img:hover,
+.scroll-animate.is-visible .team-img-fit:hover,
+.scroll-animate.is-visible .what-is-image img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
 /* -----------------------------------------------------------------------------
-   4. MISSION SECTION
+   2. MISSION SECTION
    ----------------------------------------------------------------------------- */
 .mission-section { 
-    padding: 3rem 5%; background: var(--bg-black); display: flex; justify-content: center; 
+    padding: 3rem 5%; 
+    background: var(--bg-black); 
+    display: flex; 
+    justify-content: center; 
 }
+
 .mission-container { 
-    max-width: 1200px; width: 100%; display: grid; grid-template-columns: 1.5fr 1fr; 
-    gap: 2rem; align-items: center; 
+    max-width: 1200px; 
+    width: 100%; 
+    display: grid; 
+    grid-template-columns: 1.5fr 1fr; 
+    gap: 2rem; 
+    align-items: center; 
 }
-.mission-lead strong { color: var(--text-white); font-weight: 700; }
+
+.mission-lead strong { 
+    color: var(--text-white); 
+    font-weight: 700; 
+}
+
 .mission-body { 
-    /* ACCESIBILIDAD FIX: #d1d1d1 para mejor lectura */
-    font-family: var(--font-main); font-size: 0.95rem; color: #d1d1d1; 
-    line-height: 1.6; text-align: left; 
+    /* Accessibility Fix: Adjusted contrast ratio to pass WCAG AA */
+    font-family: var(--font-main); 
+    font-size: 0.95rem; 
+    color: #d1d1d1; 
+    line-height: 1.6; 
+    text-align: left; 
 }
+
 .image-frame { 
-    position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 4px; 
+    position: relative; 
+    width: 100%; 
+    aspect-ratio: 16/9; 
+    overflow: hidden; 
+    border-radius: 4px; 
 }
+
 .mission-img { 
-    width: 100%; height: 100%; object-fit: cover; display: block; 
-    filter: brightness(0.7) grayscale(20%) contrast(1.1); transition: transform 1.2s ease; 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    display: block; 
+    filter: brightness(0.7) grayscale(20%) contrast(1.1); 
+    transition: transform 1.2s ease; 
 }
 
 /* -----------------------------------------------------------------------------
-   5. BAJA SAE
+   3. BAJA SAE SECTION
    ----------------------------------------------------------------------------- */
 .what-is-baja { 
-    padding: 3rem 0; background: #080808; width: 100%; 
-    display: flex; flex-direction: column; align-items: center; box-sizing: border-box; overflow: hidden;
+    padding: 3rem 0; 
+    background: #080808; 
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    box-sizing: border-box; 
+    overflow: hidden;
 }
+
 .compact-layout { 
-    display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; margin: 0 auto 1rem auto;
-    max-width: 1200px; width: 100%; align-items: center; padding: 0 5%; 
+    display: grid; 
+    grid-template-columns: 1fr 1.2fr; 
+    gap: 2rem; 
+    margin: 0 auto 1rem auto;
+    max-width: 1200px; 
+    width: 100%; 
+    align-items: center; 
+    padding: 0 5%; 
 }
+
 .baja-description { 
-    /* ACCESIBILIDAD FIX */
-    font-family: var(--font-main); font-size: 0.95rem; color: #d1d1d1; 
-    margin-bottom: 0.8rem; line-height: 1.6; text-align: left; 
+    /* Accessibility Fix: Adjusted color for readability */
+    font-family: var(--font-main); 
+    font-size: 0.95rem; 
+    color: #d1d1d1; 
+    margin-bottom: 0.8rem; 
+    line-height: 1.6; 
+    text-align: left; 
 }
-.baja-description strong { color: var(--text-white); font-weight: 600; }
+
+.baja-description strong { 
+    color: var(--text-white); 
+    font-weight: 600; 
+}
+
 .what-is-image { 
-    width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 4px; 
+    width: 100%; 
+    aspect-ratio: 16/9; 
+    overflow: hidden; 
+    border-radius: 4px; 
 }
+
 .what-is-image img { 
-    width: 100%; height: 100%; object-fit: cover; 
-    filter: brightness(0.7) grayscale(20%) contrast(1.1); transition: transform 1.2s ease;
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    filter: brightness(0.7) grayscale(20%) contrast(1.1); 
+    transition: transform 1.2s ease;
 }
 
 /* -----------------------------------------------------------------------------
-   6. TIMER BAR
+   4. INTEGRATED TIMER BAR
    ----------------------------------------------------------------------------- */
 .integrated-timer-bar {
-    width: 100%; background: #050505; 
-    border-top: 1px solid #222; border-bottom: 1px solid #222;
-    padding: 0.8rem 0; display: flex; justify-content: center; position: relative;
+    width: 100%; 
+    background: #050505; 
+    border-top: 1px solid #222; 
+    border-bottom: 1px solid #222;
+    padding: 0.8rem 0; 
+    display: flex; 
+    justify-content: center; 
+    position: relative;
 }
+
 .timer-container-inner {
-    max-width: 1200px; width: 90%;
-    display: flex; justify-content: space-between; align-items: center;
+    max-width: 1200px; 
+    width: 90%;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
 }
-.timer-item { display: flex; align-items: center; gap: 1rem; flex: 1; justify-content: center; }
-.timer-info { display: flex; flex-direction: column; text-align: right; }
+
+.timer-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+    flex: 1; 
+    justify-content: center; 
+}
+
+.timer-info { 
+    display: flex; 
+    flex-direction: column; 
+    text-align: right; 
+}
 
 .race-series {
-    font-family: var(--font-main); font-size: 0.65rem; 
-    /* ACCESIBILIDAD FIX: De #666 a Blanco Humo */
+    font-family: var(--font-main); 
+    font-size: 0.65rem; 
+    /* Accessibility Fix: Increased contrast from #666 to #F5F5F5 */
     color: #F5F5F5;
-    letter-spacing: 1px; text-transform: uppercase; font-weight: 500;
+    letter-spacing: 1px; 
+    text-transform: uppercase; 
+    font-weight: 500;
 }
+
 .race-location {
-    font-family: var(--font-main); font-weight: 800; 
-    font-size: 0.9rem; color: var(--text-white);
-    letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px;
+    font-family: var(--font-main); 
+    font-weight: 800; 
+    font-size: 0.9rem; 
+    color: var(--text-white);
+    letter-spacing: 0.5px; 
+    text-transform: uppercase; 
+    margin-top: 2px;
 }
+
 .timer-value {
-    font-family: 'Courier New', monospace; font-size: 1.2rem; 
-    color: var(--text-white); font-weight: 700;
+    font-family: 'Courier New', monospace; 
+    font-size: 1.2rem; 
+    color: var(--text-white); 
+    font-weight: 700;
 }
-.timer-separator { width: 1px; height: 20px; background: #333; margin: 0 1.5rem; }
+
+.timer-separator { 
+    width: 1px; 
+    height: 20px; 
+    background: #333; 
+    margin: 0 1.5rem; 
+}
 
 /* -----------------------------------------------------------------------------
-   7. RECLUTAMIENTO
+   5. RECRUITMENT (JOIN CTA)
    ----------------------------------------------------------------------------- */
 .join-cta { 
     position: relative; 
     height: 450px; 
-    display: flex; align-items: center; justify-content: center; 
-    background: var(--bg-black); overflow: hidden; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: var(--bg-black); 
+    overflow: hidden; 
 }
-.cta-media-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.cta-video-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+
+.cta-media-wrapper { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+}
+
+.cta-video-bg { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    opacity: 0.4; 
+}
 
 .join-cta__text { 
-    position: relative; z-index: 2; text-align: center; padding: 0 1rem; 
+    position: relative; 
+    z-index: 2; 
+    text-align: center; 
+    padding: 0 1rem; 
     max-width: 800px;
 }
 
 /* -----------------------------------------------------------------------------
-   8. EQUIPO
+   6. TEAM SECTION
    ----------------------------------------------------------------------------- */
 .team-hero { 
     padding: 2rem 0; 
-    background: var(--bg-black); display: flex; justify-content: center; 
+    background: var(--bg-black); 
+    display: flex; 
+    justify-content: center; 
 }
-.team-container-limited { max-width: 1200px; width: 95%; margin: 0 auto; }
+
+.team-container-limited { 
+    max-width: 1200px; 
+    width: 95%; 
+    margin: 0 auto; 
+}
+
 .team-image-wrapper-limited { 
-    position: relative; width: 100%; height: 400px; 
-    overflow: hidden; border-radius: 4px; border: 1px solid #333; 
+    position: relative; 
+    width: 100%; 
+    height: 400px; 
+    overflow: hidden; 
+    border-radius: 4px; 
+    border: 1px solid #333; 
 }
+
 .team-img-fit { 
-    width: 100%; height: 100%; object-fit: cover; object-position: center 30%; 
-    filter: grayscale(100%) brightness(0.5); transition: transform 1.2s ease; 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    object-position: center 30%; 
+    filter: grayscale(100%) brightness(0.5); 
+    transition: transform 1.2s ease; 
 }
+
 .team-overlay { 
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-    display: flex; flex-direction: column; justify-content: center; align-items: center; 
-    z-index: 5; background: rgba(0,0,0,0.3); 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 5; 
+    background: rgba(0,0,0,0.3); 
 }
 
-/* UTILIDADES */
-.social-links-large { display: flex; gap: 15px; margin-bottom: 1.5rem; justify-content: center; }
-.social-links-large img { width: 28px !important; height: 28px !important; object-fit: contain; transition: 0.3s; filter: none; }
-.social-links-large img:hover { transform: scale(1.2); }
+/* -----------------------------------------------------------------------------
+   7. UTILITIES & LINKS
+   ----------------------------------------------------------------------------- */
+.social-links-large { 
+    display: flex; 
+    gap: 15px; 
+    margin-bottom: 1.5rem; 
+    justify-content: center; 
+}
+
+.social-links-large img { 
+    width: 28px !important; 
+    height: 28px !important; 
+    object-fit: contain; 
+    transition: 0.3s; 
+    filter: none; 
+}
+
+.social-links-large img:hover { 
+    transform: scale(1.2); 
+}
+
 .btn-underline { 
-    color: var(--jaguar-gold); text-decoration: none; font-weight: 700; 
-    border-bottom: 2px solid var(--jaguar-gold); padding-bottom: 3px; 
-    font-family: var(--font-main); font-size: 0.9rem; letter-spacing: 1px; 
-    transition: all 0.3s; text-transform: uppercase;
+    color: var(--jaguar-gold); 
+    text-decoration: none; 
+    font-weight: 700; 
+    border-bottom: 2px solid var(--jaguar-gold); 
+    padding-bottom: 3px; 
+    font-family: var(--font-main); 
+    font-size: 0.9rem; 
+    letter-spacing: 1px; 
+    transition: all 0.3s; 
+    text-transform: uppercase;
 }
-.btn-underline:hover { color: var(--text-white); border-color: var(--text-white); }
 
-/* ACCESIBILIDAD FIX: Link Discreto */
+.btn-underline:hover { 
+    color: var(--text-white); 
+    border-color: var(--text-white); 
+}
+
+/* Accessibility Fix: Discreet Link High Contrast */
 .link-discreet { 
-    display: inline-block; margin-top: 0.5rem; font-family: var(--font-main); font-size: 0.85rem; 
-    /* Cambiado de #666 a Dorado Brillante */
-    color: #FFD700; 
+    display: inline-block; 
+    margin-top: 0.5rem; 
+    font-family: var(--font-main); 
+    font-size: 0.85rem; 
+    color: #FFD700; /* Gold */
     font-weight: 600;
-    text-decoration: none; transition: all 0.3s ease; border-bottom: 1px solid transparent; 
+    text-decoration: none; 
+    transition: all 0.3s ease; 
+    border-bottom: 1px solid transparent; 
 }
-.link-discreet:hover { color: #ffffff; border-bottom-color: #ffffff; transform: translateX(5px); }
 
-.active-scroll-effect { filter: brightness(0.6) grayscale(0%) contrast(1.1) !important; transform: scale(1.11) !important; }
-.team-img-fit.active-scroll-effect { filter: grayscale(100%) brightness(0.5) !important; transform: scale(1.11) !important; }
+.link-discreet:hover { 
+    color: #ffffff; 
+    border-bottom-color: #ffffff; 
+    transform: translateX(5px); 
+}
 
-/* =========================================
-   9. MEDIA QUERIES (Mobile Fix)
-   ========================================================================= */
+/* Scroll Active States */
+.active-scroll-effect { 
+    filter: brightness(0.6) grayscale(0%) contrast(1.1) !important; 
+    transform: scale(1.11) !important; 
+}
+
+.team-img-fit.active-scroll-effect { 
+    filter: grayscale(100%) brightness(0.5) !important; 
+    transform: scale(1.11) !important; 
+}
+
+/* =============================================================================
+   8. MEDIA QUERIES (Mobile Optimization)
+   ============================================================================= */
 @media (max-width: 900px) {
-    .mission-section, .what-is-baja, .join-cta { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .mission-section, 
+    .what-is-baja, 
+    .join-cta { 
+        padding-left: 1.5rem; 
+        padding-right: 1.5rem; 
+    }
     
+    /* Stats Layout Fix */
     .stats-bar { padding: 2rem 0; }
     .stats-grid { flex-direction: column; align-items: center; gap: 2.5rem; }
     .stat-item { width: 100%; }
+    .stat-label { font-size: 0.85rem; opacity: 0.9; }
     
-    .stat-label { font-size: 0.85rem; opacity: 0.9; } /* Aumentada opacidad */
+    /* Grid Adjustments */
+    .mission-container, 
+    .compact-layout { 
+        grid-template-columns: 1fr; 
+        gap: 1.5rem; 
+        margin-bottom: 1rem; 
+    }
     
-    .mission-container, .compact-layout { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1rem; }
-    .what-is-image, .mission-img { order: 2; margin-top: 0.8rem; }
+    /* Image Reordering */
+    .what-is-image, 
+    .mission-img { 
+        order: 2; 
+        margin-top: 0.8rem; 
+    }
     
-    .section-title-left, .mission-lead, .mission-body, .baja-description { text-align: center; }
-    .sponsors-desc { width: 100%; padding: 0 15px; font-size: 0.9rem; word-wrap: break-word; }
+    /* Typography Alignment */
+    .section-title-left, 
+    .mission-lead, 
+    .mission-body, 
+    .baja-description { 
+        text-align: center; 
+    }
     
+    .sponsors-desc { 
+        width: 100%; 
+        padding: 0 15px; 
+        font-size: 0.9rem; 
+        word-wrap: break-word; 
+    }
+    
+    /* Container Heights */
     .join-cta { height: 400px; } 
     .team-image-wrapper-limited { height: 300px; } 
     
+    /* Timer Bar Mobile */
     .integrated-timer-bar { padding: 2rem 1rem; }
     .timer-container-inner { flex-direction: column; gap: 2rem; }
-    .timer-item { flex-direction: column; text-align: center; gap: 0.5rem; width: 100%; border-bottom: 1px solid #222; padding-bottom: 1.5rem; }
-    .timer-item:last-child { border-bottom: none; padding-bottom: 0; }
+    
+    .timer-item { 
+        flex-direction: column; 
+        text-align: center; 
+        gap: 0.5rem; 
+        width: 100%; 
+        border-bottom: 1px solid #222; 
+        padding-bottom: 1.5rem; 
+    }
+    
+    .timer-item:last-child { 
+        border-bottom: none; 
+        padding-bottom: 0; 
+    }
+    
     .timer-info { text-align: center; width: 100%; }
     .timer-separator { display: none; }
     .race-location { font-size: 1.0rem; margin-bottom: 0.2rem; }

@@ -43,12 +43,26 @@ const pageTitle = "Inicio";
     {/* --- SCRIPTS --- */}
     
     <script>
-    // 1. Importamos la lógica del Scroll
     import { initScrollAnimations } from '../scripts/scrollAnimations.js';
-
-    // Ejecución controlada por Astro
+    
+    let cleanupScrollFx: (() => void) | undefined;
+    
     document.addEventListener('astro:page-load', () => {
-        initScrollAnimations();
+        // Limpiar instancia anterior si existe
+        if (cleanupScrollFx) {
+            cleanupScrollFx();
+        }
+        
+        // Inicializar y guardar función de limpieza
+        cleanupScrollFx = initScrollAnimations() as (() => void);
+    });
+    
+    document.addEventListener('astro:before-swap', () => {
+        // Cleanup antes de cambiar de página
+        if (cleanupScrollFx) {
+            cleanupScrollFx();
+            cleanupScrollFx = undefined;
+        }
     });
 </script>
     
