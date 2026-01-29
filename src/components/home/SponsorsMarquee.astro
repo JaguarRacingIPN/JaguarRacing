@@ -1,38 +1,58 @@
 ---
+/**
+ * =============================================================================
+ * COMPONENTE: CARRUSEL DE PATROCINADORES (INFINITE SCROLL)
+ * =============================================================================
+ * Lógica: Renderiza una lista duplicada de logos para crear un efecto de
+ * desplazamiento infinito vía CSS.
+ */
+
 import { Image } from 'astro:assets';
 import '../../styles/home/carruselPatrocinios.css';
 import '../../styles/home/apoyanosbtn.css';
 
-/* 1. TUS DATOS */
-const patrocinadores = [
-  { img: 'altair.webp', nombre: 'Altair', url: 'https://altair.com' },
-  { img: 'ansys.webp', nombre: 'Ansys', url: 'https://www.ansys.com' },
-  { img: 'bimsa.webp', nombre: 'BIMSA', url: 'https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv/?originalSubdomain=mx' }, 
-  { img: 'copiisa.webp', nombre: 'Copiisa', url: 'https://copiisa.com.mx' },
-  { img: 'mantemimiento.webp', nombre: 'Mantenimiento Industrial', url: 'https://mantto.mx/' },
-  { img: 'polimex.webp', nombre: 'Polimex', url: 'https://www.polimex.mx' },
-  { img: 'SMI.webp', nombre: 'SMI México', url: 'https://www.smimexico.com.mx/' },
-  { img: 'solidwor.webp', nombre: 'SolidWorks', url: 'https://www.solidworks.com' },
-  { img: 'tmx.webp', nombre: 'TMX Toolmex', url: 'https://hvhindustrial.com/es/brand/toolmex-tmx' },
-  { img: 'toyota.webp', nombre: 'Toyota', url: 'https://www.toyota.mx' },
-  { img: 'IPN.webp', nombre: 'Instituto Politécnico Nacional', url: 'https://www.ipn.mx' }
+/* -----------------------------------------------------------------------------
+   1. TYPES & DATA
+   ----------------------------------------------------------------------------- */
+interface Sponsor {
+    img: string;
+    nombre: string;
+    url: string;
+}
+
+const patrocinadores: Sponsor[] = [
+    { img: 'altair.webp', nombre: 'Altair', url: 'https://altair.com' },
+    { img: 'ansys.webp', nombre: 'Ansys', url: 'https://www.ansys.com' },
+    { img: 'bimsa.webp', nombre: 'BIMSA', url: 'https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv' }, 
+    { img: 'copiisa.webp', nombre: 'Copiisa', url: 'https://copiisa.com.mx' },
+    { img: 'mantemimiento.webp', nombre: 'Mantenimiento Industrial', url: 'https://mantto.mx/' },
+    { img: 'polimex.webp', nombre: 'Polimex', url: 'https://www.polimex.mx' },
+    { img: 'SMI.webp', nombre: 'SMI México', url: 'https://www.smimexico.com.mx/' },
+    { img: 'solidwor.webp', nombre: 'SolidWorks', url: 'https://www.solidworks.com' },
+    { img: 'tmx.webp', nombre: 'TMX Toolmex', url: 'https://hvhindustrial.com/es/brand/toolmex-tmx' },
+    { img: 'toyota.webp', nombre: 'Toyota', url: 'https://www.toyota.mx' },
+    { img: 'IPN.webp', nombre: 'Instituto Politécnico Nacional', url: 'https://www.ipn.mx' }
 ];
 
-/* 2. CARGA DE IMÁGENES (Astro Assets) 
-   Asegúrate de que la ruta '../../assets/IMGpatrocinadores/' sea correcta 
-   desde donde está guardado ESTE archivo.
-*/
-const images = import.meta.glob('../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}', { eager: true });
+/* -----------------------------------------------------------------------------
+   2. ASSET LOADING (DYNAMIC)
+   -----------------------------------------------------------------------------*/ 
+const images = import.meta.glob<{ default: ImageMetadata }>('../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}', { eager: true });
 
-/* 3. FUNCIÓN MATCH */
 const getLogoImage = (filename: string) => {
     const imagePath = Object.keys(images).find(path => path.endsWith(filename));
     if (!imagePath) {
-        console.error(`⚠️ Logo no encontrado: ${filename}`);
-        return null; 
+        console.warn(`[Sponsors] Logo no encontrado: ${filename}`);
+        return null;
     }
-    return (images[imagePath] as any).default;
+    return images[imagePath].default;
 };
+
+/* -----------------------------------------------------------------------------
+   3. INFINITE LOOP PREPARATION
+   ----------------------------------------------------------------------------- */
+// Duplicamos la lista para permitir que la animación CSS fluya sin cortes.
+const listaInfinita = [...patrocinadores, ...patrocinadores];
 ---
 
 <section class="sponsors-section scroll-animate">
@@ -44,55 +64,42 @@ const getLogoImage = (filename: string) => {
         manufactura y recursos hace posible que la ingeniería mexicana compita al más alto nivel.
     </p>
 
+    {/* --- PISTA ANIMADA --- */}
     <div class="sponsors-marquee">
-        {/* BLOQUE 1: Original */}
-        {patrocinadores.map((pat) => {
+        {listaInfinita.map((pat, index) => {
             const logoImg = getLogoImage(pat.img);
+            
+            const isDuplicate = index >= patrocinadores.length;
+
             return (
                 <a 
                     href={pat.url} 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     class="sponsor-card" 
-                    aria-label={`Visitar sitio de ${pat.nombre}`}
+                    
+                    aria-label={isDuplicate ? null : `Visitar sitio de ${pat.nombre}`}
+                    aria-hidden={isDuplicate ? "true" : undefined}
+                    tabindex={isDuplicate ? "-1" : "0"}
                 >
                     {logoImg ? (
                         <Image 
                             src={logoImg} 
-                            alt={`Logo de ${pat.nombre}`} 
-                            width={300} 
-                            height={150} 
+                            alt={isDuplicate ? "" : `Logo de ${pat.nombre}`} 
+                            widths={[240, 360, 480, 720]} 
+                            
+                            sizes="(max-width: 768px) 240px, 360px"
+                            
+                            format="webp"
+                            quality={95}
+                            
+                            class="sponsor-img-fit"
                             loading="lazy" 
                             decoding="async" 
                         />
                     ) : (
-                        <span>{pat.nombre}</span> /* Fallback por si falta la imagen */
-                    )}
-                </a>
-            );
-        })}
-
-        {/* BLOQUE 2: Duplicado para efecto infinito */}
-        {patrocinadores.map((pat) => {
-            const logoImg = getLogoImage(pat.img);
-            return (
-                <a 
-                    href={pat.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    class="sponsor-card" 
-                    aria-label={`Visitar sitio de ${pat.nombre}`} 
-                    tabindex="-1"
-                >
-                    {logoImg && (
-                        <Image 
-                            src={logoImg} 
-                            alt="" 
-                            width={300} 
-                            height={150} 
-                            loading="lazy" 
-                            decoding="async" 
-                        />
+                        /* Fallback textual si falla la imagen */
+                        <span class="text-fallback">{pat.nombre}</span>
                     )}
                 </a>
             );
@@ -103,3 +110,24 @@ const getLogoImage = (filename: string) => {
         <a href="/sponsors" class="boton-legendario">SER PATROCINADOR</a>
     </div>
 </section>
+
+<style>
+    /* Estilos específicos del componente Image de Astro.
+       El layout de la tarjeta se maneja en 'carruselPatrocinios.css',
+       pero el comportamiento interno de la imagen pertenece aquí.
+    */
+    .sponsor-img-fit {
+        width: 100%;
+        height: auto;
+        /* Permitimos que el CSS externo controle el max-width/height para el padding */
+        object-fit: contain; 
+        display: block;
+    }
+
+    .text-fallback {
+        color: var(--text-white, #fff);
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+</style>

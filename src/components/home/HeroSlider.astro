@@ -16,11 +16,41 @@ const backgroundImages = allImages.slice(0, 5);
         background-color: #080808;
         overflow: hidden;
     }
-
+    
+    .bg-slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+    
+    .bg-slide.active {
+        opacity: 1;
+        z-index: 2;
+    }
+    
     .bg-slide.first-load {
         opacity: 1 !important;
         transition: none !important;
         z-index: 5 !important;
+    }
+    
+    .bg-image-fit {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    .overlay-dark {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.3) 0%,
+            rgba(0, 0, 0, 0.5) 100%
+        );
+        pointer-events: none;
     }
 </style>
 
@@ -32,12 +62,13 @@ const backgroundImages = allImages.slice(0, 5);
             <div class={`bg-slide ${index === 0 ? 'active first-load' : ''}`}>
                 <Image 
                     src={img.default} 
-                    alt={`Jaguar Racing Slide ${index + 1}`}
-                    widths={[360, 540, 720, 1024, 1280, 1920]}
-                    sizes={`100vw`}
-                    quality={65}
-                    class="bg-image-fit" 
-                    loading={index === 0 ? "eager" : "lazy"} 
+                    alt={`Jaguar Racing - Imagen ${index + 1}`}
+                    widths={[640, 750, 828, 1080, 1920, 2048]}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1920px"
+                    format="webp"
+                    quality={index === 0 ? 80 : 75}
+                    class="bg-image-fit"
+                    loading={index === 0 ? "eager" : "lazy"}
                     fetchpriority={index === 0 ? "high" : "auto"}
                     decoding={index === 0 ? "sync" : "async"}
                 />
@@ -51,21 +82,19 @@ const backgroundImages = allImages.slice(0, 5);
     import { initHeroSlider } from '../../scripts/heroSlider.js';
     
     let cleanupFn: (() => void) | undefined;
-
+    
     document.addEventListener('astro:page-load', () => {
         const firstSlide = document.querySelector('.bg-slide.first-load');
-        if(firstSlide) {
-            // Un pequeño delay para asegurar que el usuario vea la primera imagen
-            // antes de permitir que el CSS de transición tome el control.
+        if (firstSlide) {
             setTimeout(() => {
                 firstSlide.classList.remove('first-load');
             }, 100);
         }
-
+        
         if (cleanupFn) cleanupFn();
         cleanupFn = initHeroSlider();
     });
-
+    
     document.addEventListener('astro:before-swap', () => {
         if (cleanupFn) {
             cleanupFn();

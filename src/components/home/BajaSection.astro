@@ -1,5 +1,4 @@
 ---
-// src/components/home/BajaSection.astro
 import { Image } from 'astro:assets';
 import imgBaja from '../../assets/CuerpoIndex/10.webp';
 ---
@@ -7,15 +6,22 @@ import imgBaja from '../../assets/CuerpoIndex/10.webp';
 <section class="what-is-baja scroll-animate">
     <div class="compact-layout">
         <div class="what-is-image">
-              <Image 
+            <Image 
                 src={imgBaja} 
                 alt="Competencia Baja SAE" 
-                widths={[350, 600, 800]} 
-                sizes={`(max-width: 768px) 100vw, 50vw`}
+                
+                widths={[350, 600, 800, 1024, 1280, 1920]} 
+                
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+                
                 format="webp"
+                
+                quality={75}
+                
                 loading="lazy"
                 decoding="async"
-              />
+                fetchpriority="auto"
+            />
         </div>
 
         <div class="what-is-text">
@@ -34,7 +40,6 @@ import imgBaja from '../../assets/CuerpoIndex/10.webp';
         </div>
     </div>
 
-    {/* BARRA DE TIEMPO */}
     <div class="integrated-timer-bar">
         <div class="timer-container-inner">
             <div class="timer-item">
@@ -63,13 +68,11 @@ import imgBaja from '../../assets/CuerpoIndex/10.webp';
 
     let cleanupFn: (() => void) | undefined;
 
-    // Se ejecuta al cargar la página (o navegar a ella)
     document.addEventListener('astro:page-load', () => {
-        if (cleanupFn) cleanupFn(); // Seguridad
+        if (cleanupFn) cleanupFn();
         cleanupFn = initTimer();
     });
 
-    // Se ejecuta antes de salir de la página
     document.addEventListener('astro:before-swap', () => {
         if (cleanupFn) {
             cleanupFn();
