@@ -2,13 +2,8 @@
 import { Image } from 'astro:assets';
 import '../../styles/join/carruselAreas.css';
 
-// OPTIMIZACIÓN PROFESIONAL: 
-// 1. Cargamos todas las imágenes de la carpeta assets/Areas
-// 2. Astro generará automáticamente los formatos WebP y los tamaños responsivos.
 const areaImages = await Astro.glob('../../assets/Areas/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
 
-// Ordenamos las imágenes numéricamente si se llaman "1.webp", "2.webp", etc.
-// (Opcional: Si el orden importa, asegúrate que los archivos estén nombrados 01.webp, 02.webp...)
 areaImages.sort((a, b) => {
     const nameA = a.default.src.split('/').pop();
     const nameB = b.default.src.split('/').pop();
@@ -25,19 +20,15 @@ areaImages.sort((a, b) => {
         <div class="areas-carousel" id="carruselAreas">
             {areaImages.map((img, index) => (
                 <div class="area-card">
-                    {/* USO DE COMPONENTE IMAGE DE ASTRO:
-                        - formats: webp (automático)
-                        - widths: genera versiones pequeñas para móvil y grandes para PC
-                        - loading: lazy (para que no frenen la carga inicial de la página)
-                    */}
                     <Image 
                         src={img.default} 
-                        alt={`Área Jaguar Racing ${index + 1}`} 
+                        alt={`Área ${index + 1} - Jaguar Racing`}
                         class="area-card__img"
-                        width={640} 
-                        height={360}
-                        widths={[320, 640]} 
-                        sizes="(max-width: 640px) 100vw, 640px"
+                        widths={[320, 480, 640, 800, 1024]}
+                        sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 640px"
+                        quality={82}
+                        format="webp"
+                        
                         loading="lazy" 
                         decoding="async"
                     />
@@ -51,5 +42,20 @@ areaImages.sort((a, b) => {
     <div class="areas-showcase__indicators" id="indicadores"></div>
 </section>
 
-{/* Script diferido para no bloquear el renderizado */}
-<script is:inline defer src="/js/carrusel.js"></script>
+<script>
+    import { initAreasCarousel } from '../../scripts/areasCarousel.js';
+    
+    let cleanupFn: Function | undefined;
+    
+    document.addEventListener('astro:page-load', () => {
+        if (cleanupFn) cleanupFn();
+        cleanupFn = initAreasCarousel();
+    });
+    
+    document.addEventListener('astro:before-swap', () => {
+        if (cleanupFn) {
+            cleanupFn();
+            cleanupFn = undefined;
+        }
+    });
+</script>

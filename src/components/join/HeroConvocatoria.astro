@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import imgConv from '../../assets/Equipo/Conv.webp'; 
+import imgConv from '../../assets/Convocatoria/1.webp'; 
 import '../../styles/layout/hero-internal.css'; 
 ---
 
@@ -9,9 +9,11 @@ import '../../styles/layout/hero-internal.css';
         src={imgConv} 
         alt="Equipo Jaguar Racing Convocatoria"
         class="hero-internal__bg"
-        widths={[360, 540, 720, 1080, 1440, 1920]} 
-        sizes={`(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw`}
-        quality={75} 
+        widths={[375, 750, 828, 1080, 1366, 1920, 2048]} 
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1920px"
+        quality={85} 
+        format="webp"
+        
         loading="eager" 
         fetchpriority="high"
         decoding="sync" 
