@@ -1,15 +1,15 @@
 /**
  * src/scripts/gameLogic.js
- * SEASON 1 - PRODUCTION RELEASE (Patch: Modal Close + Button UX)
+ * SEASON 1 - PRODUCTION RELEASE (Patch: Refresh Logic + Polling Update)
  * Description: Core logic for the reaction time game including F1 light sequence,
  * precise timing, anti-cheat validation, and backend synchronization.
  */
 
 export function initGame() {
     // --- CONFIGURATION CONSTANTS ---
-    const STORAGE_KEY_RECORD = 'jaguar_record_s1'; 
-    const STORAGE_KEY_USER = 'jaguar_user_id';     
-    const STORAGE_KEY_SYNC = 'jaguar_s1_synced';
+    const STORAGE_KEY_RECORD = 'jaguar_record_s2'; 
+    const STORAGE_KEY_USER = 'jaguar_user_id_v2';     
+    const STORAGE_KEY_SYNC = 'jaguar_s2_synced';
 
     // --- LOCAL STATE MANAGEMENT ---
     let gameTimeouts = [];
@@ -17,6 +17,7 @@ export function initGame() {
     let gameState = 'idle'; // States: idle, waiting, green, result, fault, cooldown
     let startTime = 0;
     let currentGameId = 0; 
+    let isRefreshing = false; 
 
     // --- DOM ELEMENTS REFERENCE ---
     const gameContainer = document.querySelector('.game-container');
@@ -329,7 +330,7 @@ export function initGame() {
             
             const nameInput = document.getElementById('pilot-name-input');
             const saveBtn = document.getElementById('save-name-btn');
-            const closeBtn = document.getElementById('close-modal-btn'); // FIXED: Select Close Button
+            const closeBtn = document.getElementById('close-modal-btn'); 
             const modalTitle = modal.querySelector('h3'); 
             
             modal.classList.add('active');
@@ -367,29 +368,55 @@ export function initGame() {
             function cleanListeners() {
                 saveBtn.onclick = null;
                 modal.onclick = null;
-                if (closeBtn) closeBtn.onclick = null; // Clean up
+                if (closeBtn) closeBtn.onclick = null; 
                 nameInput.onkeydown = null;
             }
 
             saveBtn.onclick = onSave;
             modal.onclick = onCancel;
-            if (closeBtn) closeBtn.onclick = onCancel; // FIXED: Bind click event
+            if (closeBtn) closeBtn.onclick = onCancel; 
             nameInput.onkeydown = onKey;
         });
     }
 
     // --- UI EVENT LISTENERS ---
     
-    // Refresh Button Logic
     if (refreshBtn) {
-        refreshBtn.onclick = () => {
-            refreshBtn.style.transform = "rotate(360deg)";
-            refreshBtn.style.transition = "transform 0.5s";
-            loadLeaderboard();
-            setTimeout(() => {
+        refreshBtn.onclick = async () => {
+            // 1. Bloqueo Lógico (Si ya está rodando, adiós)
+            if (isRefreshing) return;
+
+            try {
+                isRefreshing = true;
+                
+                // --- BLOQUEO VISUAL ---
+                refreshBtn.style.opacity = "0.5";        // Se ve "apagado"
+                refreshBtn.style.cursor = "not-allowed"; // El cursor indica prohibido/espera
+                refreshBtn.style.transform = "rotate(360deg)";
+                refreshBtn.style.transition = "transform 0.5s";
+
+                // 2. Esperar datos + tiempo mínimo de animación
+                await Promise.all([
+                    loadLeaderboard(),
+                    new Promise(resolve => setTimeout(resolve, 500))
+                ]);
+
+            } catch (error) {
+                console.error("Manual refresh failed", error);
+            } finally {
+                // 3. Restaurar estado (Desbloqueo)
                 refreshBtn.style.transform = "rotate(0deg)";
                 refreshBtn.style.transition = "none";
-            }, 500);
+                
+                // --- RESTAURAR VISUAL ---
+                refreshBtn.style.opacity = "1";
+                refreshBtn.style.cursor = "pointer";
+                
+                isRefreshing = false;
+                
+                // Reiniciar el timer automático
+                startPolling();
+            }
         };
     }
 
@@ -431,6 +458,7 @@ export function initGame() {
     function startPolling() {
         if (pollingInterval) clearInterval(pollingInterval);
         pollingInterval = setInterval(() => {
+            // ACTUALIZADO: 30 segundos
             if (gameState === 'idle') loadLeaderboard();
         }, 30000); 
     }

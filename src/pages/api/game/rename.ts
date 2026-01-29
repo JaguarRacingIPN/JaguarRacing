@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 2. Verificar si el usuario realmente tiene un récord
-    const currentScore = await redis.zscore("leaderboard:feb2026_Q1", oldName);
+    const currentScore = await redis.zscore("leaderboard:feb2026_v2", oldName);
 
     if (currentScore === null) {
         // Si no tiene récord en el server, le decimos que todo OK para que 
@@ -29,10 +29,10 @@ export const POST: APIRoute = async ({ request }) => {
     const p = redis.pipeline();
 
     // A) Crear la entrada nueva con el mismo puntaje
-    p.zadd("leaderboard:feb2026_Q1", { score: currentScore, member: newName });
+    p.zadd("leaderboard:feb2026_v2", { score: currentScore, member: newName });
     
     // B) Borrar la entrada vieja
-    p.zrem("leaderboard:feb2026_Q1", oldName);
+    p.zrem("leaderboard:feb2026_v2", oldName);
 
     // C) Migrar metadatos técnicos (IP, Last Seen)
     // Usamos RENAMENX para mover el hash "user:old" a "user:new".

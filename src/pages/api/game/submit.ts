@@ -18,7 +18,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
     
     const tiempoNumerico = Number(tiempo);
-    if (isNaN(tiempoNumerico) || tiempoNumerico < 0.010) { 
+    if (isNaN(tiempoNumerico) || tiempoNumerico < 0.1) { 
         return new Response(JSON.stringify({ error: "Tiempo sospechoso" }), { status: 400 });
     }
 
@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // C) Guardar Score (La parte crítica)
     // Usamos 'lt' (Less Than) para guardar solo si es récord.
     // Al usar await directo, la librería maneja los argumentos correctamente sin enviar nulls.
-    await redis.zadd("leaderboard:feb2026_Q1", { 
+    await redis.zadd("leaderboard:feb2026_v2", { 
         lt: true 
     }, { 
         score: tiempoNumerico, 
@@ -50,11 +50,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
     // D) Obtener Posición
     // zrank devuelve el índice base 0 (0 es el primero)
-    const rankIndex = await redis.zrank("leaderboard:feb2026_Q1", nombre);
+    const rankIndex = await redis.zrank("leaderboard:feb2026_v2", nombre);
     
     const realPosition = (rankIndex !== null) ? rankIndex + 1 : null;
 
-    console.log(`✅ Récord procesado: ${nombre} -> Rank #${realPosition}`);
+    console.log(`Récord procesado: ${nombre} -> Rank #${realPosition}`);
 
     return new Response(JSON.stringify({ 
       status: "success", 
@@ -62,7 +62,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }), { status: 200 });
 
   } catch (error: any) {
-    console.error("🔥 ERROR API SUBMIT:", error); 
+    console.error("ERROR API SUBMIT:", error); 
     return new Response(JSON.stringify({ error: "Error interno", details: error.message }), { status: 500 });
   }
 };
