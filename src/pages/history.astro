@@ -6,7 +6,6 @@ import '../styles/history/trayectoria.css';
 import HeroHistory from '../components/history/HeroHistory.astro';
 import Timeline from '../components/history/Timeline.astro';
 
-import '../styles/history/animation.css';
 const pageTitle = "Nuestra Trayectoria";
 ---
 
@@ -16,27 +15,4 @@ const pageTitle = "Nuestra Trayectoria";
         
         <Timeline />
     </main>
-    <script>
-    import { initScrollAnimations } from '../scripts/scrollAnimations.js';
-    
-    let cleanupScrollFx: (() => void) | undefined;
-    
-    document.addEventListener('astro:page-load', () => {
-        // Limpiar instancia anterior si existe
-        if (cleanupScrollFx) {
-            cleanupScrollFx();
-        }
-        
-        // Inicializar y guardar función de limpieza
-        cleanupScrollFx = initScrollAnimations() as (() => void);
-    });
-    
-    document.addEventListener('astro:before-swap', () => {
-        // Cleanup antes de cambiar de página
-        if (cleanupScrollFx) {
-            cleanupScrollFx();
-            cleanupScrollFx = undefined;
-        }
-    });
-</script>
 </Layout>
