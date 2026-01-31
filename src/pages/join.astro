@@ -6,6 +6,7 @@ import HeroConvocatoria from '../components/join/HeroConvocatoria.astro';
 import AreasCarousel from '../components/join/AreasCarousel.astro';
 import RegistrationCTA from '../components/join/RegistrationCTA.astro';
 
+import '../styles/join/animation.css';
 const pageTitle = "Convocatoria";
 ---
 
@@ -17,4 +18,27 @@ const pageTitle = "Convocatoria";
         
         <RegistrationCTA />
     </main>
+    <script>
+    import { initScrollAnimations } from '../scripts/scrollAnimations.js';
+    
+    let cleanupScrollFx: (() => void) | undefined;
+    
+    document.addEventListener('astro:page-load', () => {
+        // Limpiar instancia anterior si existe
+        if (cleanupScrollFx) {
+            cleanupScrollFx();
+        }
+        
+        // Inicializar y guardar función de limpieza
+        cleanupScrollFx = initScrollAnimations() as (() => void);
+    });
+    
+    document.addEventListener('astro:before-swap', () => {
+        // Cleanup antes de cambiar de página
+        if (cleanupScrollFx) {
+            cleanupScrollFx();
+            cleanupScrollFx = undefined;
+        }
+    });
+</script>
 </Layout>

@@ -16,56 +16,54 @@ const patrocinadores = [
   { img: 'IPN.webp', nombre: 'Instituto Politécnico Nacional', url: 'https://www.ipn.mx' }
 ];
 
-/* 2. CARGA INTELIGENTE DE IMÁGENES
-   En lugar de Astro.glob, usamos import.meta.glob con 'eager: true'.
-   Esto nos da un objeto donde las claves son las rutas de los archivos.
-*/
+/* 2. CARGA INTELIGENTE DE IMÁGENES */
 const images = import.meta.glob('../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}', { eager: true });
 
-/* 3. FUNCIÓN DE CRUCE (El cerebro)
-   Busca en las imágenes importadas aquella cuya ruta termine con el nombre de archivo de tu array.
-*/
+/* 3. FUNCIÓN DE CRUCE */
 const getLogoImage = (filename: string) => {
-    // Buscamos la ruta completa que termine con "altair.webp", etc.
     const imagePath = Object.keys(images).find(path => path.endsWith(filename));
     
     if (!imagePath) {
-        console.error(`❌ Imagen no encontrada en assets: ${filename}`);
-        return null; // O una imagen por defecto
+        console.error(`Imagen no encontrada en assets: ${filename}`);
+        return null;
     }
     
     return (images[imagePath] as any).default;
 };
 ---
 
-<section class="sponsors-grid-section">
+<section class="sponsors-grid-section scroll-animate">
     <div class="sponsors-grid">
         
         {patrocinadores.map((sponsor) => {
             const logoImg = getLogoImage(sponsor.img);
             
             return (
-                /* Convertimos el div en un <a> para que sea cliqueable */
                 <a 
                     href={sponsor.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     class="sponsor-card"
-                    title={`Visitar ${sponsor.nombre}`}
+                    title={`Visitar sitio web de ${sponsor.nombre}`}
+                    aria-label={`Logo de ${sponsor.nombre} - Patrocinador oficial`}
                 >
                     {logoImg ? (
                         <Image 
                             src={logoImg} 
-                            alt={`Logo de ${sponsor.nombre}`} 
+                            alt={`${sponsor.nombre} - Patrocinador oficial de Jaguar Racing`}
                             class="sponsor-logo" 
-                            width={300} 
-                            height={150}
+                            widths={[150, 200, 300, 400]}
+                            sizes="(max-width: 480px) 150px, (max-width: 768px) 200px, 300px"
+                            quality={90}
+                            format="webp"
+                            
                             loading="lazy"
                             decoding="async"
                         />
                     ) : (
-                        /* Fallback por si escribiste mal el nombre de la imagen */
-                        <span>{sponsor.nombre}</span>
+                        <div class="sponsor-logo-fallback">
+                            <span>{sponsor.nombre}</span>
+                        </div>
                     )}
                 </a>
             );

@@ -8,53 +8,9 @@
    ============================================================================= */
 
 /* Contenedores principales: animación de entrada */
-.scroll-animate {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-.scroll-animate.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
 
 /* Imágenes: estado inicial (ocultas) */
-.mission-img,
-.team-img-fit,
-.what-is-image img {
-    opacity: 0;
-    transform: scale(0.95);
-}
 
-.scroll-animate.is-visible .mission-img,
-.scroll-animate.is-visible .team-img-fit,
-.scroll-animate.is-visible .what-is-image img {
-    opacity: 1;
-    transform: scale(1);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-/* Filtros específicos aplicados desde CSS */
-.scroll-animate.is-visible .mission-img {
-    filter: brightness(0.7) grayscale(20%) contrast(1.1);
-}
-
-.scroll-animate.is-visible .team-img-fit {
-    filter: grayscale(100%) brightness(0.5);
-}
-
-.scroll-animate.is-visible .what-is-image img {
-    filter: brightness(0.7) grayscale(20%) contrast(1.1);
-}
-
-/* Hover effects (opcional) */
-.scroll-animate.is-visible .mission-img:hover,
-.scroll-animate.is-visible .team-img-fit:hover,
-.scroll-animate.is-visible .what-is-image img:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
-}
 
 /* -----------------------------------------------------------------------------
    2. MISSION SECTION
