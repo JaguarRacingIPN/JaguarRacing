@@ -1,6 +1,9 @@
 ---
+import { Image } from 'astro:assets';
+import logoJaguar from '../../assets/logos/JaguarLogo.webp';
 ---
-<section class="origins-section">
+
+<section class="origins-section scroll-animate">
     <div class="origins-content">
         <h2 class="section-title compact-title">ORÍGENES</h2>
         
@@ -17,13 +20,15 @@
             equipo y la excelencia universitaria.
         </p>
 
-        {/* LOGO: Dimensiones explícitas para evitar CLS */}
-        <img 
-            src="/img/page/JaguarLogo.webp" 
+        <Image 
+            src={logoJaguar}
             class="origins-logo" 
-            alt="Logo Jaguar Racing" 
-            width="150" 
-            height="150" 
+            alt="Logo Jaguar Racing"
+            widths={[150, 200, 300]}
+            sizes="(max-width: 768px) 120px, 150px"
+            quality={90}
+            format="webp"
+            
             loading="lazy"
             decoding="async"
         />

@@ -2,25 +2,37 @@
 import { Image } from 'astro:assets';
 import '../../styles/team/credencialesEquipo.css';
 
-// Cargamos todas las imágenes de la carpeta assets/Equipo
 const teamImages = await Astro.glob('../../assets/Equipo/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
 ---
 
-<section class="team-marquee-section">
+<section class="team-marquee-section scroll-animate">
     <div class="team-marquee-wrapper">
         <div class="team-marquee-track">
-            {/* Renderizamos DOS veces las imágenes para loop infinito sin espacios vacíos */}
-            {[...teamImages, ...teamImages].map((img, index) => (
+            {teamImages.map((img, index) => (
                 <div class="marquee-card">
                     <Image 
                         src={img.default} 
-                        alt={`Momento Jaguar Racing ${index}`} 
+                        alt={`Equipo Jaguar Racing - Momento ${index + 1}`}
                         class="marquee-img"
-                        width={400} 
-                        height={280}
-                        widths={[200, 400]}
-                        sizes="(max-width: 768px) 200px, 400px"
-                        quality={60} 
+                        widths={[200, 300, 400, 600]}
+                        sizes="(max-width: 480px) 200px, (max-width: 768px) 300px, 400px"
+                        quality={80}
+                        
+                        format="webp"
+                        loading="lazy"
+                        decoding="async"
+                    />
+                </div>
+            ))}
+            {teamImages.map((img, index) => (
+                <div class="marquee-card" aria-hidden="true">
+                    <Image 
+                        src={img.default} 
+                        alt=""
+                        class="marquee-img"
+                        widths={[200, 300, 400, 600]}
+                        sizes="(max-width: 480px) 200px, (max-width: 768px) 300px, 400px"
+                        quality={80}
                         format="webp"
                         loading="lazy"
                         decoding="async"

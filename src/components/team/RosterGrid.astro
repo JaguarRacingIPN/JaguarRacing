@@ -1,11 +1,27 @@
 ---
-import roster from '../../data/miembros.json'; // Ajuste de ruta (subimos 2 niveles)
+import { Image } from 'astro:assets';
+import roster from '../../data/miembros.json';
 import '../../styles/team/carruselAlbum.css';
+
+import linkedInIcon from '../../assets/logos/linkedIn_.webp';
+const teamPhotos = import.meta.glob('../../assets/team/*.{jpg,jpeg,png,webp}', { eager: true });
+
+function getTeamPhoto(filename: string) {
+    const path = `../../assets/team/${filename}`;
+    const photo = teamPhotos[path] as any;
+    
+    if (!photo) {
+        console.warn(`Foto no encontrada: ${filename}`);
+        return null;
+    }
+    
+    return photo.default || photo;
+}
 ---
 
 <div class="roster-section">
     {roster.map((seccion) => (
-        <section class="roster-category">
+        <section class="roster-category scroll-animate">
             <div class="category-header">
                 <span class="gold-line"></span>
                 <h2 class="category-title">{seccion.categoria}</h2>
@@ -13,42 +29,62 @@ import '../../styles/team/carruselAlbum.css';
             </div>
 
             <div class="roster-grid">
-                {seccion.integrantes.map((miembro) => (
-                    <div class="roster-card">
-                        <div class="roster-img-box">
-                            {/* FOTOS DE JSON: Usamos <img> estándar optimizado */}
-                            <img 
-                                src={miembro.foto} 
-                                alt={`Foto de ${miembro.nombre}`} 
-                                class="roster-img" 
-                                loading="lazy" 
-                                decoding="async"
-                                width="300" 
-                                height="300" 
-                            />
-                        </div>
-
-                        <div class="roster-info">
-                            <div class="roster-role">{miembro.rol}</div>
-                            <h3 class="roster-name">{miembro.nombre}</h3>
-                            <p class="roster-career">{miembro.carrera}</p>
-                            
-                            {miembro.linkedin && (
-                                <a href={miembro.linkedin} target="_blank" rel="noopener noreferrer" class="roster-social-link" aria-label={`LinkedIn de ${miembro.nombre}`}>
-                                    <img 
-                                        src="/img/page/linkedIn_.webp" 
-                                        alt="LinkedIn Icon" 
-                                        class="linkedin-icon"
-                                        loading="lazy"
+                {seccion.integrantes.map((miembro) => {
+                    const foto = getTeamPhoto(miembro.foto);
+                    
+                    return (
+                        <div class="roster-card">
+                            <div class="roster-img-box">
+                                {foto ? (
+                                    <Image 
+                                        src={foto}
+                                        alt={`${miembro.nombre} - ${miembro.rol}`}
+                                        class="roster-img" 
+                                        widths={[150, 300, 400]}
+                                        sizes="(max-width: 640px) 150px, 300px"
+                                        quality={85}
+                                        format="webp"
+                                        
+                                        loading="lazy" 
                                         decoding="async"
-                                        width="22"
-                                        height="22"
                                     />
-                                </a>
-                            )}
+                                ) : (
+                                    <div class="roster-img-placeholder">
+                                        <span>Foto no disponible</span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div class="roster-info">
+                                <div class="roster-role">{miembro.rol}</div>
+                                <h3 class="roster-name">{miembro.nombre}</h3>
+                                <p class="roster-career">{miembro.carrera}</p>
+                                
+                                {miembro.linkedin && (
+                                    <a 
+                                        href={miembro.linkedin} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        class="roster-social-link" 
+                                        aria-label={`LinkedIn de ${miembro.nombre}`}
+                                    >
+                                        <Image 
+                                            src={linkedInIcon}
+                                            alt="LinkedIn"
+                                            class="linkedin-icon"
+                                            widths={[22, 44]}
+                                            sizes="22px"
+                                            quality={90}
+                                            format="webp"
+                                            loading="lazy"
+                                            decoding="async"
+                                        />
+                                    </a>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         </section>
     ))}

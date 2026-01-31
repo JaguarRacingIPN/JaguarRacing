@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import '../../styles/layout/hero.css'; 
 
 const allImages = await Astro.glob('../../assets/Index/*.{jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}');
-const backgroundImages = allImages.slice(0, 5); 
+const backgroundImages = allImages.slice(0, 6); 
 ---
 
 {/* CSS CRÍTICO INLINE */}
@@ -63,10 +63,10 @@ const backgroundImages = allImages.slice(0, 5);
                 <Image 
                     src={img.default} 
                     alt={`Jaguar Racing - Imagen ${index + 1}`}
-                    widths={[375, 750, 828, 1080, 1536, 1920, 2048]}
-                    sizes="(max-width: 390px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1920px"
+                    widths={[828, 1080, 1170, 1536, 1920, 2560]}
+                    sizes="(max-width: 430px) 828px, (max-width: 768px) 1170px, (max-width: 1024px) 1536px, 1920px"
                     format="webp"
-                    quality={index === 0 ? 85 : 78}
+                    quality={index === 0 ? 82 : 75}
                     
                     class="bg-image-fit"
                     loading={index === 0 ? "eager" : "lazy"}
