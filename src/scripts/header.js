@@ -1,76 +1,81 @@
 // src/scripts/header.js
 
-/**
- * Normaliza una ruta eliminando la barra final si existe.
- * Ej: "/team/" -> "/team"
- */
+/* =============================================================================
+   UTILIDADES
+   ============================================================================= */
 const normalizePath = (path) => path === '/' ? path : path.replace(/\/$/, '');
 
+/* =============================================================================
+   LÓGICA DEL SCROLL (Optimizada para no duplicarse)
+   ============================================================================= */
 /**
- * Actualiza visualmente qué enlace está activo según la URL actual.
+ * Definimos onScroll AFUERA de la función de inicialización.
+ * Esto mantiene la referencia en memoria constante.
+ * Si Astro re-ejecuta el script, addEventListener detectará que es la misma función
+ * y NO añadirá un duplicado.
  */
+const onScrollHandler = () => {
+    const navbar = document.getElementById('main-navbar');
+    // Si no hay navbar en esta página, no hacemos nada (pero no explotamos)
+    if (!navbar) return;
+
+    if (window.scrollY > 50) {
+        navbar.classList.add("main-navbar--scrolled");
+    } else {
+        navbar.classList.remove("main-navbar--scrolled");
+    }
+};
+
+/* =============================================================================
+   LÓGICA DE NAVEGACIÓN ACTIVA
+   ============================================================================= */
 export function updateActiveLinks() {
     const currentPath = normalizePath(window.location.pathname);
-    
-    // Seleccionamos todos los links de navegación
     const allLinks = document.querySelectorAll('.nav-link, .mobile-nav__link');
 
     allLinks.forEach(link => {
         const href = link.getAttribute('href');
         if (!href) return;
-
         const linkPath = normalizePath(href);
-        // Comprobación simple: ¿Es la ruta exacta?
         const isActive = linkPath === currentPath;
 
-        // Versión Escritorio
         if (link.classList.contains('nav-link')) {
             link.classList.toggle('nav-link--active', isActive);
         }
-
-        // Versión Móvil
         if (link.classList.contains('mobile-nav__link')) {
             link.classList.toggle('mobile-nav__link--active', isActive);
         }
     });
 }
 
-/**
- * Inicializa los eventos (Scroll y Menú Móvil).
- * Usa un "flag" (data-initialized) para garantizar que solo se ejecute UNA VEZ,
- * incluso si navegas entre páginas (vital para transition:persist).
- */
+/* =============================================================================
+   INICIALIZACIÓN PRINCIPAL
+   ============================================================================= */
 export function initHeaderListeners() {
     const navbar = document.getElementById('main-navbar');
+    if (!navbar) return;
+
+    // 1. SCROLL: Ahora es seguro llamar a esto múltiples veces.
+    // El navegador ignorará llamadas repetidas a la misma función referenciada.
+    window.removeEventListener('scroll', onScrollHandler); // Limpieza preventiva (opcional pero buena práctica)
+    window.addEventListener('scroll', onScrollHandler, { passive: true });
     
-    // 1. SEGURIDAD: Si no existe o ya fue inicializado, abortamos misión.
-    if (!navbar || navbar.dataset.initialized === "true") return;
+    // Ejecutamos una vez para asegurar el estado inicial
+    onScrollHandler();
 
-    // --- A. Lógica de Scroll (Transparente -> Solido) ---
-    const onScroll = () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add("main-navbar--scrolled");
-        } else {
-            navbar.classList.remove("main-navbar--scrolled");
-        }
-    };
-    // Ejecutamos una vez al inicio por si recarga la página a mitad del scroll
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    // 2. MENÚ MÓVIL
+    // Aquí sí usamos el check de initialized porque los botones se recrean
+    // y no queremos añadir doble click listener al MISMO botón si persiste.
+    if (navbar.dataset.initialized === "true") return;
 
-    // --- B. Lógica del Menú Móvil ---
     const sidebar = document.getElementById('mobile-nav');
     const overlay = document.getElementById('mobile-overlay');
-    // Botones que abren o cierran el menú
     const toggleBtns = document.querySelectorAll('#nav-toggle, #close-nav, #mobile-overlay');
 
     const toggleMenu = () => {
         if (!sidebar || !overlay) return;
-        
         const isOpen = sidebar.classList.toggle('mobile-nav--open');
         overlay.classList.toggle('mobile-overlay--active');
-        
-        // Bloquear el scroll del cuerpo si el menú está abierto
         document.body.style.overflow = isOpen ? 'hidden' : '';
     };
 
@@ -78,7 +83,5 @@ export function initHeaderListeners() {
         btn?.addEventListener('click', toggleMenu);
     });
 
-    // --- C. Marcar como Inicializado ---
     navbar.dataset.initialized = "true";
-    console.log("⚡ Header Events Initialized (Single Instance)");
 }
