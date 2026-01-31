@@ -7,7 +7,6 @@ import HeroSponsors from '../components/sponsors/HeroSponsors.astro';
 import SponsorsIntro from '../components/sponsors/SponsorsIntro.astro';
 import SponsorsGrid from '../components/sponsors/SponsorsGrid.astro';
 
-import '../styles/sponsors/animation.css';
 const pageTitle = "Patrocinios";
 ---
 
@@ -19,27 +18,4 @@ const pageTitle = "Patrocinios";
         
         <SponsorsGrid />
     </main>
-        <script>
-    import { initScrollAnimations } from '../scripts/scrollAnimations.js';
-    
-    let cleanupScrollFx: (() => void) | undefined;
-    
-    document.addEventListener('astro:page-load', () => {
-        // Limpiar instancia anterior si existe
-        if (cleanupScrollFx) {
-            cleanupScrollFx();
-        }
-        
-        // Inicializar y guardar función de limpieza
-        cleanupScrollFx = initScrollAnimations() as (() => void);
-    });
-    
-    document.addEventListener('astro:before-swap', () => {
-        // Cleanup antes de cambiar de página
-        if (cleanupScrollFx) {
-            cleanupScrollFx();
-            cleanupScrollFx = undefined;
-        }
-    });
-</script>
 </Layout>

@@ -1,0 +1,98 @@
+/* =============================================================================
+   JAGUAR RACING - ANIMATIONS (LITE VERSION)
+   Optimized for Mid-Range Mobile Devices (Samsung A32, etc.)
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. CORE ENGINE (Solo Opacidad y Transformación - GPU Friendly)
+   ----------------------------------------------------------------------------- */
+.scroll-animate {
+    opacity: 0;
+    transform: translateY(20px); /* Reduje de 30px a 20px para menos recorrido */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    will-change: opacity, transform;
+}
+
+.scroll-animate.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animación de carga inicial (Hero) */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-on-load {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* -----------------------------------------------------------------------------
+   2. DESKTOP ONLY (Efectos que solo se verán en PC)
+   ----------------------------------------------------------------------------- */
+@media (min-width: 769px) {
+    /* Solo en PC permitimos movimiento lateral */
+    .timeline-event--left { transform: translateX(-30px); }
+    .timeline-event--right { transform: translateX(30px); }
+    
+    .timeline-event--left.is-visible,
+    .timeline-event--right.is-visible {
+        transform: translateX(0);
+    }
+
+    /* Stagger (Efecto cascada) solo en PC para grids */
+    .scroll-animate.is-visible .sponsor-card:nth-child(1), .roster-category.is-visible .roster-card:nth-child(1) { transition-delay: 0.05s; }
+    .scroll-animate.is-visible .sponsor-card:nth-child(2), .roster-category.is-visible .roster-card:nth-child(2) { transition-delay: 0.1s; }
+    .scroll-animate.is-visible .sponsor-card:nth-child(3), .roster-category.is-visible .roster-card:nth-child(3) { transition-delay: 0.15s; }
+    .scroll-animate.is-visible .sponsor-card:nth-child(4), .roster-category.is-visible .roster-card:nth-child(4) { transition-delay: 0.2s; }
+    .scroll-animate.is-visible .sponsor-card:nth-child(n+5), .roster-category.is-visible .roster-card:nth-child(n+5) { transition-delay: 0.25s; }
+}
+
+/* -----------------------------------------------------------------------------
+   3. MOBILE OPTIMIZATIONS (La clave para el Samsung A32)
+   ----------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    /* 1. Normalizar dirección: Todo viene de abajo, es más natural en scroll vertical */
+    .timeline-event--left, 
+    .timeline-event--right {
+        transform: translateY(20px);
+    }
+    
+    .timeline-event--left.is-visible, 
+    .timeline-event--right.is-visible {
+        transform: translateY(0);
+    }
+
+    /* 2. ELIMINAR DELAYS: En móvil el usuario hace scroll rápido. 
+       Esperar 0.5s a que aparezca un logo se siente como que la página es lenta. */
+    .scroll-animate.is-visible .sponsor-card,
+    .roster-category.is-visible .roster-card {
+        transition-delay: 0s !important;
+    }
+}
+
+/* -----------------------------------------------------------------------------
+   4. ELEMENTOS INTERNOS (Generalizados)
+   ----------------------------------------------------------------------------- */
+/* Escalado suave para imágenes - Barato para la GPU */
+.mission-img, .team-img-fit, .sponsor-card, .roster-card {
+    transition: transform 0.3s ease; /* Solo para hover */
+}
+
+/* Hover effects (Solo funcionan si el usuario toca el elemento, no afectan scroll) */
+.mission-img:hover, .team-img-fit:hover, .sponsor-card:hover, .roster-card:hover {
+    transform: scale(1.02); /* Escala muy sutil */
+}
+
+/* -----------------------------------------------------------------------------
+   5. ACCESIBILIDAD (Obligatorio)
+   ----------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+        transition-delay: 0s !important;
+    }
+}
