@@ -1,257 +1,222 @@
 /* =============================================================================
-   ROSTER / EQUIPO JAGUAR - OPTIMIZADO v4.0 (Virtualización Nativa)
+   MODULE: TEAM ROSTER UI
+   VERSION: 2.0 (Performance Optimized)
+   DESCRIPTION: Renders the team member showcase. Utilizes a strict Flexbox 
+   layout to ensure consistent card sizing regardless of item count. 
+   Optimized for mid-range mobile devices via CSS Containment.
    ============================================================================= */
 
-.roster-container {
+/* -----------------------------------------------------------------------------
+   1. MAIN CONTAINER & ISOLATION
+   ----------------------------------------------------------------------------- */
+.roster-section {
     padding: 60px 20px;
     background-color: var(--bg-black);
-    text-align: center;
-    position: relative;
     width: 100%;
-    overflow: hidden; 
     
-    /* Aísla el cálculo de layout de esta sección del resto de la página */
+    /* PERFORMANCE: 'contain: content' isolates the layout and paint calculations 
+       of this section from the rest of the document, reducing reflow costs. */
     contain: content; 
 }
 
-.roster-main-title {
-    font-family: var(--font-impact); 
-    font-size: 3.5rem;
-    color: white;
-    text-transform: uppercase;
-    margin-bottom: 60px;
-    letter-spacing: 2px;
-    background: linear-gradient(to bottom, #fff 40%, var(--jaguar-gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    
-    /* Sombra optimizada */
-    filter: drop-shadow(0 4px 5px rgba(0,0,0,0.8)); 
-    
-    max-width: 100%;
-    overflow-wrap: break-word;
-}
-
-/* --- CATEGORÍAS --- */
 .roster-category {
-    margin-bottom: 80px;
-    width: 100%; 
-    /* Otra capa de aislamiento para que cada categoría se renderice independiente */
-    contain: layout;
+    margin-bottom: 60px;
+    /* Optimization: Limits layout recalculations to this specific wrapper */
+    contain: layout; 
 }
 
-.roster-category__title {
+.category-header {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
+    margin-bottom: 40px;
+}
+
+.category-title {
     font-family: var(--font-main);
     font-weight: 700;
     font-size: 1.8rem;
     color: var(--jaguar-gold);
     text-transform: uppercase;
-    margin-bottom: 40px;
     letter-spacing: 1px;
-    flex-wrap: wrap; 
     text-align: center;
 }
 
 .gold-line {
     height: 1px;
-    width: 60px;
+    width: 40px;
     background-color: var(--jaguar-dark-gold);
-    display: block;
     opacity: 0.7;
-    flex-shrink: 0;
 }
 
-/* --- GRID SYSTEM --- */
+/* -----------------------------------------------------------------------------
+   2. LAYOUT SYSTEM (FLEXBOX STRICT MODE)
+   ----------------------------------------------------------------------------- */
 .roster-grid {
     display: flex;
-    flex-wrap: wrap;       
-    justify-content: center;
+    flex-wrap: wrap;        /* Allows items to wrap to new lines */
+    justify-content: center; /* Centers items when the row is not full */
     gap: 30px;
-    width: 100%;
     max-width: 1400px;
     margin: 0 auto;
-    box-sizing: border-box;
+    
+    /* CRITICAL: Ensures all cards within the same row share the same height */
+    align-items: stretch; 
 }
 
-/* --- TARJETA DE MIEMBRO (OPTIMIZADA) --- */
-.member-card {
-    background-color: #080808; 
-    border: 1px solid var(--jaguar-gold); 
-    border-radius: 4px; 
-    box-shadow: 0 0 15px rgba(166, 124, 0, 0.15); 
-    
+/* -----------------------------------------------------------------------------
+   3. MEMBER CARD COMPONENT
+   ----------------------------------------------------------------------------- */
+.roster-card {
+    background-color: #080808;
+    border-radius: 4px;
     overflow: hidden;
+    
+    /* PERFORMANCE: 'content-visibility: auto' acts as native lazy-rendering.
+       The browser skips rendering work for off-screen cards (RAM saving). */
+    content-visibility: auto; 
+    contain-intrinsic-size: 260px 380px; /* Placeholder size for scrollbar stability */
+    
+    /* LAYOUT: Fixed width prevents cards from stretching excessively 
+       when a category has few items (e.g., only 2 members). */
+    width: 260px; 
+    max-width: 100%;
+    
+    /* Internal Layout: Flex column enables footer alignment */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Image Container */
+.roster-img-box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: radial-gradient(circle, #222 0%, #000 100%);
+    border-bottom: 1px solid rgba(166, 124, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Prevents image compression */
+}
+
+.roster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 20px;
+    will-change: transform;
+}
+
+.roster-img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+/* Content Wrapper */
+.roster-info {
+    padding: 20px 15px;
+    text-align: center;
+    
+    /* FLEX MAGIC: Makes this container grow to fill available vertical space.
+       This pushes the social link to the bottom of the card. */
+    flex-grow: 1; 
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-bottom: 25px;
-    
-    width: 260px; 
-    max-width: 100%; 
-    flex-shrink: 0;
-
-    /* --- MAGIA DE RENDIMIENTO --- */
-    /* 1. Si no está en pantalla, no se renderiza (ahorra RAM masivamente) */
-    content-visibility: auto; 
-    
-    /* 2. Le decimos al navegador cuánto mide aprox para que el scroll no salte */
-    contain-intrinsic-size: 260px 400px; 
 }
 
-/* --- FOTO DEL MIEMBRO --- */
-.member-card__img-box {
-    width: 100%;
-    aspect-ratio: 1 / 1; 
-    position: relative;
-    background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-    border-bottom: 1px solid var(--jaguar-dark-gold);
-}
-
-.member-card__img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; 
-    padding: 20px;       
-    opacity: 1; 
-    display: block;
-    
-    /* Evita repintados complejos en la imagen */
-    will-change: transform; 
-}
-
-/* --- INFO TEXTUAL --- */
-.member-card__info {
-    padding: 20px 15px 0;
-    text-align: center;
-    width: 100%;
-}
-
-.member-card__role {
+.roster-role {
     color: var(--jaguar-gold);
-    font-family: var(--font-main);
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 0 0 8px 0;
+    margin-bottom: 5px;
 }
 
-.member-card__name {
+.roster-name {
     color: #fff;
-    font-family: var(--font-main);
     font-size: 1.1rem;
     font-weight: 500;
-    margin: 0 0 8px 0;
-    line-height: 1.3;
+    margin: 0 0 5px 0;
 }
 
-.member-card__career {
+.roster-career {
     color: #888;
     font-size: 0.75rem;
-    font-weight: 300;
+    text-transform: uppercase;
     margin-bottom: 15px;
-    text-transform: uppercase; 
 }
 
-/* Botón LinkedIn */
-.member-card__social {
-    color: #fff; 
-    background-color: #0077b5; 
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 6px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.member-card__social:hover {
-    background-color: var(--jaguar-gold);
-    color: #000;
-    transform: translateY(-2px); /* Pequeño feedback visual */
-}
-
-/* --- RESPONSIVE (MÓVIL 2 COLUMNAS) --- */
-@media (max-width: 600px) {
-    .roster-container { 
-        padding: 40px 10px; 
-        overflow-x: hidden; 
-    }
+/* -----------------------------------------------------------------------------
+   4. SOCIAL ACTIONS
+   ----------------------------------------------------------------------------- */
+.roster-social-link {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    transition: opacity 0.2s ease;
     
-    .roster-main-title { 
-        font-size: 2.2rem; 
-        margin-bottom: 40px; 
-        word-break: break-word; 
-    }
+    /* Alignment: Ensures the button stays at the bottom of the flex container */
+    margin-top: auto; 
+}
 
-    /* Ajuste Títulos */
-    .roster-category__title {
-        font-size: 1.2rem;   
-        gap: 8px;            
-        margin-bottom: 25px; 
-        width: 100%;         
-        flex-wrap: nowrap;   
-    }
+.roster-social-link:hover {
+    opacity: 0.8;
+}
 
-    .gold-line {
-        width: 20px;        
-        opacity: 0.6;
+.linkedin-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    
+    /* Quality: Render as-is without filters for maximum sharpness */
+    filter: none; 
+    image-rendering: -webkit-optimize-contrast;
+}
+
+/* -----------------------------------------------------------------------------
+   5. RESPONSIVE DESIGN (MOBILE)
+   ----------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+    .roster-section {
+        padding: 40px 10px;
     }
     
     .roster-grid {
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap: 8px; 
+        /* Mobile Layout: Switch to Grid for precise 2-column alignment */
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
         justify-content: stretch;
-        width: 100%;
     }
 
-    .member-card {
-        width: auto; 
-        max-width: none;
-        border-radius: 2px;
-        padding-bottom: 12px;
-        
-        /* Ajustamos la estimación de tamaño para móvil */
-        contain-intrinsic-size: 160px 250px; 
+    .roster-card {
+        /* Mobile Layout: Remove fixed width to allow fluid resizing */
+        width: auto;
+        contain-intrinsic-size: 160px 250px;
     }
 
-    .member-card__img-box img {
-        padding: 10px; 
-    }
-
-    .member-card__info { 
-        padding: 10px 2px 0; 
-    }
+    .roster-img { padding: 10px; }
+    .roster-info { padding: 10px 5px; }
     
-    .member-card__role { 
-        font-size: 0.55rem; 
-        line-height: 1.1; 
-        margin-bottom: 4px;
-        letter-spacing: 0; 
-        min-height: 2.2em; 
+    .roster-role { 
+        font-size: 0.65rem;
+        min-height: 2.5em; /* Ensures text alignment across rows */
         display: flex;
-        align-items: flex-end; 
+        align-items: flex-end;
         justify-content: center;
-    }
+    } 
     
-    .member-card__name { 
-        font-size: 0.8rem; 
-        margin-bottom: 3px;
-        line-height: 1.1;
-    }
-    
-    .member-card__career { 
-        font-size: 0.55rem; 
-        margin-bottom: 8px;
-        line-height: 1;
-    }
+    .roster-name { font-size: 0.85rem; }
+    .roster-career { font-size: 0.6rem; }
 
-    .member-card__social {
-        padding: 4px; 
-    }
+    .roster-social-link { width: 44px; height: 44px; }
 }
