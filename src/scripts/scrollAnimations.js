@@ -19,7 +19,6 @@ export function initScrollAnimations() {
     
     const unifiedObserver = new IntersectionObserver(handleIntersection, observerConfig);
     
-    // Solo observar contenedores padre con .scroll-animate
     const sections = document.querySelectorAll('.scroll-animate');
     
     if (sections.length > 0) {

@@ -1,0 +1,79 @@
+/* =============================================================================
+   PAGE: TEAM / NOSOTROS (Layout & Structure)
+   Description: Controls section containers, titles, and grid layouts.
+   Dependencies: module-album-strip.css, team-card.css
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. ORIGINS SECTION (Texto e Intro)
+   ----------------------------------------------------------------------------- */
+.origins-section {
+    padding: 60px 20px;
+    background: #080808; 
+    text-align: center;
+    border-bottom: 1px solid #222;
+    contain: content;
+}
+
+.origins-content { max-width: 900px; margin: 0 auto; }
+
+.origins-text {
+    font-family: var(--font-main); font-size: 1rem; color: #bbbbbb; 
+    line-height: 1.8; margin-bottom: 30px;
+}
+
+.origins-logo {
+    display: block; margin: 40px auto; width: 150px; height: auto;
+    filter: drop-shadow(0 0 10px rgba(166,124,0,0.3)); 
+}
+
+/* -----------------------------------------------------------------------------
+   2. ROSTER LAYOUT (Sección y Títulos)
+   ----------------------------------------------------------------------------- */
+.roster-section {
+    padding: 60px 20px;
+    background-color: var(--bg-black);
+    width: 100%;
+    contain: content; 
+}
+
+.roster-category {
+    margin-bottom: 60px;
+    contain: layout; 
+}
+
+.category-header {
+    display: flex; align-items: center; justify-content: center;
+    gap: 20px; margin-bottom: 40px;
+}
+
+.gold-line {
+    height: 1px; width: 40px; 
+    background-color: var(--jaguar-dark-gold); 
+    opacity: 0.7;
+}
+
+/* -----------------------------------------------------------------------------
+   3. GRID SYSTEM (La Rejilla)
+   ----------------------------------------------------------------------------- */
+.roster-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: stretch; 
+}
+
+/* RESPONSIVE LAYOUT */
+@media (max-width: 600px) {
+    .roster-section { padding: 40px 10px; }
+    
+    .roster-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 2 Columnas estrictas en móvil */
+        gap: 10px;
+        justify-content: stretch;
+    }
+}

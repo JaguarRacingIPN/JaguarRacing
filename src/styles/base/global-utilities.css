@@ -1,0 +1,33 @@
+/* =============================================================================
+   BASE: IMAGE BEHAVIOR & UTILITIES
+   Description: Global resets for app-like interaction and accessibility tools.
+   ============================================================================= */
+
+/* GLOBAL IMAGE RESET
+   Makes images feel like native app elements (no dragging, no selection).
+   WARNING: Prevents users from saving images via right-click/long-press.
+*/
+img {
+    -webkit-tap-highlight-color: transparent; 
+    -webkit-touch-callout: none; 
+    user-select: none;         
+    -webkit-user-select: none;  
+    -webkit-user-drag: none;  
+    pointer-events: auto; 
+}
+
+/* ACCESSIBILITY UTILITY (.sr-only)
+   Standard pattern to hide text visually but keep it for Screen Readers.
+   Performance: Zero layout impact (1px clipped).
+*/
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
