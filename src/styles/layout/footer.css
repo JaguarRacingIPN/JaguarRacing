@@ -1,8 +1,12 @@
 /* =============================================================================
-   5. FOOTER
+   MODULE: SITE FOOTER
+   Version: 2.1 (Performance Optimized)
+   Description: Lightweight footer with flexbox layout and optimized animations.
    ============================================================================= */
 
-/* --- 5.1 CONTENEDOR PRINCIPAL --- */
+/* -----------------------------------------------------------------------------
+   1. MAIN CONTAINER
+   ----------------------------------------------------------------------------- */
 .site-footer {
     background-color: var(--bg-black);
     color: white;
@@ -11,18 +15,21 @@
     border-top: 1px solid var(--jaguar-gold);
     position: relative;
     z-index: 10;
+    contain: content; 
 }
 
 .site-footer__content {
     display: flex;
-    justify-content: space-between; /* Logo a la izquierda, Contacto a la derecha */
+    justify-content: space-between;
     flex-wrap: wrap;
     gap: 40px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* --- 5.2 IDENTIDAD (LOGO) --- */
+/* -----------------------------------------------------------------------------
+   2. IDENTITY (LOGO & DESC)
+   ----------------------------------------------------------------------------- */
 .site-footer__logo {
     height: 55px;
     width: auto;
@@ -37,10 +44,12 @@
     max-width: 300px;
 }
 
-/* --- 5.3 COMPONENTE DE CORREO ELECTRÓNICO --- */
+/* -----------------------------------------------------------------------------
+   3. CONTACT COMPONENT
+   ----------------------------------------------------------------------------- */
 .footer-email-wrapper {
     display: flex;
-    justify-content: flex-end; /* En PC alineado a la derecha */
+    justify-content: flex-end;
     width: 100%;
     margin-top: 10px;
 }
@@ -54,27 +63,29 @@
     font-size: 0.95rem;
     padding: 8px 12px;
     border-radius: 6px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.05); /* Fondo sutil */
+    background: rgba(255, 255, 255, 0.05);
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
 }
 
 .footer-email-link:hover {
     color: var(--jaguar-gold, #fbbf24);
     background: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px); /* Pequeño movimiento al hacer hover */
+    transform: translateX(5px); 
 }
 
-/* --- 5.4 REDES SOCIALES (Estilo Base / PC) --- */
+/* -----------------------------------------------------------------------------
+   4. SOCIAL ICONS
+   ----------------------------------------------------------------------------- */
 .social-icons {
     display: flex;
-    gap: 15px; /* Espacio compacto en PC */
+    gap: 15px;
     justify-content: flex-end;
     align-items: center;
     margin-top: 20px;
 }
 
 .social-icons__img {
-    width: 32px; /* Tamaño refinado para escritorio */
+    width: 32px;
     height: 32px;
     object-fit: contain;
     transition: transform 0.2s ease-in-out, opacity 0.2s;
@@ -86,23 +97,27 @@
     opacity: 1;
 }
 
-/* CORRECCIONES DE ICONOS ESPECÍFICOS */
+/* --- Specific Icon Overrides --- */
+
+/* GitHub: Invert filter is acceptable here as it avoids loading a second image file */
 .social-icons__img[alt="GitHub Logo"] {
-    filter: invert(1) brightness(1.2); /* Vuelve blanco el logo negro */
+    filter: invert(1) brightness(1.2); 
 }
 
+/* Facebook: Adjusted via dimensions instead of transform for better rendering performance */
 .social-icons__img[alt="Facebook Logo"] {
-    transform: scale(0.9); /* Reduce Facebook un 10% para igualar a los demás */
-}
-.social-icons__link:hover .social-icons__img[alt="Facebook Logo"] {
-    transform: scale(1.05); /* Mantiene la proporción en hover */
+    width: 29px; /* Calculated: 32px * 0.9 = ~29px */
+    height: 29px;
+    margin: 0 1.5px; /* Centers the smaller icon */
 }
 
-/* --- 5.5 BARRA INFERIOR (Copyright + Legal) --- */
+/* -----------------------------------------------------------------------------
+   5. BOTTOM BAR (COPYRIGHT & LEGAL)
+   ----------------------------------------------------------------------------- */
 .site-footer__bottom {
     margin-top: 40px;
     padding-top: 20px;
-    border-top: 1px solid #222; /* Línea separadora muy sutil */
+    border-top: 1px solid #222;
     font-size: 0.8rem;
     color: #666;
 }
@@ -111,20 +126,18 @@
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between; /* CLAVE: Separa Copyright (Izq) de Privacidad (Der) */
+    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 15px;
 }
 
-/* Estilo del texto "Orgullo Politécnico" */
 .copyright-text {
     margin: 0;
     font-weight: 500;
     color: #888;
 }
 
-/* Estilo del link "Política de Privacidad" */
 .footer-privacy-link {
     color: #555;
     text-decoration: none;
@@ -137,11 +150,9 @@
 }
 
 /* =============================================================================
-   RESPONSIVE DESIGN (MÓVIL / TABLET)
+   RESPONSIVE DESIGN (Mobile & Tablet)
    ============================================================================= */
 @media (max-width: 900px) {
-    
-    /* Layout Vertical */
     .site-footer__content {
         flex-direction: column;
         align-items: center;
@@ -155,7 +166,6 @@
         align-items: center;
     }
 
-    /* Centrado de logo y correo */
     .site-footer__logo {
         margin: 0 auto;
         height: 50px;
@@ -165,7 +175,6 @@
         justify-content: center; 
     }
 
-    /* Iconos Grandes para Touch */
     .social-icons {
         justify-content: center;
         gap: 25px;
@@ -173,19 +182,23 @@
     }
 
     .social-icons__img {
-        width: 45px; /* Más grandes en móvil */
+        width: 45px;
         height: 45px;
         opacity: 1;
     }
+    .social-icons__img[alt="Facebook Logo"] {
+        width: 40px;
+        height: 40px;
+        margin: 0;
+    }
 
-    /* Barra inferior apilada */
     .site-footer__bottom-content {
-        flex-direction: column-reverse; /* Pone la privacidad al final */
+        flex-direction: column-reverse;
         gap: 15px;
         text-align: center;
     }
 
     .hidden-mobile {
-        display: none; /* Oculta separadores visuales innecesarios en móvil */
+        display: none;
     }
 }

@@ -1,19 +1,11 @@
 /* =============================================================================
-   JAGUAR RACING - INDEX BODY STYLES
+   JAGUAR RACING - MAIN INDEX BODY STYLES
+   Description: Core styles for Mission, Baja SAE, Timer, and Recruitment sections.
    Dependencies: variables-base.css, typography-ui.css
    ============================================================================= */
 
-/* =============================================================================
-   1. SCROLL ANIMATIONS (Synchronized - Solution 1A)
-   ============================================================================= */
-
-/* Contenedores principales: animación de entrada */
-
-/* Imágenes: estado inicial (ocultas) */
-
-
 /* -----------------------------------------------------------------------------
-   2. MISSION SECTION
+   1. MISSION SECTION
    ----------------------------------------------------------------------------- */
 .mission-section { 
     padding: 3rem 5%; 
@@ -37,7 +29,6 @@
 }
 
 .mission-body { 
-    /* Accessibility Fix: Adjusted contrast ratio to pass WCAG AA */
     font-family: var(--font-main); 
     font-size: 0.95rem; 
     color: #d1d1d1; 
@@ -63,7 +54,7 @@
 }
 
 /* -----------------------------------------------------------------------------
-   3. BAJA SAE SECTION
+   2. BAJA SAE EXPLANATION SECTION
    ----------------------------------------------------------------------------- */
 .what-is-baja { 
     padding: 3rem 0; 
@@ -88,7 +79,6 @@
 }
 
 .baja-description { 
-    /* Accessibility Fix: Adjusted color for readability */
     font-family: var(--font-main); 
     font-size: 0.95rem; 
     color: #d1d1d1; 
@@ -116,9 +106,26 @@
     filter: brightness(0.7) grayscale(20%) contrast(1.1); 
     transition: transform 1.2s ease;
 }
+.link-discreet {
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    color: var(--jaguar-gold); 
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.link-discreet:hover {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+    transform: translateX(5px);
+}
 
 /* -----------------------------------------------------------------------------
-   4. INTEGRATED TIMER BAR
+   3. INTEGRATED TIMER BAR
    ----------------------------------------------------------------------------- */
 .integrated-timer-bar {
     width: 100%; 
@@ -156,7 +163,6 @@
 .race-series {
     font-family: var(--font-main); 
     font-size: 0.65rem; 
-    /* Accessibility Fix: Increased contrast from #666 to #F5F5F5 */
     color: #F5F5F5;
     letter-spacing: 1px; 
     text-transform: uppercase; 
@@ -188,7 +194,7 @@
 }
 
 /* -----------------------------------------------------------------------------
-   5. RECRUITMENT (JOIN CTA)
+   4. RECRUITMENT (JOIN CTA)
    ----------------------------------------------------------------------------- */
 .join-cta { 
     position: relative; 
@@ -224,126 +230,8 @@
 }
 
 /* -----------------------------------------------------------------------------
-   6. TEAM SECTION
+   5. RESPONSIVE UTILITIES (General)
    ----------------------------------------------------------------------------- */
-.team-hero { 
-    padding: 2rem 0; 
-    background: var(--bg-black); 
-    display: flex; 
-    justify-content: center; 
-}
-
-.team-container-limited { 
-    max-width: 1200px; 
-    width: 95%; 
-    margin: 0 auto; 
-}
-
-.team-image-wrapper-limited { 
-    position: relative; 
-    width: 100%; 
-    height: 400px; 
-    overflow: hidden; 
-    border-radius: 4px; 
-    border: 1px solid #333; 
-}
-
-.team-img-fit { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    object-position: center 30%; 
-    filter: grayscale(100%) brightness(0.5); 
-    transition: transform 1.2s ease; 
-}
-
-.team-overlay { 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 100%; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    z-index: 5; 
-    background: rgba(0,0,0,0.3); 
-}
-
-/* -----------------------------------------------------------------------------
-   7. UTILITIES & LINKS
-   ----------------------------------------------------------------------------- */
-.social-links-large { 
-    display: flex; 
-    gap: 15px; 
-    margin-bottom: 1.5rem; 
-    justify-content: center; 
-}
-
-.social-links-large img { 
-    width: 28px !important; 
-    height: 28px !important; 
-    object-fit: contain; 
-    transition: 0.3s; 
-    filter: none; 
-}
-
-.social-links-large img:hover { 
-    transform: scale(1.2); 
-}
-
-.btn-underline { 
-    color: var(--jaguar-gold); 
-    text-decoration: none; 
-    font-weight: 700; 
-    border-bottom: 2px solid var(--jaguar-gold); 
-    padding-bottom: 3px; 
-    font-family: var(--font-main); 
-    font-size: 0.9rem; 
-    letter-spacing: 1px; 
-    transition: all 0.3s; 
-    text-transform: uppercase;
-}
-
-.btn-underline:hover { 
-    color: var(--text-white); 
-    border-color: var(--text-white); 
-}
-
-/* Accessibility Fix: Discreet Link High Contrast */
-.link-discreet { 
-    display: inline-block; 
-    margin-top: 0.5rem; 
-    font-family: var(--font-main); 
-    font-size: 0.85rem; 
-    color: #FFD700; /* Gold */
-    font-weight: 600;
-    text-decoration: none; 
-    transition: all 0.3s ease; 
-    border-bottom: 1px solid transparent; 
-}
-
-.link-discreet:hover { 
-    color: #ffffff; 
-    border-bottom-color: #ffffff; 
-    transform: translateX(5px); 
-}
-
-/* Scroll Active States */
-.active-scroll-effect { 
-    filter: brightness(0.6) grayscale(0%) contrast(1.1) !important; 
-    transform: scale(1.11) !important; 
-}
-
-.team-img-fit.active-scroll-effect { 
-    filter: grayscale(100%) brightness(0.5) !important; 
-    transform: scale(1.11) !important; 
-}
-
-/* =============================================================================
-   8. MEDIA QUERIES (Mobile Optimization)
-   ============================================================================= */
 @media (max-width: 900px) {
     .mission-section, 
     .what-is-baja, 
@@ -352,13 +240,6 @@
         padding-right: 1.5rem; 
     }
     
-    /* Stats Layout Fix */
-    .stats-bar { padding: 2rem 0; }
-    .stats-grid { flex-direction: column; align-items: center; gap: 2.5rem; }
-    .stat-item { width: 100%; }
-    .stat-label { font-size: 0.85rem; opacity: 0.9; }
-    
-    /* Grid Adjustments */
     .mission-container, 
     .compact-layout { 
         grid-template-columns: 1fr; 
@@ -366,14 +247,12 @@
         margin-bottom: 1rem; 
     }
     
-    /* Image Reordering */
     .what-is-image, 
     .mission-img { 
         order: 2; 
         margin-top: 0.8rem; 
     }
     
-    /* Typography Alignment */
     .section-title-left, 
     .mission-lead, 
     .mission-body, 
@@ -381,16 +260,7 @@
         text-align: center; 
     }
     
-    .sponsors-desc { 
-        width: 100%; 
-        padding: 0 15px; 
-        font-size: 0.9rem; 
-        word-wrap: break-word; 
-    }
-    
-    /* Container Heights */
     .join-cta { height: 400px; } 
-    .team-image-wrapper-limited { height: 300px; } 
     
     /* Timer Bar Mobile */
     .integrated-timer-bar { padding: 2rem 1rem; }

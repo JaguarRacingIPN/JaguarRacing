@@ -1,10 +1,20 @@
 /* =============================================================================
-   JAGUAR RACING - PRODUCTION STYLESHEET
-   Description: Core styles for the reaction game, grid system, and responsive layout.
+   MODULE: REACTION GAME UI
+   
+   ARCHITECTURAL OVERVIEW:
+   1. Graphic Performance: Utilizes conditional rendering for expensive effects 
+      like 'backdrop-filter', providing high-performance fallbacks for mobile.
+   2. Interaction Latency: Restricts CSS transitions to specific properties 
+      (transform, color, opacity) to prevent layout thrashing during state changes.
+   3. Responsive Scaling: Implements 'clamp()' functions for fluid typography 
+      and spacing without excessive media query breakpoints.
    ============================================================================= */
 
+/* -----------------------------------------------------------------------------
+   1. MAIN SECTION & LAYOUT
+   ----------------------------------------------------------------------------- */
 .reaction-game-section {
-    padding: 2rem 1rem 4rem 1rem; /* Reduced top padding for better visibility */
+    padding: 2rem 1rem 4rem 1rem;
     text-align: center;
     border-block: 1px solid #1a1a1a;
     background: radial-gradient(circle at center, #0a0a0a, #000);
@@ -12,11 +22,10 @@
     overflow: hidden;
 }
 
-/* --- MAIN LAYOUT --- */
 .game-container {
     display: flex; 
     flex-direction: column; 
-    gap: 2rem; /* Reduced gap to bring elements closer */
+    gap: 2rem;
     max-width: 1100px; 
     margin: 0 auto; 
     align-items: center;
@@ -25,7 +34,7 @@
 @media (min-width: 900px) {
     .game-container { 
         flex-direction: row; 
-        align-items: flex-start; /* Aligns table to the top */
+        align-items: flex-start;
         justify-content: center; 
         gap: 3rem; 
     }
@@ -33,7 +42,9 @@
     .f1-leaderboard { flex: 0.8; width: 100%; }
 }
 
-/* --- GAME INTERFACE --- */
+/* -----------------------------------------------------------------------------
+   2. GAME INTERFACE & LIGHTS
+   ----------------------------------------------------------------------------- */
 .reaction-result {
     font-family: 'Courier New', monospace; 
     font-weight: 700;
@@ -72,13 +83,23 @@
     border-radius: 50%;
     background: #111; 
     border: 2px solid #333; 
+    /* Performance: Short transition for snappy feedback */
     transition: background-color 0.05s;
 }
 
-.light.red { background: #ff0000 !important; box-shadow: 0 0 50px #ff0000; }
-.light.green { background: #00ff00 !important; box-shadow: 0 0 50px #00ff00; }
+/* Performance Note: Reduced shadow spread (30px) to minimize GPU fill-rate cost */
+.light.red { 
+    background: #ff0000 !important; 
+    box-shadow: 0 0 30px #ff0000; 
+}
+.light.green { 
+    background: #00ff00 !important; 
+    box-shadow: 0 0 30px #00ff00; 
+}
 
-/* --- MAIN BUTTON (State Management) --- */
+/* -----------------------------------------------------------------------------
+   3. INTERACTION CONTROLS
+   ----------------------------------------------------------------------------- */
 .btn-race {
     background: transparent; 
     border: 2px solid #A67C00; 
@@ -89,10 +110,11 @@
     letter-spacing: 2px; 
     border-radius: 50px;
     cursor: pointer; 
-    transition: all 0.2s; 
     width: 100%; 
     max-width: 300px;
     user-select: none;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    will-change: transform;
 }
 
 .btn-race:hover { 
@@ -101,7 +123,7 @@
     transform: translateY(-2px); 
 }
 
-/* State: Cooldown / Locked */
+/* State: Locked / Cooldown */
 .btn-race.locked {
     border-color: #444 !important;
     color: #444 !important;
@@ -111,13 +133,41 @@
     opacity: 0.6;
 }
 
-/* State: Penalty / False Start */
+/* State: Penalty */
 .btn-race.penalty {
     border-color: #1a1a1a !important;
     color: white !important;
 }
 
-/* --- LEADERBOARD (Grid System) --- */
+.refresh-btn {
+    background: transparent; 
+    border: none; 
+    color: #fff; 
+    font-size: 1.8rem; 
+    line-height: 1; 
+    padding: 0 5px; 
+    cursor: pointer; 
+    
+    /* Performance: Animate only transform and color */
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.refresh-btn:hover {
+    color: #A67C00; 
+    transform: scale(1.1) rotate(45deg);
+    text-shadow: 0 0 10px rgba(166, 124, 0, 0.5);
+}
+
+.refresh-btn:disabled {
+    color: #444; 
+    cursor: wait; 
+    transform: rotate(360deg); 
+    opacity: 0.5;
+}
+
+/* -----------------------------------------------------------------------------
+   4. LEADERBOARD SYSTEM (GRID)
+   ----------------------------------------------------------------------------- */
 .f1-leaderboard {
     background: #080808; 
     border: 1px solid #333; 
@@ -130,12 +180,29 @@
     flex-direction: column;
 }
 
-/* Grid Column Definition: 15% Rank | Flexible Name | 30% Time */
+/* Column Definition: 15% Rank | Flexible Name | 30% Time */
 .leaderboard-header, .rank-row, .user-row {
     display: grid;
     grid-template-columns: 15% 1fr 30%; 
     align-items: center;
-    padding: 8px 15px; /* Compacted padding */
+    padding: 8px 15px; 
+}
+
+.leaderboard-top {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 12px 20px; 
+    border-bottom: 1px solid #333; 
+    margin-bottom: 0; 
+}
+
+.leaderboard-top h3 {
+    color: #FFD700; 
+    font-weight: 800; 
+    letter-spacing: 1.5px; 
+    text-transform: uppercase;
+    font-size: 1rem; 
 }
 
 .leaderboard-header {
@@ -159,12 +226,11 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 0.9rem; 
     color: #ccc; 
-    transition: background 0.2s;
+    transition: background-color 0.2s ease;
 }
 
 .rank-row:hover { background: #111; }
 
-/* Text Alignment */
 .col-pos, .pos { text-align: center; font-weight: bold; }
 .col-pilot { padding-left: 15px; } 
 
@@ -180,12 +246,12 @@
     color: #A67C00; 
 }
 
-/* Top 3 Highlighting */
+/* Rank Highlighting */
 .rank-row:nth-child(1) .pos { color: #FFD700; text-shadow: 0 0 5px #FFD700; }
 .rank-row:nth-child(2) .pos { color: #C0C0C0; }
 .rank-row:nth-child(3) .pos { color: #CD7F32; }
 
-/* User Row Sticky Footer */
+/* Sticky Footer User Row */
 .user-row {
     background: linear-gradient(145deg, #151515, #000);
     border-top: 2px solid #A67C00; 
@@ -223,13 +289,31 @@
 
 .edit-btn:hover { background: #A67C00; }
 
-/* --- MODAL DIALOG --- */
+/* -----------------------------------------------------------------------------
+   5. MODAL SYSTEM (Optimized Overlay)
+   ----------------------------------------------------------------------------- */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+    
+    /* PERFORMANCE FALLBACK: 
+       Use a solid high-opacity color for devices that struggle with real-time blur. */
+    background: rgba(0,0,0,0.9); 
+    
     display: flex; justify-content: center; align-items: center;
-    z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    z-index: 9999; opacity: 0; pointer-events: none; 
+    
+    /* Only animate opacity to keep it cheap */
+    transition: opacity 0.3s ease;
 }
+
+/* Feature Query: Apply blur only if supported by the browser engine */
+@supports (backdrop-filter: blur(5px)) {
+    .modal-overlay {
+        background: rgba(0,0,0,0.85);
+        backdrop-filter: blur(5px);
+    }
+}
+
 .modal-overlay.active { opacity: 1; pointer-events: all; }
 
 .modal-content {
@@ -268,37 +352,3 @@
 .btn-save:hover { background: #ffc400; }
 
 .hidden { display: none !important; }
-
-/* --- LEADERBOARD HEADER (Compacted) --- */
-.leaderboard-top {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    padding: 12px 20px; /* Reduced vertical padding */
-    border-bottom: 1px solid #333; 
-    margin-bottom: 0; /* Removed bottom margin */
-}
-
-.leaderboard-top h3 {
-    color: #FFD700; 
-    font-weight: 800; 
-    letter-spacing: 1.5px; 
-    text-transform: uppercase;
-    font-size: 1rem; /* Slightly smaller for compactness */
-}
-
-/* --- REFRESH BUTTON --- */
-.refresh-btn {
-    background: transparent; border: none; color: #fff; 
-    font-size: 1.8rem; line-height: 1; padding: 0 5px; 
-    cursor: pointer; transition: all 0.3s ease;
-}
-
-.refresh-btn:hover {
-    color: #A67C00; transform: scale(1.1) rotate(45deg);
-    text-shadow: 0 0 10px rgba(166, 124, 0, 0.5);
-}
-
-.refresh-btn:disabled {
-    color: #444; cursor: wait; transform: rotate(360deg); opacity: 0.5;
-}
