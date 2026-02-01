@@ -1,0 +1,104 @@
+/* =============================================================================
+   COMPONENT: TEAM CARD
+   Description: Individual member card styling only.
+   Usage: Inside .roster-grid
+   ============================================================================= */
+
+.roster-card {
+    background-color: #080808;
+    border-radius: 4px;
+    overflow: hidden;
+    
+    /* Performance */
+    content-visibility: auto; 
+    contain-intrinsic-size: 260px 380px; 
+    
+    /* Dimensions inside the grid */
+    width: 260px; 
+    max-width: 100%;
+    
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Image Area --- */
+.roster-img-box {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: radial-gradient(circle, #222 0%, #000 100%);
+    border-bottom: 1px solid rgba(166, 124, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.roster-img {
+    width: 100%; height: 100%; object-fit: contain;
+    padding: 20px; transition: transform 0.3s ease; 
+}
+
+.roster-card:hover .roster-img { transform: scale(1.05); }
+
+.roster-img-placeholder {
+    width: 100%; height: 100%; display: flex;
+    align-items: center; justify-content: center;
+    color: #555; font-size: 0.8rem; text-transform: uppercase;
+}
+
+/* --- Info Area --- */
+.roster-info {
+    padding: 20px 15px; text-align: center;
+    flex-grow: 1; display: flex; flex-direction: column; align-items: center;
+}
+
+.roster-role {
+    color: var(--jaguar-gold); font-size: 0.85rem; font-weight: 700;
+    text-transform: uppercase; margin-bottom: 5px;
+}
+
+.roster-name {
+    color: #fff; font-size: 1.1rem; font-weight: 500; margin: 0 0 5px 0;
+}
+
+.roster-career {
+    color: #888; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 15px;
+}
+
+/* --- Interactive Elements --- */
+.roster-social-link {
+    display: inline-block; width: 48px; height: 48px;
+    transition: opacity 0.2s ease; margin-top: auto; 
+}
+
+.roster-social-link:hover { opacity: 0.8; }
+
+.linkedin-icon {
+    width: 100%; height: 100%; object-fit: contain;
+    filter: none; image-rendering: -webkit-optimize-contrast; 
+}
+
+/* --- MOBILE ADJUSTMENTS --- */
+@media (max-width: 600px) {
+    .roster-card { 
+        width: auto; /* Se adapta a la columna del grid padre */
+        contain-intrinsic-size: 160px 250px; 
+    }
+    
+    .roster-img-box { 
+        background: #111; 
+        border-bottom: 1px solid rgba(166, 124, 0, 0.15); 
+    }
+
+    .roster-img { padding: 10px; }
+    .roster-info { padding: 10px 5px; }
+    
+    .roster-role { 
+        font-size: 0.65rem; min-height: 2.5em; 
+        display: flex; align-items: flex-end; justify-content: center;
+    } 
+    
+    .roster-name { font-size: 0.85rem; }
+    .roster-career { font-size: 0.6rem; }
+    .roster-social-link { width: 44px; height: 44px; }
+}

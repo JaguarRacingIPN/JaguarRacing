@@ -1,0 +1,56 @@
+/* -----------------------------------------------------------------------------
+ * MODULE: INFINITE TEAM MARQUEE
+ * Description: High-performance continuous scrolling strip using GPU-accelerated transforms.
+ * Performance: Implements 'contain: strict' and 'translate3d' to isolate rendering and ensure 60fps on mobile.
+ * Requirement: HTML content must be duplicated to support the 0% to -50% seamless loop logic.
+   ----------------------------------------------------------------------------- */
+.team-marquee-section {
+    padding: 40px 0;
+    background: #000000;
+    overflow: hidden; 
+    position: relative;
+    border-bottom: 1px solid #222;
+    contain: content;
+}
+
+.team-marquee-wrapper {
+    display: flex; width: 100%; overflow: hidden; position: relative;
+}
+
+.team-marquee-track {
+    display: flex;
+    gap: 15px; 
+    width: max-content; 
+    
+    /* PERFORMANCE: Promote to layer */
+    will-change: transform;
+    animation: scrollTeam 25s linear infinite; 
+}
+
+.marquee-card {
+    position: relative;
+    width: 280px;
+    height: 190px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #222;
+    contain: strict;
+}
+
+.marquee-card::after {
+    content: '';
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 90%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.marquee-img {
+    width: 100%; height: 100%; object-fit: cover;
+}
+
+@keyframes scrollTeam {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); } 
+}
