@@ -1,0 +1,190 @@
+/* =============================================================================
+   MODULE: SPONSORS & SUPPORT
+   Description: Infinite marquee (never stops) and optimized CTA button.
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   1. SECTION CONTAINER
+   ----------------------------------------------------------------------------- */
+.sponsors-section {
+    padding: 80px 0;
+    background-color: var(--bg-black, #000);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid #222;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    contain: content;
+}
+
+.sponsors-desc {
+    max-width: 800px;
+    margin: 0 auto 60px auto;
+    text-align: center;
+    color: #cccccc;
+    padding: 0 20px;
+    font-family: var(--font-main, sans-serif);
+    font-size: 1.1rem;
+}
+
+/* -----------------------------------------------------------------------------
+   2. INFINITE MARQUEE (THE TRACK)
+   ----------------------------------------------------------------------------- */
+.sponsors-marquee {
+    display: flex;
+    gap: 40px;
+    width: max-content;
+    will-change: transform;
+    animation: desplazamiento 45s linear infinite; 
+}
+
+@keyframes desplazamiento {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* -----------------------------------------------------------------------------
+   3. SPONSOR CARDS
+   ----------------------------------------------------------------------------- */
+.sponsor-card {
+    width: 360px;
+    height: 200px;
+    padding: 15px;
+    flex-shrink: 0;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.sponsor-card img {
+    width: auto;
+    height: auto;
+    max-width: 95%; 
+    max-height: 90%; 
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
+    
+    opacity: 0.7; 
+    filter: grayscale(100%); 
+}
+
+@media (hover: hover) {
+    .sponsor-card:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: var(--jaguar-gold, #A67C00);
+        transform: translateY(-5px) scale(1.02);
+        z-index: 2;
+    }
+
+    .sponsor-card:hover img {
+        opacity: 1;
+        filter: grayscale(0%);
+        transform: scale(1.08);
+    }
+}
+
+/* -----------------------------------------------------------------------------
+   4. CTA BUTTON: "APÓYANOS"
+   ----------------------------------------------------------------------------- */
+.center-content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 50px;
+    padding-bottom: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.boton-legendario {
+    position: relative;
+    display: inline-block;
+    padding: 18px 55px;
+    
+    font-family: var(--font-main, sans-serif); 
+    font-weight: 800; 
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--jaguar-black, #000); 
+
+    background-image: 
+        linear-gradient(rgba(0,0,0, 0.3), rgba(0,0,0, 0.3)),
+        linear-gradient(45deg, var(--jaguar-gold, #A67C00) 0%, var(--jaguar-light, #FFD700) 51%, var(--jaguar-gold, #A67C00) 100%);
+    background-blend-mode: multiply; 
+    background-size: 200% auto; 
+    
+    border: none;
+    border-radius: 50px; 
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-position 0.3s ease;
+    will-change: transform, box-shadow;
+    
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.boton-legendario:hover {
+    background-position: right center; 
+    box-shadow: 0 0 35px rgba(140, 105, 0, 0.8); 
+    transform: translateY(-3px) scale(1.02); 
+    color: var(--jaguar-black, #000);
+}
+
+.boton-legendario:active {
+    transform: translateY(1px) scale(0.98); 
+    box-shadow: 0 0 15px rgba(140, 105, 0, 1); 
+    transition-duration: 0.1s;
+}
+
+/* -----------------------------------------------------------------------------
+   5. MOBILE OPTIMIZATIONS (Samsung A32 Focus)
+   ----------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .sponsors-section {
+        padding: 40px 0;
+        -webkit-mask-image: none; 
+        mask-image: none;
+    }
+
+    /* Smaller Cards */
+    .sponsor-card {
+        width: 240px; 
+        height: 140px;
+        padding: 10px;
+        transform: none !important;
+    }
+    
+    .sponsors-marquee {
+        gap: 20px; 
+        animation-duration: 30s; 
+    }
+
+    .sponsor-card img {
+        filter: grayscale(0%) !important; 
+        opacity: 1 !important;
+        max-width: 90%; 
+        max-height: 85%;
+    }
+    .center-content {
+        margin-top: 30px;
+    }
+    
+    .boton-legendario {
+        padding: 15px 40px;
+        font-size: 1rem;
+    }
+}

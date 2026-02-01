@@ -1,27 +1,26 @@
 /* =============================================================================
    MODULE: TEAM ROSTER UI
-   VERSION: 2.0 (Performance Optimized)
-   DESCRIPTION: Renders the team member showcase. Utilizes a strict Flexbox 
-   layout to ensure consistent card sizing regardless of item count. 
-   Optimized for mid-range mobile devices via CSS Containment.
+   VERSION: 2.1 (Stable / High-Performance)
+   TARGET: Cross-platform (Optimized for Helio G80/Samsung A32 class devices)
+   
+   ARCHITECTURAL NOTES:
+   1. USES 'content-visibility' to skip rendering off-screen elements (CPU/RAM Saver).
+   2. USES 'contain' to isolate layout recalculations to specific components.
+   3. AVOIDS persistent 'will-change' to prevent VRAM saturation on low-end GPUs.
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
-   1. MAIN CONTAINER & ISOLATION
+   1. SECTION CONTAINMENT & ISOLATION
    ----------------------------------------------------------------------------- */
 .roster-section {
     padding: 60px 20px;
     background-color: var(--bg-black);
     width: 100%;
-    
-    /* PERFORMANCE: 'contain: content' isolates the layout and paint calculations 
-       of this section from the rest of the document, reducing reflow costs. */
     contain: content; 
 }
 
 .roster-category {
     margin-bottom: 60px;
-    /* Optimization: Limits layout recalculations to this specific wrapper */
     contain: layout; 
 }
 
@@ -51,44 +50,36 @@
 }
 
 /* -----------------------------------------------------------------------------
-   2. LAYOUT SYSTEM (FLEXBOX STRICT MODE)
+   2. GRID SYSTEM
    ----------------------------------------------------------------------------- */
 .roster-grid {
     display: flex;
-    flex-wrap: wrap;        /* Allows items to wrap to new lines */
-    justify-content: center; /* Centers items when the row is not full */
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 30px;
     max-width: 1400px;
     margin: 0 auto;
-    
-    /* CRITICAL: Ensures all cards within the same row share the same height */
     align-items: stretch; 
 }
 
 /* -----------------------------------------------------------------------------
-   3. MEMBER CARD COMPONENT
+   3. COMPONENT: MEMBER CARD
    ----------------------------------------------------------------------------- */
 .roster-card {
     background-color: #080808;
     border-radius: 4px;
     overflow: hidden;
-    
-    /* PERFORMANCE: 'content-visibility: auto' acts as native lazy-rendering.
-       The browser skips rendering work for off-screen cards (RAM saving). */
     content-visibility: auto; 
-    contain-intrinsic-size: 260px 380px; /* Placeholder size for scrollbar stability */
+    contain-intrinsic-size: 260px 380px; 
     
-    /* LAYOUT: Fixed width prevents cards from stretching excessively 
-       when a category has few items (e.g., only 2 members). */
     width: 260px; 
     max-width: 100%;
     
-    /* Internal Layout: Flex column enables footer alignment */
     display: flex;
     flex-direction: column;
 }
 
-/* Image Container */
+/* --- Image Area --- */
 .roster-img-box {
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -97,7 +88,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0; /* Prevents image compression */
+    flex-shrink: 0;
 }
 
 .roster-img {
@@ -105,7 +96,11 @@
     height: 100%;
     object-fit: contain;
     padding: 20px;
-    will-change: transform;
+    transition: transform 0.3s ease; 
+}
+
+.roster-card:hover .roster-img {
+    transform: scale(1.05);
 }
 
 .roster-img-placeholder {
@@ -119,15 +114,10 @@
     text-transform: uppercase;
 }
 
-/* Content Wrapper */
 .roster-info {
     padding: 20px 15px;
     text-align: center;
-    
-    /* FLEX MAGIC: Makes this container grow to fill available vertical space.
-       This pushes the social link to the bottom of the card. */
     flex-grow: 1; 
-    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -156,15 +146,13 @@
 }
 
 /* -----------------------------------------------------------------------------
-   4. SOCIAL ACTIONS
+   4. INTERACTIVE ELEMENTS
    ----------------------------------------------------------------------------- */
 .roster-social-link {
     display: inline-block;
     width: 48px;
     height: 48px;
     transition: opacity 0.2s ease;
-    
-    /* Alignment: Ensures the button stays at the bottom of the flex container */
     margin-top: auto; 
 }
 
@@ -176,14 +164,12 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    
-    /* Quality: Render as-is without filters for maximum sharpness */
     filter: none; 
-    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -webkit-optimize-contrast; 
 }
 
 /* -----------------------------------------------------------------------------
-   5. RESPONSIVE DESIGN (MOBILE)
+   5. MOBILE OPTIMIZATIONS (Viewport < 600px)
    ----------------------------------------------------------------------------- */
 @media (max-width: 600px) {
     .roster-section {
@@ -191,7 +177,6 @@
     }
     
     .roster-grid {
-        /* Mobile Layout: Switch to Grid for precise 2-column alignment */
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
@@ -199,9 +184,12 @@
     }
 
     .roster-card {
-        /* Mobile Layout: Remove fixed width to allow fluid resizing */
         width: auto;
         contain-intrinsic-size: 160px 250px;
+    }
+    .roster-img-box {
+        background: #111; 
+        border-bottom: 1px solid rgba(166, 124, 0, 0.15);
     }
 
     .roster-img { padding: 10px; }
@@ -209,7 +197,7 @@
     
     .roster-role { 
         font-size: 0.65rem;
-        min-height: 2.5em; /* Ensures text alignment across rows */
+        min-height: 2.5em; 
         display: flex;
         align-items: flex-end;
         justify-content: center;
@@ -217,6 +205,5 @@
     
     .roster-name { font-size: 0.85rem; }
     .roster-career { font-size: 0.6rem; }
-
     .roster-social-link { width: 44px; height: 44px; }
 }
