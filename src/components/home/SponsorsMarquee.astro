@@ -7,8 +7,8 @@
  * desplazamiento infinito vía CSS.
  */
 
-import { Image } from 'astro:assets';
-import '../../styles/home/section-sponsors.css';
+import { Image } from "astro:assets";
+import "../../styles/home/section-sponsors.css";
 
 /* -----------------------------------------------------------------------------
    1. TYPES & DATA
@@ -20,26 +20,97 @@ interface Sponsor {
 }
 
 const patrocinadores: Sponsor[] = [
-    { img: 'altair.webp', nombre: 'Altair', url: 'https://altair.com' },
-    { img: 'ansys.webp', nombre: 'Ansys', url: 'https://www.ansys.com' },
-    { img: 'bimsa.webp', nombre: 'BIMSA', url: 'https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv' }, 
-    { img: 'copiisa.webp', nombre: 'Copiisa', url: 'https://copiisa.com.mx' },
-    { img: 'mantemimiento.webp', nombre: 'Mantenimiento Industrial', url: 'https://mantto.mx/' },
-    { img: 'polimex.webp', nombre: 'Polimex', url: 'https://www.polimex.mx' },
-    { img: 'SMI.webp', nombre: 'SMI México', url: 'https://www.smimexico.com.mx/' },
-    { img: 'solidwor.webp', nombre: 'SolidWorks', url: 'https://www.solidworks.com' },
-    { img: 'tmx.webp', nombre: 'TMX Toolmex', url: 'https://hvhindustrial.com/es/brand/toolmex-tmx' },
-    { img: 'toyota.webp', nombre: 'Toyota', url: 'https://www.toyota.mx' },
-    { img: 'IPN.webp', nombre: 'Instituto Politécnico Nacional', url: 'https://www.ipn.mx' }
+    { img: "altair.webp", nombre: "Altair", url: "https://altair.com" },
+    { img: "ansys.webp", nombre: "Ansys", url: "https://www.ansys.com" },
+    {
+        img: "bimsa.webp",
+        nombre: "BIMSA",
+        url: "https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv",
+    },
+    {
+        img: "copiisa.webp",
+        nombre: "Copiisa",
+        url: "https://www.linkedin.com/company/copiisaoffshore/?originalSubdomain=mx",
+    },
+    {
+        img: "mantemimiento.webp",
+        nombre: "Mantenimiento Industrial",
+        url: "https://mantto.mx/",
+    },
+    { img: "polimex.webp", nombre: "Polimex", url: "https://www.polimex.mx" },
+    {
+        img: "SMI.webp",
+        nombre: "SMI México",
+        url: "https://www.smimexico.com.mx/",
+    },
+    {
+        img: "solidwor.webp",
+        nombre: "SolidWorks",
+        url: "https://www.solidworks.com",
+    },
+    {
+        img: "tmx.webp",
+        nombre: "TMX Toolmex",
+        url: "https://hvhindustrial.com/es/brand/toolmex-tmx",
+    },
+    { img: "toyota.webp", nombre: "Toyota", url: "https://www.toyota.mx" },
+    {
+        img: "IPN.webp",
+        nombre: "Instituto Politécnico Nacional",
+        url: "https://www.ipn.mx",
+    },
+    {
+        img: "Cend.webp",
+        nombre: "Cend",
+        url: "https://www.facebook.com/people/CEND-Ingenieria-SA/100063745008457/#",
+    },
+    {
+        img: "dassault.webp",
+        nombre: "Dassault Systèmes",
+        url: "https://www.3ds.com/es/",
+    },
+    {
+        img: "DeportesAlonso.webp",
+        nombre: "Deportes Alonso",
+        url: "https://www.facebook.com/deportesalonso/",
+    },
+    { img: "entera.webp", nombre: "Entera Branding", url: "https://entera.mx" },
+    {
+        img: "GravoMasters.webp",
+        nombre: "GravoMasters",
+        url: "https://www.gravo-master.com.mx",
+    },
+    {
+        img: "GrupoRome.webp",
+        nombre: "Grupo Rome",
+        url: "https://www.rome.mx/",
+    },
+    { img: "Hexagono.webp", nombre: "Hexagon", url: "https://hexagon.com" },
+    {
+        img: "MasterCard.webp",
+        nombre: "Mastercard",
+        url: "https://www.mastercam.com/",
+    },
+    { img: "mtf.webp", nombre: "MTF", url: "#" },
+    {
+        img: "nemi.webp",
+        nombre: "Fundación NEMI",
+        url: "https://www.nemi.com.mx/",
+    },
 ];
 
 /* -----------------------------------------------------------------------------
    2. ASSET LOADING (DYNAMIC)
-   -----------------------------------------------------------------------------*/ 
-const images = import.meta.glob<{ default: ImageMetadata }>('../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}', { eager: true });
+   -----------------------------------------------------------------------------*/
+const images = import.meta.glob<{ default: ImageMetadata }>(
+    "../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}",
+    { eager: true },
+);
 
 const getLogoImage = (filename: string) => {
-    const imagePath = Object.keys(images).find(path => path.endsWith(filename));
+    const imagePath = Object.keys(images).find((path) =>
+        path.endsWith(filename),
+    );
     if (!imagePath) {
         console.warn(`[Sponsors] Logo no encontrado: ${filename}`);
         return null;
@@ -55,54 +126,56 @@ const listaInfinita = [...patrocinadores, ...patrocinadores];
 ---
 
 <section class="sponsors-section scroll-animate">
-    
     <h2 class="titulo-seccion">PATROCINADORES</h2>
 
     <p class="sponsors-desc">
-        Agradecemos profundamente a nuestros socios estratégicos. Su apoyo en tecnología, 
-        manufactura y recursos hace posible que la ingeniería mexicana compita al más alto nivel.
+        Agradecemos profundamente a nuestros socios estratégicos. Su apoyo en
+        tecnología, manufactura y recursos hace posible que la ingeniería
+        mexicana compita al más alto nivel.
     </p>
 
     {/* --- PISTA ANIMADA --- */}
     <div class="sponsors-marquee">
-        {listaInfinita.map((pat, index) => {
-            const logoImg = getLogoImage(pat.img);
-            
-            const isDuplicate = index >= patrocinadores.length;
+        {
+            listaInfinita.map((pat, index) => {
+                const logoImg = getLogoImage(pat.img);
 
-            return (
-                <a 
-                    href={pat.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    class="sponsor-card" 
-                    
-                    aria-label={isDuplicate ? null : `Visitar sitio de ${pat.nombre}`}
-                    aria-hidden={isDuplicate ? "true" : undefined}
-                    tabindex={isDuplicate ? "-1" : "0"}
-                >
-                    {logoImg ? (
-                        <Image 
-                            src={logoImg} 
-                            alt={isDuplicate ? "" : `Logo de ${pat.nombre}`} 
-                            widths={[240, 360, 480, 720]} 
-                            
-                            sizes="(max-width: 768px) 240px, 360px"
-                            
-                            format="webp"
-                            quality={95}
-                            
-                            class="sponsor-img-fit"
-                            loading="lazy" 
-                            decoding="async" 
-                        />
-                    ) : (
-                        /* Fallback textual si falla la imagen */
-                        <span class="text-fallback">{pat.nombre}</span>
-                    )}
-                </a>
-            );
-        })}
+                const isDuplicate = index >= patrocinadores.length;
+
+                return (
+                    <a
+                        href={pat.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="sponsor-card"
+                        aria-label={
+                            isDuplicate
+                                ? null
+                                : `Visitar sitio de ${pat.nombre}`
+                        }
+                        aria-hidden={isDuplicate ? "true" : undefined}
+                        tabindex={isDuplicate ? "-1" : "0"}
+                    >
+                        {logoImg ? (
+                            <Image
+                                src={logoImg}
+                                alt={isDuplicate ? "" : `Logo de ${pat.nombre}`}
+                                widths={[240, 360, 480, 720]}
+                                sizes="(max-width: 768px) 240px, 360px"
+                                format="webp"
+                                quality={95}
+                                class="sponsor-img-fit"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        ) : (
+                            /* Fallback textual si falla la imagen */
+                            <span class="text-fallback">{pat.nombre}</span>
+                        )}
+                    </a>
+                );
+            })
+        }
     </div>
 
     <div class="center-content">
@@ -111,15 +184,12 @@ const listaInfinita = [...patrocinadores, ...patrocinadores];
 </section>
 
 <style>
-    /* Estilos específicos del componente Image de Astro.
-       El layout de la tarjeta se maneja en 'carruselPatrocinios.css',
-       pero el comportamiento interno de la imagen pertenece aquí.
     */
     .sponsor-img-fit {
         width: 100%;
         height: auto;
         /* Permitimos que el CSS externo controle el max-width/height para el padding */
-        object-fit: contain; 
+        object-fit: contain;
         display: block;
     }
 

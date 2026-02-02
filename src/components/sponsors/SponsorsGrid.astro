@@ -1,73 +1,142 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-/* 1. TUS DATOS (La fuente de la verdad) */
 const patrocinadores = [
-  { img: 'altair.webp', nombre: 'Altair', url: 'https://altair.com' },
-  { img: 'ansys.webp', nombre: 'Ansys', url: 'https://www.ansys.com' },
-  { img: 'bimsa.webp', nombre: 'BIMSA', url: 'https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv/?originalSubdomain=mx' }, 
-  { img: 'copiisa.webp', nombre: 'Copiisa', url: 'https://copiisa.com.mx' },
-  { img: 'mantemimiento.webp', nombre: 'Mantenimiento Industrial', url: 'https://mantto.mx/' },
-  { img: 'polimex.webp', nombre: 'Polimex', url: 'https://www.polimex.mx' },
-  { img: 'SMI.webp', nombre: 'SMI México', url: 'https://www.smimexico.com.mx/' },
-  { img: 'solidwor.webp', nombre: 'SolidWorks', url: 'https://www.solidworks.com' },
-  { img: 'tmx.webp', nombre: 'TMX Toolmex', url: 'https://hvhindustrial.com/es/brand/toolmex-tmx' },
-  { img: 'toyota.webp', nombre: 'Toyota', url: 'https://www.toyota.mx' },
-  { img: 'IPN.webp', nombre: 'Instituto Politécnico Nacional', url: 'https://www.ipn.mx' }
+    { img: "altair.webp", nombre: "Altair", url: "https://altair.com" },
+    { img: "ansys.webp", nombre: "Ansys", url: "https://www.ansys.com" },
+    {
+        img: "bimsa.webp",
+        nombre: "BIMSA",
+        url: "https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv",
+    },
+    {
+        img: "copiisa.webp",
+        nombre: "Copiisa",
+        url: "https://www.linkedin.com/company/copiisaoffshore/?originalSubdomain=mx",
+    },
+    {
+        img: "mantemimiento.webp",
+        nombre: "Mantenimiento Industrial",
+        url: "https://mantto.mx/",
+    },
+    { img: "polimex.webp", nombre: "Polimex", url: "https://www.polimex.mx" },
+    {
+        img: "SMI.webp",
+        nombre: "SMI México",
+        url: "https://www.smimexico.com.mx/",
+    },
+    {
+        img: "solidwor.webp",
+        nombre: "SolidWorks",
+        url: "https://www.solidworks.com",
+    },
+    {
+        img: "tmx.webp",
+        nombre: "TMX Toolmex",
+        url: "https://hvhindustrial.com/es/brand/toolmex-tmx",
+    },
+    { img: "toyota.webp", nombre: "Toyota", url: "https://www.toyota.mx" },
+    {
+        img: "IPN.webp",
+        nombre: "Instituto Politécnico Nacional",
+        url: "https://www.ipn.mx",
+    },
+    {
+        img: "Cend.webp",
+        nombre: "Cend",
+        url: "https://www.facebook.com/people/CEND-Ingenieria-SA/100063745008457/#",
+    },
+    {
+        img: "dassault.webp",
+        nombre: "Dassault Systèmes",
+        url: "https://www.3ds.com/es/",
+    },
+    {
+        img: "DeportesAlonso.webp",
+        nombre: "Deportes Alonso",
+        url: "https://www.facebook.com/deportesalonso/",
+    },
+    { img: "entera.webp", nombre: "Entera Branding", url: "https://entera.mx" },
+    {
+        img: "GravoMasters.webp",
+        nombre: "GravoMasters",
+        url: "https://www.gravo-master.com.mx",
+    },
+    {
+        img: "GrupoRome.webp",
+        nombre: "Grupo Rome",
+        url: "https://www.rome.mx/",
+    },
+    { img: "Hexagono.webp", nombre: "Hexagon", url: "https://hexagon.com" },
+    {
+        img: "MasterCard.webp",
+        nombre: "Mastercard",
+        url: "https://www.mastercam.com/",
+    },
+    { img: "mtf.webp", nombre: "MTF", url: "#" },
+    {
+        img: "nemi.webp",
+        nombre: "Fundación NEMI",
+        url: "https://www.nemi.com.mx/",
+    },
 ];
 
 /* 2. CARGA INTELIGENTE DE IMÁGENES */
-const images = import.meta.glob('../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}', { eager: true });
+const images = import.meta.glob(
+    "../../assets/IMGpatrocinadores/*.{png,webp,jpg,svg,jpeg,PNG}",
+    { eager: true },
+);
 
 /* 3. FUNCIÓN DE CRUCE */
 const getLogoImage = (filename: string) => {
-    const imagePath = Object.keys(images).find(path => path.endsWith(filename));
-    
+    const imagePath = Object.keys(images).find((path) =>
+        path.endsWith(filename),
+    );
+
     if (!imagePath) {
         console.error(`Imagen no encontrada en assets: ${filename}`);
         return null;
     }
-    
+
     return (images[imagePath] as any).default;
 };
 ---
 
 <section class="sponsors-grid-section scroll-animate">
     <div class="sponsors-grid">
-        
-        {patrocinadores.map((sponsor) => {
-            const logoImg = getLogoImage(sponsor.img);
-            
-            return (
-                <a 
-                    href={sponsor.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    class="sponsor-card"
-                    title={`Visitar sitio web de ${sponsor.nombre}`}
-                    aria-label={`Logo de ${sponsor.nombre} - Patrocinador oficial`}
-                >
-                    {logoImg ? (
-                        <Image 
-                            src={logoImg} 
-                            alt={`${sponsor.nombre} - Patrocinador oficial de Jaguar Racing`}
-                            class="sponsor-logo" 
-                            widths={[150, 200, 300, 400]}
-                            sizes="(max-width: 480px) 150px, (max-width: 768px) 200px, 300px"
-                            quality={90}
-                            format="webp"
-                            
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    ) : (
-                        <div class="sponsor-logo-fallback">
-                            <span>{sponsor.nombre}</span>
-                        </div>
-                    )}
-                </a>
-            );
-        })}
+        {
+            patrocinadores.map((sponsor) => {
+                const logoImg = getLogoImage(sponsor.img);
 
+                return (
+                    <a
+                        href={sponsor.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="sponsor-card"
+                        title={`Visitar sitio web de ${sponsor.nombre}`}
+                        aria-label={`Logo de ${sponsor.nombre} - Patrocinador oficial`}
+                    >
+                        {logoImg ? (
+                            <Image
+                                src={logoImg}
+                                alt={`${sponsor.nombre} - Patrocinador oficial de Jaguar Racing`}
+                                class="sponsor-logo"
+                                widths={[150, 200, 300, 400]}
+                                sizes="(max-width: 480px) 150px, (max-width: 768px) 200px, 300px"
+                                quality={90}
+                                format="webp"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        ) : (
+                            <div class="sponsor-logo-fallback">
+                                <span>{sponsor.nombre}</span>
+                            </div>
+                        )}
+                    </a>
+                );
+            })
+        }
     </div>
 </section>

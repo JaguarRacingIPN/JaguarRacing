@@ -1,8 +1,9 @@
-/* =============================================================================
-   JAGUAR RACING - SPONSORS PAGE (OPTIMIZED)
-   ============================================================================= */
+/* ==========================================================================
+   JAGUAR RACING - SPONSORS PAGE STYLES
+   Description: Optimized styles for the sponsors grid with monochrome white logos.
+   ========================================================================== */
 
-/* --- SECCIÓN INTRO --- */
+/* --- INTRO SECTION --- */
 .sponsors-intro-section {
     padding: 80px 20px;
     background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
@@ -10,33 +11,47 @@
     border-bottom: 1px solid #222;
 }
 
-.sponsors-intro-content { max-width: 800px; margin: 0 auto; }
+.sponsors-intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
 
-/* --- BOTÓN DOSSIER --- */
-.dossier-btn-wrapper { display: flex; justify-content: center; margin-top: 30px; }
+/* --- CALL TO ACTION BUTTON (DOSSIER) --- */
+.dossier-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
 
 .btn-download {
-    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--jaguar-gold);
     color: var(--jaguar-gold);
     border-radius: 50px;
     padding: 16px 45px;
-    font-family: var(--font-main); font-weight: 700; font-size: 0.9rem;
-    text-transform: uppercase; text-decoration: none; letter-spacing: 2px;
-    position: relative; overflow: hidden;
-    /* Optimización: Solo animamos lo necesario */
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
     transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
 .btn-download:hover {
-    background: var(--jaguar-gold); 
+    background: var(--jaguar-gold);
     color: #000;
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); /* Reduje el blur de 30 a 20 para GPU */
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
     transform: translateY(-3px);
 }
 
-/* --- GRID DE LOGOS --- */
+/* --- SPONSORS GRID LAYOUT --- */
 .sponsors-grid-section {
     padding: 80px 20px;
     background: #050505;
@@ -50,93 +65,122 @@
     margin: 0 auto;
 }
 
-/* --- TARJETA DEL PATROCINADOR --- */
+/* --- SPONSOR CARD COMPONENT --- */
 .sponsor-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    height: 180px; 
-    display: flex; align-items: center; justify-content: center;
-    padding: 30px; 
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
     position: relative;
     cursor: pointer;
-    /* Optimización: No usar 'all' */
-    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    will-change: transform; /* Aviso a la GPU */
+    /* Optimize transition performance */
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+    will-change: transform;
 }
 
-.sponsor-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: var(--jaguar-gold);
-    transform: translateY(-5px); /* Reduje de 7 a 5px, más sutil */
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5); /* Sombra más ligera */
+/* Desktop Hover Effects */
+@media (hover: hover) {
+    .sponsor-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: var(--jaguar-gold);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
 }
 
-/* --- EL LOGO --- */
+/* --- LOGO STYLING --- */
 .sponsor-logo {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    opacity: 0.6;
-    filter: grayscale(100%);
-    /* Transición específica */
-    transition: opacity 0.4s ease, filter 0.4s ease, transform 0.4s ease;
-    will-change: filter, transform;
+    /* Force monochrome white representation for all logos */
+    filter: brightness(0) invert(1);
+    opacity: 0.7;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    will-change: transform, opacity;
 }
 
-.sponsor-card:hover .sponsor-logo {
-    opacity: 1;
-    filter: grayscale(0%);
-    transform: scale(1.1); /* Zoom controlado */
+/* Desktop Hover: Increase visual weight, maintain white color */
+@media (hover: hover) {
+    .sponsor-card:hover .sponsor-logo {
+        opacity: 1;
+        transform: scale(1.05);
+        /* Note: Filter remains active to ensure logo stays white */
+    }
 }
 
-/* --- TARJETA "TU LOGO AQUÍ" --- */
+/* --- PLACEHOLDER CARD ("YOUR LOGO HERE") --- */
 .sponsor-cta {
-    border: 2px dashed #333; 
+    border: 2px dashed #333;
     background: transparent;
-    flex-direction: column; gap: 12px;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.sponsor-cta:hover { 
-    border-color: var(--jaguar-gold); 
+.cta-text {
+    color: #555;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+}
+
+.sponsor-cta:hover {
+    border-color: var(--jaguar-gold);
     background: rgba(212, 175, 55, 0.05);
     transform: translateY(-5px);
 }
 
-.cta-text {
-    color: #555; font-weight: 800; text-transform: uppercase;
-    font-size: 0.9rem; letter-spacing: 1px; transition: color 0.3s;
+.sponsor-cta:hover .cta-text {
+    color: var(--jaguar-gold);
 }
 
-.sponsor-cta:hover .cta-text { color: var(--jaguar-gold); }
-.cta-sub { color: #444; font-size: 0.75rem; text-transform: uppercase; font-weight: 600; }
+.cta-sub {
+    color: #444;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
 
-/* --- RESPONSIVE OPTIMIZADO PARA MÓVIL (A32 Friendly) --- */
+/* --- MOBILE OPTIMIZATION (Low-end Device Support) --- */
 @media (max-width: 768px) {
-    .sponsors-intro-section { padding: 60px 20px; } /* Menos padding */
-    
-    .sponsors-grid { 
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 12px; 
+    .sponsors-intro-section {
+        padding: 60px 20px;
     }
-    
-    .sponsor-card { 
-        height: 120px; 
+
+    .sponsors-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .sponsor-card {
+        height: 120px;
         padding: 15px;
         border-radius: 12px;
+        /* Disable will-change to save memory on mobile */
+        will-change: auto;
     }
-    
-    /* CRÍTICO PARA RENDIMIENTO EN MÓVIL */
+
     .sponsor-logo {
-        opacity: 0.9;
-        filter: none; /* Quitamos grayscale para que la GPU no trabaje extra */
-        transition: none; /* Sin animaciones en los logos al scrollear */
+        /* Enforce high contrast visibility */
+        filter: brightness(0) invert(1) !important;
+        opacity: 0.85;
+        /* Disable animations for smooth scrolling */
+        transition: none !important;
+        transform: none !important;
+        will-change: auto;
     }
-    
-    /* Quitamos efectos hover que no existen en touch */
-    .sponsor-card:hover { 
-        transform: none; 
-        box-shadow: none;
-        border-color: rgba(255, 255, 255, 0.1); /* Mantiene borde original */
+
+    /* Disable hover states on touch interfaces */
+    .sponsor-card:hover,
+    .sponsor-card:active {
+        transform: none !important;
+        box-shadow: none !important;
+        background: rgba(255, 255, 255, 0.03) !important;
     }
 }
