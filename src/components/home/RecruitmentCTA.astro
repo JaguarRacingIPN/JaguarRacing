@@ -1,14 +1,14 @@
 ---
-import { Image } from 'astro:assets';
-import imgRegistro from '../../assets/CuerpoIndex/re.webp';
+import { Image } from "astro:assets";
+import imgRegistro from "../../assets/CuerpoIndex/re.webp";
 ---
 
 <section class="join-cta scroll-animate">
     <div class="cta-media-wrapper">
-        <Image 
-            src={imgRegistro} 
-            alt="Fondo Reclutamiento" 
-            class="cta-video-bg" 
+        <Image
+            src={imgRegistro}
+            alt="Fondo Reclutamiento"
+            class="cta-video-bg"
             widths={[350, 540, 720, 1024, 1280]}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 800px"
             format="webp"
@@ -21,9 +21,10 @@ import imgRegistro from '../../assets/CuerpoIndex/re.webp';
     <div class="join-cta__text">
         <h2>ÚNETE A LA ESCUDERÍA</h2>
         <p class="join-cta__subtitle">
-            Cada temporada es una oportunidad de reiniciar y mejorar. El diseño del coche 25/26 ya está en proceso. 
-            Es tu oportunidad de sumarte y hacer realidad el nuevo prototipo.
+            El proceso de selección para la temporada 2026 inicia oficialmente
+            en Agosto. Regístrate en la lista de espera para recibir la
+            convocatoria y los requisitos antes que nadie.
         </p>
-        <a href="/join" class="btn-underline">APLICAR AHORA</a>
+        <a href="/join" class="btn-underline">LISTA DE ESPERA</a>
     </div>
 </section>

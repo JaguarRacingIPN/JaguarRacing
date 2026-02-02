@@ -10,67 +10,75 @@ import { redis } from "../../lib/redis";
 // ============================================
 const CONFIG = {
   SYSTEM_PROMPT: `[ROLE]
-Eres el Asistente Virtual oficial de 'Jaguar Racing', escudería de la ESIME Azcapotzalco (IPN). Tu objetivo es reclutar talento y persuadir patrocinadores.
-TONO: Profesional, Tecnológico, Directo y MUY BREVE".
+Eres el Asistente Virtual oficial de 'Jaguar Racing', escudería de la ESIME Azcapotzalco (IPN).
+OBJETIVO: Dirigir tráfico a la Lista de Espera (Agosto 2026) y captar patrocinadores mostrando autoridad técnica.
+TONO: Profesional, Tecnológico, Directo y MUY BREVE.
 IDIOMA: Responde en el mismo idioma del usuario (ES/EN).
 
 [RULES - GATEKEEPER]
-1. TEMAS PERMITIDOS: Reclutamiento (áreas/requisitos), Patrocinio (beneficios), Historia, Ubicación.
-2. TEMAS SENSIBLES: Si mencionan "UNAM", "F1" o "Checo Pérez", responde con cortesía pero redirige INMEDIATAMENTE a los logros de Jaguar Racing.
-3. BLOQUEO: Si piden hacer tareas, código ajeno o insultan -> "Soy el asistente de Jaguar Racing. ¿Te interesa unirte al equipo o patrocinarnos?"
-4. REGLA DE UNIÓN: Si preguntan cómo unirse, SIEMPRE lista con saltos de linea de los "Requisitos Generales" y los "Títulos de las Áreas" antes del link.
-5. INFORMACIÓN FALTANTE: Si no tienes el dato exacto en tu base, NO inventes. Di: "Para dudas no listadas aquí, escribe a nuestro correo."
+1. TEMAS PERMITIDOS: Reclutamiento (Lista de Espera), Áreas del proyecto, Patrocinios, Historia y Logros.
+2. TEMAS SENSIBLES: Si mencionan "UNAM", "F1" o "Checo", redirige cortésmente a los logros de Jaguar Racing.
+3. BLOQUEO: No haces tareas ni código. -> "Soy el asistente de Jaguar Racing. ¿Te interesa el proyecto?"
+4. REGLA DE UNIÓN: Si preguntan cómo unirse, SIEMPRE aclara que el reclutamiento inicia en AGOSTO 2026. Invita a registrarse en la Lista de Espera.
+5. INFORMACIÓN FALTANTE: No inventes. Di: "Escribe a nuestro correo para dudas específicas."
 
 [KNOWLEDGE BASE - CONTACT & LOCATION]
-- EMAIL CENTRAL: jaguarteam.ipn@gmail.com (Canal ÚNICO para Reclutamiento y Patrocinios).
-- DIRECCIÓN: Av. de las Granjas 682, Azcapotzalco, CDMX.
-- MAPA: https://maps.app.goo.gl/x5cyKqTVajGd2GpPA
+- EMAIL: jaguarteam.ipn@gmail.com
+- UBICACIÓN: Av. de las Granjas 682, Azcapotzalco, CDMX.
 
-[KNOWLEDGE BASE - RECRUITMENT]
-LINK REGISTRO: https://jaguar-racing.vercel.app/join
+[KNOWLEDGE BASE - RECRUITMENT STATUS]
+- ESTADO ACTUAL: Convocatoria cerrada. Lista de Espera abierta para Agosto 2026.
+- PERFIL BUSCADO: Estudiantes IPN con iniciativa, autogestión y nociones básicas.
+- LINK: https://forms.office.com/Pages/ResponsePage.aspx?id=2fRL-ZeAlEet9qVGbKKFY5aTG26BlHBMh-vtwJX9tNJUMzlLTkEzVlQ1OTVYRjlSSVBUSlBXS0VLUy4u
 
-A. PERFIL GENERAL (OBLIGATORIO):
-- Estudiante activo IPN (máx 1 reprobada).
-- Soft Skills: Compromiso, autodidacta, trabajo en equipo.
+[KNOWLEDGE BASE - HISTORY & ACHIEVEMENTS]
+- 2022: 1er Lugar GENERAL (ATV Design Challenge) y 2do Lugar en Suspensión (Baja SAE Méx).
+- 2019: 1er Lugar en Presentación de Marketing (Baja SAE Méx).
+- CALIDAD: Equipo con 10 Certificaciones Green Belt y finalistas constantes en Diseño y Costos.
 
-B. ÁREAS ABIERTAS Y REQUISITOS CLAVE:
-1. DIRECCIÓN: SolidWorks y Excel básicos, Física/Mecánica.
-2. ERGONOMÍA: SolidWorks básico, disposición trabajo manual.
-3. SUSPENSIÓN: SolidWorks intermedio, Física.
-4. CHASIS: SolidWorks básico, Estática.
+[KNOWLEDGE BASE - COMPETITION CONTEXT]
+- QUÉ HACEMOS: Diseño y manufactura de prototipos 4x4 para competencias Baja SAE.
+- PRUEBAS DINÁMICAS: Endurance (4 hrs), Arrastre, Aceleración y Maniobrabilidad.
+- PRUEBAS ESTÁTICAS: Diseño de Ingeniería, Costos y Business Plan.
+
+[KNOWLEDGE BASE - TEAM STATS]
+- FUERZA: +25 Ingenieros en formación (Mecánica, Robótica, Sistemas).
+- DEDICACIÓN: +5,000 horas de ingeniería por prototipo.
+
+[KNOWLEDGE BASE - PROJECT AREAS (REFERENCIA)]
+(Menciona estas áreas reales para ilustrar la especialización del equipo, NO como vacantes activas hoy)
+- INGENIERÍA: Suspensión, Dirección, Frenos, Chasis, Powertrain, Ergonomía, Instrumentación.
+- SIMULACIÓN Y MANUFACTURA: CAE, CAM, Manufactura.
+- GESTIÓN Y TI: Costos, Redes/Web, Patrocinios.
 
 [KNOWLEDGE BASE - SPONSORSHIP]
-BENEFICIOS (Dossier 2026):
-1. Talento Politécnico: Acceso a base de datos para reclutamiento y prácticas.
-2. Visibilidad de Marca: Logo en vehículo, uniformes y pits.
-3. Impacto Digital: Posicionamiento en web y redes sociales.
-4. Incentivos Fiscales: Recibos de donativo deducibles (Donataria Autorizada).
-
-[KNOWLEDGE BASE - GENERAL]
-- QUÉ HACEMOS: Diseño y manufactura de prototipos todo terreno (Baja SAE/Formula).
+BENEFICIOS:
+1. Acceso a Talento Politécnico (+30 perfiles).
+2. Visibilidad de Marca (Coche, Uniformes, Web).
+3. Deducibilidad de impuestos (Donataria Autorizada).
 
 [OUTPUT CONSTRAINTS]
-- FORMATO: Texto plano. PROHIBIDO usar asteriscos (*) ni negritas. Usa listas con guiones "-".
-- LONGITUD: MÁXIMO 60 palabras por respuesta. Sé conciso.
-- LINKS: Siempre al final, sin paréntesis ni texto posterior.`,
-  
+- FORMATO: Texto plano. Usa guiones "-" para listas. NO uses asteriscos.
+- LONGITUD: MÁXIMO 50 palabras.
+- LINKS: Siempre al final, solo la URL.`,
+
   RATE_LIMITS: {
     IP: { max: 300, window: 86400 },
     USER: { max: 50, window: 86400 },
     BURST: { max: 5, window: 60 }
   },
-  
+
   // Azure OpenAI
   MAX_TOKENS: 150,
   TEMPERATURE: 0.5,
   TIMEOUT: 20000, // 20s (margen para Vercel 25s)
   RETRY_ATTEMPTS: 2, // Reintentos en backend
   RETRY_DELAY: 1000, // 1s base para backoff exponencial
-  
+
   // Cache
   CACHE_TTL: 3600,
   CACHE_ENABLED: true,
-  
+
   // Context
   MAX_CONTEXT_MESSAGES: 6,
   MAX_INPUT_LENGTH: 500
@@ -115,13 +123,13 @@ const Utils = {
     const str = JSON.stringify(messages);
     const encoder = new TextEncoder();
     const data = encoder.encode(str);
-    
+
     if (typeof crypto !== 'undefined' && crypto.subtle) {
       const hashBuffer = await crypto.subtle.digest('SHA-256', data);
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 16);
     }
-    
+
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
@@ -143,18 +151,14 @@ const Utils = {
   sanitizeOutput(content: string): string {
     return content
       .trim()
-      // Remover markdown
       .replace(/\*\*(.+?)\*\*/g, '$1')
       .replace(/\*(.+?)\*/g, '$1')
       .replace(/__(.+?)__/g, '$1')
       .replace(/_(.+?)_/g, '$1')
-      // Remover backticks
       .replace(/`(.+?)`/g, '$1')
-      // Remover HTML tags
       .replace(/<[^>]*>/g, '')
-      // 👇 CAMBIO: Normalizar espacios PERO preservar \n
-      .replace(/[ \t]{2,}/g, ' ')  // Solo espacios/tabs horizontales
-      .replace(/\n{3,}/g, '\n\n')  // Máximo 2 saltos consecutivos
+      .replace(/[ \t]{2,}/g, ' ')  
+      .replace(/\n{3,}/g, '\n\n')  
       .trim();
   },
 
@@ -203,8 +207,8 @@ interface UserMessage {
 // ============================================
 class RateLimiter {
   static async check(
-    key: string, 
-    limit: number, 
+    key: string,
+    limit: number,
     windowSeconds: number
   ): Promise<RateLimitResult> {
     const now = Date.now();
@@ -216,10 +220,10 @@ class RateLimiter {
       p.zadd(key, { score: now, member: `${now}` });
       p.zcard(key);
       p.expire(key, windowSeconds * 2);
-      
+
       const results = (await p.exec()) as Array<[Error | null, unknown]>;
       const count = (results?.[2]?.[1] as number) || 0;
-      
+
       return {
         allowed: count <= limit,
         remaining: Math.max(0, limit - count)
@@ -240,24 +244,24 @@ class RateLimiter {
     const [ipCheck, userCheck, burstCheck] = checks;
 
     if (!ipCheck.allowed) {
-      return { 
-        allowed: false, 
+      return {
+        allowed: false,
         reason: "Límite de red excedido. Intenta mañana.",
         retryAfter: CONFIG.RATE_LIMITS.IP.window
       };
     }
 
     if (!burstCheck.allowed) {
-      return { 
-        allowed: false, 
+      return {
+        allowed: false,
         reason: "Demasiado rápido. Espera 1 minuto.",
         retryAfter: 60
       };
     }
 
     if (!userCheck.allowed) {
-      return { 
-        allowed: false, 
+      return {
+        allowed: false,
         reason: "Límite diario alcanzado (50 mensajes).",
         retryAfter: CONFIG.RATE_LIMITS.USER.window
       };
@@ -273,7 +277,7 @@ class RateLimiter {
 class ResponseCache {
   static async get(messagesHash: string): Promise<string | null> {
     if (!CONFIG.CACHE_ENABLED) return null;
-    
+
     try {
       const cached = await redis.get(`cache:chat:${messagesHash}`) as string | null;
       return cached;
@@ -284,7 +288,7 @@ class ResponseCache {
 
   static async set(messagesHash: string, content: string): Promise<void> {
     if (!CONFIG.CACHE_ENABLED) return;
-    
+
     try {
       await redis.setex(
         `cache:chat:${messagesHash}`,
@@ -322,7 +326,7 @@ class AzureAI {
 
     // Retry logic con backoff exponencial
     let lastError: Error | null = null;
-    
+
     for (let attempt = 0; attempt <= CONFIG.RETRY_ATTEMPTS; attempt++) {
       try {
         const controller = new AbortController();
@@ -341,7 +345,7 @@ class AzureAI {
         clearTimeout(timeoutId);
 
         const rawContent = result.choices[0]?.message?.content || "Sin respuesta.";
-        
+
         // Sanitizar output de la IA
         const sanitizedContent = Utils.sanitizeOutput(rawContent);
 
@@ -361,13 +365,13 @@ class AzureAI {
         if (err.name === 'AbortError') {
           throw new Error("TIMEOUT");
         }
-        
+
         if (err.status === 401 || err.status === 403) {
           throw new Error("AUTH_ERROR");
         }
 
         // Errores recuperables
-        const isRetryable = 
+        const isRetryable =
           err.code === 'ECONNRESET' ||
           err.code === 'ETIMEDOUT' ||
           err.status === 429 ||
@@ -402,12 +406,12 @@ export const POST: APIRoute = async ({ request }) => {
     const rateLimitResult = await RateLimiter.checkAll(ip, userId);
     if (!rateLimitResult.allowed) {
       return Utils.jsonResponse(
-        { 
+        {
           content: rateLimitResult.reason,
-          retryAfter: rateLimitResult.retryAfter 
+          retryAfter: rateLimitResult.retryAfter
         },
         429,
-        { 
+        {
           "Retry-After": String(rateLimitResult.retryAfter || 60),
           "X-RateLimit-Remaining": "0"
         }
@@ -420,7 +424,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // 3. Construir mensajes con sanitización
     let userMessages: ChatCompletionMessageParam[] = [];
-    
+
     if (messages.length > 0) {
       userMessages = messages
         .slice(-CONFIG.MAX_CONTEXT_MESSAGES)
@@ -438,7 +442,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 4. Llamar a Azure OpenAI (con retry automático)
-    const content = await AzureAI.complete(userMessages, { 
+    const content = await AzureAI.complete(userMessages, {
       useCache: CONFIG.CACHE_ENABLED
     });
 
@@ -447,7 +451,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   } catch (error: unknown) {
     const err = error as Error & { code?: string };
-    
+
     console.error("Chat API Error:", {
       message: err.message,
       userId,

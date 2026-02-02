@@ -8,12 +8,8 @@
     background-color: #080808;
     border-radius: 4px;
     overflow: hidden;
-    
-    /* Performance */
     content-visibility: auto; 
     contain-intrinsic-size: 260px 380px; 
-    
-    /* Dimensions inside the grid */
     width: 260px; 
     max-width: 100%;
     

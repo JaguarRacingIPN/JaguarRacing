@@ -1,7 +1,3 @@
-/**
- * Sistema de animaciones al scroll - Solución 1A Sincronizada
- * Anima contenedores completos con todos sus elementos hijos simultáneamente
- */
 export function initScrollAnimations() {
     const observerConfig = {
         threshold: 0.1,
