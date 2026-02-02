@@ -1,17 +1,25 @@
 ---
-// src/components/layout/Footer.astro
+import { Image } from "astro:assets";
+
+import jaguarLogo from "../../assets/logos/JaguarLogo.webp";
+import instagramIcon from "../../assets/logos/ImgIG.webp";
+import linkedInIcon from "../../assets/logos/linkedIn_.webp";
+import facebookIcon from "../../assets/logos/ImgFaceeBook.webp";
+import githubIcon from "../../assets/logos/github.webp";
 ---
 
 <footer class="site-footer">
     <div class="site-footer__content">
         <div class="site-footer__section">
             <div>
-                <img
-                    src="/img/page/JaguarLogo.webp"
+                <Image
+                    src={jaguarLogo}
                     alt="Jaguar Racing Logo"
                     class="site-footer__logo"
-                    width="150"
-                    height="150"
+                    widths={[120, 150, 200, 300]}
+                    sizes="(max-width: 480px) 120px, (max-width: 768px) 150px, 200px"
+                    quality={90}
+                    format="webp"
                     loading="lazy"
                     decoding="async"
                 />
@@ -42,8 +50,8 @@
                             stroke-linejoin="round"
                         >
                             <rect width="20" height="16" x="2" y="4" rx="2"
-                            ></rect><path
-                                d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                            ></rect>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
                             ></path>
                         </svg>
                         <span>jaguarteam.ipn@gmail.com</span>
@@ -57,15 +65,18 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     class="social-icons__link"
-                    aria-label="Instagram"
+                    aria-label="Síguenos en Instagram"
                 >
-                    <img
-                        src="/img/page/ImgIG.webp"
-                        alt="Instagram Logo"
-                        width="30"
-                        height="30"
+                    <Image
+                        src={instagramIcon}
+                        alt="Instagram"
                         class="social-icons__img"
+                        widths={[30, 60]}
+                        sizes="30px"
+                        quality={90}
+                        format="webp"
                         loading="lazy"
+                        decoding="async"
                     />
                 </a>
 
@@ -74,15 +85,18 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     class="social-icons__link"
-                    aria-label="LinkedIn"
+                    aria-label="Síguenos en LinkedIn"
                 >
-                    <img
-                        src="/img/page/linkedIn_.webp"
-                        alt="LinkedIn Logo"
-                        width="30"
-                        height="30"
+                    <Image
+                        src={linkedInIcon}
+                        alt="LinkedIn"
                         class="social-icons__img"
+                        widths={[30, 60]}
+                        sizes="30px"
+                        quality={90}
+                        format="webp"
                         loading="lazy"
+                        decoding="async"
                     />
                 </a>
 
@@ -91,15 +105,18 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     class="social-icons__link"
-                    aria-label="Facebook"
+                    aria-label="Síguenos en Facebook"
                 >
-                    <img
-                        src="/img/page/ImgFaceeBook.webp"
-                        alt="Facebook Logo"
-                        width="30"
-                        height="30"
+                    <Image
+                        src={facebookIcon}
+                        alt="Facebook"
                         class="social-icons__img"
+                        widths={[30, 60]}
+                        sizes="30px"
+                        quality={90}
+                        format="webp"
                         loading="lazy"
+                        decoding="async"
                     />
                 </a>
 
@@ -108,15 +125,18 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     class="social-icons__link"
-                    aria-label="GitHub"
+                    aria-label="Síguenos en GitHub"
                 >
-                    <img
-                        src="/img/page/github.webp"
-                        alt="GitHub Logo"
-                        width="30"
-                        height="30"
+                    <Image
+                        src={githubIcon}
+                        alt="GitHub"
                         class="social-icons__img"
+                        widths={[30, 60]}
+                        sizes="30px"
+                        quality={90}
+                        format="webp"
                         loading="lazy"
+                        decoding="async"
                     />
                 </a>
             </div>
@@ -126,9 +146,8 @@
     <div class="site-footer__bottom">
         <div class="site-footer__bottom-content">
             <p class="copyright-text">
-                Jaguar Racing Team. <span
-                    class="hidden-mobile">|</span
-                > Hecho con orgullo politécnico.
+                Jaguar Racing Team. <span class="hidden-mobile">|</span> Hecho con
+                orgullo politécnico.
             </p>
 
             <nav class="legal-nav">

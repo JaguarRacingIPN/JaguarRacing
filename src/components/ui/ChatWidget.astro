@@ -1,13 +1,24 @@
 ---
-// src/components/ui/ChatWidget.astro
+import { Image } from 'astro:assets';
+
+import chatIcon from '../../assets/logos/IMGChatv2.webp';
 ---
 
 <button 
     id="chat-trigger" 
     class="chat-trigger" 
     aria-label="Abrir asistente virtual"
-    style="background-image: url('/img/page/IMGChatv2.webp');"
 >
+    <Image 
+        src={chatIcon} 
+        alt="Chat Icon"
+        class="chat-trigger__img"
+        width={160} 
+        height={160}
+        format="webp"
+        quality={100}
+        loading="eager" 
+    />
 </button>
 
 <div id="chat-window" class="chat-window">

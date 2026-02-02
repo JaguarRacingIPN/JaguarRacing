@@ -37,7 +37,7 @@
 
 ## Sobre el Proyecto
 
-Bienvenido al repositorio oficial de la plataforma web de **Jaguar Racing**. Este proyecto fue desarrollado por el área de Telecomunicaciones para transformar la presencia digital de la escudería, pasando de ser un sitio informativo estático a una herramienta de gestión integral.
+Bienvenido al repositorio oficial de la plataforma web de **Jaguar Racing**. Este proyecto fue desarrollado por el área de Redes para transformar la presencia digital de la escudería, pasando de ser un sitio informativo estático a una herramienta de gestión integral.
 
 **Funcionalidades principales:**
 1.  **Dossier Técnico Digital:** Visualización y documentación técnica de los prototipos de competencia (Baja SAE), enfocada en demostrar la capacidad de manufactura e ingeniería del equipo.

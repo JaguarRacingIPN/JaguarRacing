@@ -57,7 +57,7 @@ import imgBaja from '../../assets/CuerpoIndex/10.webp';
                     <span class="race-series">QUERÉTARO</span>
                     <span class="race-location">All Terrain Vehicle Design Challenge</span>
                 </div>
-                <span id="timer-queretaro" class="timer-value">000d 00h 00m 00s</span>
+                <span id="timer-allterrain" class="timer-value">000d 00h 00m 00s</span>
             </div>
         </div>
     </div>
@@ -69,8 +69,10 @@ import imgBaja from '../../assets/CuerpoIndex/10.webp';
     let cleanupFn: (() => void) | undefined;
 
     document.addEventListener('astro:page-load', () => {
-        if (cleanupFn) cleanupFn();
-        cleanupFn = initTimer();
+        if (cleanupFn) {
+            cleanupFn();
+        }
+        cleanupFn = initTimer() as () => void;
     });
 
     document.addEventListener('astro:before-swap', () => {

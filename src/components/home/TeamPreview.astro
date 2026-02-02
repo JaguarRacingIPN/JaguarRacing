@@ -1,6 +1,12 @@
 ---
 import { Image } from 'astro:assets';
+
 import imgEquipo1 from '../../assets/Equipo/1.webp';
+
+import instagramIcon from '../../assets/logos/ImgIG.webp';
+import linkedInIcon from '../../assets/logos/linkedIn_.webp';
+import facebookIcon from '../../assets/logos/ImgFaceeBook.webp';
+
 import '../../styles/home/section-about.css';
 ---
 
@@ -13,9 +19,7 @@ import '../../styles/home/section-about.css';
                 class="team-img-fit" 
                 
                 widths={[350, 600, 900, 1200, 1920]}
-                
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-                
                 quality={80}
                 format="webp"
                 
@@ -28,14 +32,65 @@ import '../../styles/home/section-about.css';
                 <h2 class="section-title compact-title">EQUIPO JAGUAR</h2>
                 
                 <div class="social-links-large">
-                    <a href="https://www.instagram.com/jaguar_racing_team/" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
-                        <img src="/img/page/ImgIG.webp" alt="Instagram" width="80" height="80" loading="lazy" decoding="async">
+                    <a 
+                        href="https://www.instagram.com/jaguar_racing_team/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        aria-label="Síguenos en Instagram"
+                    >
+                        <Image
+                            src={instagramIcon}
+                            alt="Instagram"
+                            class="social-icon"
+                            
+                            widths={[40, 80, 120]}
+                            sizes="(max-width: 768px) 40px, 80px"
+                            quality={90}
+                            format="webp"
+                            
+                            loading="lazy"
+                            decoding="async"
+                        />
                     </a>
-                    <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn" rel="noopener noreferrer">
-                        <img src="/img/page/linkedIn_.webp" alt="LinkedIn" width="80" height="80" loading="lazy" decoding="async">
+                    <a 
+                        href="https://www.linkedin.com/company/jaguar-racing-ipn" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        aria-label="Síguenos en LinkedIn"
+                    >
+                        <Image
+                            src={linkedInIcon}
+                            alt="LinkedIn"
+                            class="social-icon"
+                            
+                            widths={[40, 80, 120]}
+                            sizes="(max-width: 768px) 40px, 80px"
+                            quality={90}
+                            format="webp"
+                            
+                            loading="lazy"
+                            decoding="async"
+                        />
                     </a>
-                    <a href="https://www.facebook.com/jaguar.racing.team/" target="_blank" aria-label="Facebook" rel="noopener noreferrer">
-                        <img src="/img/page/ImgFaceeBook.webp" alt="Facebook" width="80" height="80" loading="lazy" decoding="async">
+                    <a 
+                        href="https://www.facebook.com/jaguar.racing.team/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        aria-label="Síguenos en Facebook"
+                    >
+                        <Image
+                            src={facebookIcon}
+                            alt="Facebook"
+                            class="social-icon"
+                            
+                            widths={[40, 80, 120]}
+                            sizes="(max-width: 768px) 40px, 80px"
+                            quality={90}
+                            format="webp"
+                            
+                            loading="lazy"
+                            decoding="async"
+                        />
                     </a>
                 </div>
                 
