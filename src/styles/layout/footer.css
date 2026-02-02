@@ -99,16 +99,16 @@
 
 /* --- Specific Icon Overrides --- */
 
-/* GitHub: Invert filter is acceptable here as it avoids loading a second image file */
-.social-icons__img[alt="GitHub Logo"] {
+.social-icons__img[alt="GitHub"] {
     filter: invert(1) brightness(1.2); 
 }
 
-/* Facebook: Adjusted via dimensions instead of transform for better rendering performance */
-.social-icons__img[alt="Facebook Logo"] {
-    width: 29px; /* Calculated: 32px * 0.9 = ~29px */
-    height: 29px;
-    margin: 0 1.5px; /* Centers the smaller icon */
+.social-icons__img[alt="Facebook"] {
+    /* Mismo tamaño base que los demás para mantener alineación */
+    width: 25px; 
+    height: 25px;
+    transform: scale(1.1); 
+    margin: 0; 
 }
 
 /* -----------------------------------------------------------------------------
@@ -186,9 +186,10 @@
         height: 45px;
         opacity: 1;
     }
-    .social-icons__img[alt="Facebook Logo"] {
-        width: 40px;
+    .social-icons__img[alt="Facebook"] {
+        width: 40px; 
         height: 40px;
+        transform: scale(0.95); 
         margin: 0;
     }
 
@@ -201,4 +202,5 @@
     .hidden-mobile {
         display: none;
     }
+
 }
