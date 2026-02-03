@@ -160,10 +160,10 @@ const listaInfinita = [...patrocinadores, ...patrocinadores];
                             <Image
                                 src={logoImg}
                                 alt={isDuplicate ? "" : `Logo de ${pat.nombre}`}
-                                widths={[240, 360, 480, 720]}
-                                sizes="(max-width: 768px) 240px, 360px"
+                                widths={[180, 240, 360]}
+                                sizes="(max-width: 480px) 180px, 240px"
                                 format="webp"
-                                quality={95}
+                                quality={80}
                                 class="sponsor-img-fit"
                                 loading="lazy"
                                 decoding="async"
@@ -184,7 +184,6 @@ const listaInfinita = [...patrocinadores, ...patrocinadores];
 </section>
 
 <style>
-    */
     .sponsor-img-fit {
         width: 100%;
         height: auto;

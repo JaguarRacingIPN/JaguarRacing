@@ -6,14 +6,15 @@ const allImages = await Astro.glob('../../assets/Index/*.{jpg,JPG,jpeg,JPEG,png,
 const backgroundImages = allImages.slice(0, 6); 
 ---
 
-{/* CSS CRÍTICO INLINE */}
+{/* CSS CRÍTICO INLINE - OPTIMIZADO PARA LCP + CLS */}
 <style>
     .hero-placeholder {
         position: relative;
         width: 100%;
         height: 100vh; 
         height: 100svh; 
-        background-color: #080808;
+        /* Placeholder color dominante para evitar CLS mientras carga la imagen */
+        background-color: #0a0a0a;
         overflow: hidden;
     }
     
@@ -63,14 +64,14 @@ const backgroundImages = allImages.slice(0, 6);
                 <Image 
                     src={img.default} 
                     alt={`Jaguar Racing - Imagen ${index + 1}`}
-                    widths={[828, 1080, 1170, 1536, 1920, 2560]}
-                    sizes="(max-width: 430px) 828px, (max-width: 768px) 1170px, (max-width: 1024px) 1536px, (max-width: 1920px) 1920px, 2560px"
+                    widths={[480, 768, 1024, 1440, 1920]}
+                    sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, (max-width: 1024px) 1024px, (max-width: 1440px) 1440px, 1920px"
                     format="webp"
-                    quality={index === 0 ? 82 : 75}
+                    quality={index === 0 ? 70 : 60}
                     
                     class="bg-image-fit"
                     loading={index === 0 ? "eager" : "lazy"}
-                    fetchpriority={index === 0 ? "high" : "auto"}
+                    fetchpriority={index === 0 ? "high" : "low"}
                     decoding={index === 0 ? "sync" : "async"}
                 />
                 <div class="overlay-dark"></div>
