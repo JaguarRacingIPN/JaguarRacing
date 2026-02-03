@@ -13,11 +13,12 @@ import chatIcon from '../../assets/logos/IMGChatv2.webp';
         src={chatIcon} 
         alt="Chat Icon"
         class="chat-trigger__img"
-        width={160} 
-        height={160}
+        widths={[80, 120, 160]}
+        sizes="80px"
         format="webp"
         quality={100}
-        loading="eager" 
+        loading="eager"
+        decoding="async"
     />
 </button>
 
