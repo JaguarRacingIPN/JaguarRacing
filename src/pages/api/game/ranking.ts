@@ -1,4 +1,3 @@
-// src/pages/api/game/ranking.ts
 export const prerender = false;
 import type { APIRoute } from "astro";
 import { redis } from "../../../lib/redis";
@@ -12,8 +11,7 @@ export const GET: APIRoute = async () => {
     const formattedRanking = [];
     for (let i = 0; i < rawData.length; i += 2) {
       formattedRanking.push({
-        // Limpiamos el ID visualmente (quitamos lo que sigue del # si quieres, o lo dejamos para unicidad)
-        // Por ahora lo dejamos limpio para la tabla:
+        // Limpiamos el ID visualmente
         member: String(rawData[i]).split('#')[0], 
         score: Number(rawData[i + 1])
       });

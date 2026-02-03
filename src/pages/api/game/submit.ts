@@ -26,7 +26,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const userKey = `user:${nombre}`;
 
     // --- 2. Ejecución Secuencial (Safe Mode) ---
-    // Quitamos el pipeline para evitar el error de "null args" de la librería.
     
     // A) Rate Limit
     await redis.setex(`game:cooldown:${ip}`, 2, "1");
@@ -38,9 +37,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         last_attempt: tiempoNumerico
     });
 
-    // C) Guardar Score (La parte crítica)
-    // Usamos 'lt' (Less Than) para guardar solo si es récord.
-    // Al usar await directo, la librería maneja los argumentos correctamente sin enviar nulls.
+    // C) Guardar Score
     await redis.zadd("leaderboard:feb2026_v2", { 
         lt: true 
     }, { 
@@ -49,7 +46,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
 
     // D) Obtener Posición
-    // zrank devuelve el índice base 0 (0 es el primero)
     const rankIndex = await redis.zrank("leaderboard:feb2026_v2", nombre);
     
     const realPosition = (rankIndex !== null) ? rankIndex + 1 : null;
