@@ -1,87 +1,109 @@
-// src/scripts/header.js
+/**
+ * @file header.js
+ * @description Manages navigation behavior including scroll effects, 
+ * active link states, and mobile menu interactions.
+ */
 
-/* =============================================================================
-   UTILIDADES
-   ============================================================================= */
+// ============================================
+// UTILITIES
+// ============================================
+
+/**
+ * Normalizes a URL path by removing trailing slashes (except for root).
+ * @param {string} path - The URL path to normalize.
+ * @returns {string} The normalized path.
+ */
 const normalizePath = (path) => path === '/' ? path : path.replace(/\/$/, '');
 
-/* =============================================================================
-   LÓGICA DEL SCROLL (Optimizada para no duplicarse)
-   ============================================================================= */
-/**
- * Definimos onScroll AFUERA de la función de inicialización.
- * Esto mantiene la referencia en memoria constante.
- * Si Astro re-ejecuta el script, addEventListener detectará que es la misma función
- * y NO añadirá un duplicado.
- */
-const onScrollHandler = () => {
-    const navbar = document.getElementById('main-navbar');
-    // Si no hay navbar en esta página, no hacemos nada (pero no explotamos)
-    if (!navbar) return;
+// ============================================
+// SCROLL LOGIC
+// ============================================
 
-    if (window.scrollY > 50) {
-        navbar.classList.add("main-navbar--scrolled");
-    } else {
-        navbar.classList.remove("main-navbar--scrolled");
-    }
+/**
+ * Handles the scroll event to toggle the navbar styling.
+ * Defined externally to maintain a stable reference for addEventListener.
+ */
+const handleScroll = () => {
+  const navbar = document.getElementById('main-navbar');
+  if (!navbar) return;
+
+  if (window.scrollY > 50) {
+    navbar.classList.add("main-navbar--scrolled");
+  } else {
+    navbar.classList.remove("main-navbar--scrolled");
+  }
 };
 
-/* =============================================================================
-   LÓGICA DE NAVEGACIÓN ACTIVA
-   ============================================================================= */
+// ============================================
+// ACTIVE STATE LOGIC
+// ============================================
+
+/**
+ * Updates the visual state of navigation links based on the current URL.
+ */
 export function updateActiveLinks() {
-    const currentPath = normalizePath(window.location.pathname);
-    const allLinks = document.querySelectorAll('.nav-link, .mobile-nav__link');
+  const currentPath = normalizePath(window.location.pathname);
+  const links = document.querySelectorAll('.nav-link, .mobile-nav__link');
 
-    allLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (!href) return;
-        const linkPath = normalizePath(href);
-        const isActive = linkPath === currentPath;
+  links.forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href) return;
 
-        if (link.classList.contains('nav-link')) {
-            link.classList.toggle('nav-link--active', isActive);
-        }
-        if (link.classList.contains('mobile-nav__link')) {
-            link.classList.toggle('mobile-nav__link--active', isActive);
-        }
-    });
+    const linkPath = normalizePath(href);
+    const isActive = linkPath === currentPath;
+
+    // Toggle specific classes based on the link type
+    if (link.classList.contains('nav-link')) {
+      link.classList.toggle('nav-link--active', isActive);
+    }
+    
+    if (link.classList.contains('mobile-nav__link')) {
+      link.classList.toggle('mobile-nav__link--active', isActive);
+    }
+  });
 }
 
-/* =============================================================================
-   INICIALIZACIÓN PRINCIPAL
-   ============================================================================= */
+// ============================================
+// INITIALIZATION
+// ============================================
+
+/**
+ * Initializes all header event listeners.
+ * Safe to call multiple times (idempotent).
+ */
 export function initHeaderListeners() {
-    const navbar = document.getElementById('main-navbar');
-    if (!navbar) return;
+  const navbar = document.getElementById('main-navbar');
+  if (!navbar) return;
 
-    // 1. SCROLL: Ahora es seguro llamar a esto múltiples veces.
-    // El navegador ignorará llamadas repetidas a la misma función referenciada.
-    window.removeEventListener('scroll', onScrollHandler); // Limpieza preventiva (opcional pero buena práctica)
-    window.addEventListener('scroll', onScrollHandler, { passive: true });
+  // 1. Setup Scroll Listener (Debounced by browser via passive flag)
+  // Remove existing listener first to prevent duplication on re-renders
+  window.removeEventListener('scroll', handleScroll);
+  window.addEventListener('scroll', handleScroll, { passive: true });
+  
+  // Initial check in case page is already scrolled on load
+  handleScroll();
+
+  // 2. Prevent double initialization for the Mobile Menu
+  if (navbar.dataset.initialized === "true") return;
+
+  const sidebar = document.getElementById('mobile-nav');
+  const overlay = document.getElementById('mobile-overlay');
+  const toggleTriggers = document.querySelectorAll('#nav-toggle, #close-nav, #mobile-overlay');
+
+  const toggleMenu = () => {
+    if (!sidebar || !overlay) return;
     
-    // Ejecutamos una vez para asegurar el estado inicial
-    onScrollHandler();
+    const isOpen = sidebar.classList.toggle('mobile-nav--open');
+    overlay.classList.toggle('mobile-overlay--active');
+    
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  };
 
-    // 2. MENÚ MÓVIL
-    // Aquí sí usamos el check de initialized porque los botones se recrean
-    // y no queremos añadir doble click listener al MISMO botón si persiste.
-    if (navbar.dataset.initialized === "true") return;
+  toggleTriggers.forEach(btn => {
+    btn?.addEventListener('click', toggleMenu);
+  });
 
-    const sidebar = document.getElementById('mobile-nav');
-    const overlay = document.getElementById('mobile-overlay');
-    const toggleBtns = document.querySelectorAll('#nav-toggle, #close-nav, #mobile-overlay');
-
-    const toggleMenu = () => {
-        if (!sidebar || !overlay) return;
-        const isOpen = sidebar.classList.toggle('mobile-nav--open');
-        overlay.classList.toggle('mobile-overlay--active');
-        document.body.style.overflow = isOpen ? 'hidden' : '';
-    };
-
-    toggleBtns.forEach(btn => {
-        btn?.addEventListener('click', toggleMenu);
-    });
-
-    navbar.dataset.initialized = "true";
+  // Mark as initialized
+  navbar.dataset.initialized = "true";
 }

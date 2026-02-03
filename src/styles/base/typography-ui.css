@@ -1,32 +1,32 @@
 /* =============================================================================
-   2. TIPOGRAFÍA, BOTONES & UTILIDADES (v3.1 - Optimizado para Accesibilidad 100)
-   Estilo: H1 Dominante / H2 Industrial Compacto / Texto Alto Contraste
+   2. TYPOGRAPHY, BUTTONS & UTILITIES (v3.1)
+   Style: Dominant H1 / Industrial H2 / High Contrast Text
    ============================================================================= */
 
 h1 {
     font-family: var(--font-main);
     font-weight: 800;
-
-    /* Móvil: 1.8rem (29px) - PC: 3.5rem (56px) */
+    
+    /* Mobile: 1.8rem (29px) - Desktop: 3.5rem (56px) */
     font-size: clamp(1.8rem, 5vw, 3.5rem);
-
+    
     line-height: 1.1;
     text-transform: uppercase;
     letter-spacing: -1px;
-
+    
     color: var(--text-white);
     background: none;
     -webkit-text-fill-color: initial;
-
+    
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     filter: none;
-
-    /* --- ALINEACIÓN Y SEGURIDAD --- */
+    
+    /* Layout */
     text-align: center;
     width: 100%;
     margin: 0 auto 30px auto;
-
-    /* Evita saltos de línea feos */
+    
+    /* Prevent line breaks/hyphenation */
     hyphens: none !important;
     -webkit-hyphens: none !important;
     overflow-wrap: normal !important;
@@ -36,17 +36,17 @@ h1 {
 h2 {
     font-family: var(--font-main);
     font-weight: 700;
-
-    /* Móvil: 1.2rem (19px) - PC: 2rem (32px) */
+    
+    /* Responsive sizing strategy */
     font-size: clamp(2.1rem, 2.5vw, 2rem);
-
+    
     color: var(--text-white);
     text-transform: uppercase;
     letter-spacing: -0.5px;
     line-height: 1.2;
     margin-top: 0;
     margin-bottom: 1.5rem;
-
+    
     text-align: center;
 }
 
@@ -55,7 +55,7 @@ h3 {
     font-weight: 600;
     font-size: 1rem;
     color: #E0E0E0;
-
+    
     margin-bottom: 1rem;
     text-transform: uppercase;
     letter-spacing: 0px;
@@ -66,12 +66,12 @@ p {
     line-height: 1.6;
     max-width: 100%;
     color: #d1d1d1;
-
+    
     font-size: 0.95rem;
     font-weight: 400;
 }
 
-/* --- UTILIDADES DE TEXTO --- */
+/* --- TEXT UTILITIES --- */
 
 .stat-label {
     color: #F0F0F0;
@@ -94,7 +94,7 @@ p {
     border-radius: 2px;
 }
 
-/* --- BOTONES --- */
+/* --- BUTTONS --- */
 
 .btn-gold {
     display: inline-block;
@@ -137,12 +137,9 @@ p {
 }
 
 /* --- RESPONSIVE TYPOGRAPHY --- */
-@media (max-width: 900px) {
 
-    h1,
-    h2,
-    h3,
-    p {
+@media (max-width: 900px) {
+    h1, h2, h3, p {
         width: 94%;
         margin-left: auto;
         margin-right: auto;
@@ -158,11 +155,7 @@ p {
 }
 
 @media (max-width: 480px) {
-
-    h1,
-    h2,
-    h3,
-    p {
+    h1, h2, h3, p {
         width: 92%;
     }
 

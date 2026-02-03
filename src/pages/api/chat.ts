@@ -71,9 +71,9 @@ BENEFICIOS:
   // Azure OpenAI
   MAX_TOKENS: 150,
   TEMPERATURE: 0.5,
-  TIMEOUT: 20000, // 20s (margen para Vercel 25s)
-  RETRY_ATTEMPTS: 2, // Reintentos en backend
-  RETRY_DELAY: 1000, // 1s base para backoff exponencial
+  TIMEOUT: 20000, 
+  RETRY_ATTEMPTS: 2, 
+  RETRY_DELAY: 1000, 
 
   // Cache
   CACHE_TTL: 3600,
@@ -85,7 +85,7 @@ BENEFICIOS:
 } as const;
 
 // ============================================
-// VALIDACIÓN DE ENV VARS
+// ENV VARS (Safe Load)
 // ============================================
 const ENV = {
   endpoint: import.meta.env.AZURE_OPENAI_ENDPOINT,
@@ -93,20 +93,17 @@ const ENV = {
   deployment: import.meta.env.AZURE_OPENAI_DEPLOYMENT
 };
 
-if (!ENV.key || !ENV.endpoint || !ENV.deployment) {
-  throw new Error("Missing Azure OpenAI credentials");
-}
-
 // ============================================
-// CLIENTE AZURE OPENAI (singleton)
+// CLIENTE AZURE OPENAI (Safe Init)
 // ============================================
+// Inicializamos con valores dummy si faltan las variables para evitar crash al inicio
 const azureClient = new AzureOpenAI({
-  endpoint: ENV.endpoint,
-  apiKey: ENV.key,
+  endpoint: ENV.endpoint || "https://placeholder.openai.azure.com", 
+  apiKey: ENV.key || "dummy-key",
   apiVersion: "2024-08-01-preview",
-  deployment: ENV.deployment,
+  deployment: ENV.deployment || "gpt-35-turbo",
   timeout: CONFIG.TIMEOUT,
-  maxRetries: 0 // Manejamos retries manualmente
+  maxRetries: 0 
 });
 
 // ============================================
@@ -139,7 +136,6 @@ const Utils = {
     return Math.abs(hash).toString(36);
   },
 
-  // Sanitización de input (prevenir injection)
   sanitizeInput(content: string): string {
     return content
       .trim()
@@ -147,7 +143,6 @@ const Utils = {
       .replace(/[<>]/g, '');
   },
 
-  // Sanitización de output del bot (prevenir XSS desde IA)
   sanitizeOutput(content: string): string {
     return content
       .trim()
@@ -162,7 +157,6 @@ const Utils = {
       .trim();
   },
 
-  // Delay para retry
   async delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   },
@@ -314,7 +308,6 @@ class AzureAI {
       ...messages
     ];
 
-    // Intentar cache
     if (options.useCache) {
       const hash = await Utils.hashMessages(fullMessages);
       const cached = await ResponseCache.get(hash);
@@ -324,7 +317,6 @@ class AzureAI {
       }
     }
 
-    // Retry logic con backoff exponencial
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= CONFIG.RETRY_ATTEMPTS; attempt++) {
@@ -334,7 +326,7 @@ class AzureAI {
 
         const result = await azureClient.chat.completions.create({
           messages: fullMessages,
-          model: ENV.deployment,
+          model: ENV.deployment || "gpt-35-turbo", // Fallback seguro
           max_tokens: CONFIG.MAX_TOKENS,
           temperature: CONFIG.TEMPERATURE,
           stream: false
@@ -345,11 +337,8 @@ class AzureAI {
         clearTimeout(timeoutId);
 
         const rawContent = result.choices[0]?.message?.content || "Sin respuesta.";
-
-        // Sanitizar output de la IA
         const sanitizedContent = Utils.sanitizeOutput(rawContent);
 
-        // Guardar en cache
         if (options.useCache) {
           const hash = await Utils.hashMessages(fullMessages);
           await ResponseCache.set(hash, sanitizedContent);
@@ -361,7 +350,6 @@ class AzureAI {
         const err = error as Error & { name?: string; code?: string; status?: number };
         lastError = err;
 
-        // No reintentar en estos casos
         if (err.name === 'AbortError') {
           throw new Error("TIMEOUT");
         }
@@ -370,7 +358,6 @@ class AzureAI {
           throw new Error("AUTH_ERROR");
         }
 
-        // Errores recuperables
         const isRetryable =
           err.code === 'ECONNRESET' ||
           err.code === 'ETIMEDOUT' ||
@@ -383,7 +370,6 @@ class AzureAI {
           throw err;
         }
 
-        // Backoff exponencial: 1s, 2s, 4s
         const delay = CONFIG.RETRY_DELAY * Math.pow(2, attempt);
         console.log(`Retry attempt ${attempt + 1}/${CONFIG.RETRY_ATTEMPTS} after ${delay}ms`);
         await Utils.delay(delay);
@@ -402,6 +388,15 @@ export const POST: APIRoute = async ({ request }) => {
   const userId = request.headers.get('x-user-id') || 'anonymous';
 
   try {
+    // 0. CHECK DE MANTENIMIENTO (Si faltan las credenciales)
+    if (!ENV.key || !ENV.endpoint || !ENV.deployment) {
+      console.warn(`[CHAT] Intento de uso sin configuración .env desde ${ip}`);
+      return Utils.errorResponse(
+        "El chat está en configuración. Intenta más tarde.",
+        503
+      );
+    }
+
     // 1. Rate Limiting
     const rateLimitResult = await RateLimiter.checkAll(ip, userId);
     if (!rateLimitResult.allowed) {
@@ -422,7 +417,7 @@ export const POST: APIRoute = async ({ request }) => {
     const body = await request.json();
     const { messages = [], mensaje } = body;
 
-    // 3. Construir mensajes con sanitización
+    // 3. Construir mensajes
     let userMessages: ChatCompletionMessageParam[] = [];
 
     if (messages.length > 0) {
@@ -441,12 +436,12 @@ export const POST: APIRoute = async ({ request }) => {
       return Utils.errorResponse("Mensaje vacío.", 400);
     }
 
-    // 4. Llamar a Azure OpenAI (con retry automático)
+    // 4. Llamar a Azure OpenAI
     const content = await AzureAI.complete(userMessages, {
       useCache: CONFIG.CACHE_ENABLED
     });
 
-    // 5. Retornar respuesta sanitizada
+    // 5. Retornar
     return Utils.jsonResponse({ content });
 
   } catch (error: unknown) {
@@ -459,7 +454,6 @@ export const POST: APIRoute = async ({ request }) => {
       timestamp: new Date().toISOString()
     });
 
-    // Mensajes de error específicos
     if (err.message === "TIMEOUT") {
       return Utils.errorResponse(
         "La IA está tardando mucho. Intenta con una pregunta más corta.",
