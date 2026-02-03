@@ -106,7 +106,7 @@ Para replicar el entorno localmente, se requiere Node.js v22+ y acceso a las cre
 ### 1. Instalación de Dependencias
 
 ```bash
-git clone https://github.com/jaguar-racing/web-platform.git
+git clone https://github.com/JaguarRacingIPN/JaguarRacing.git
 cd Jaguar-Racing
 npm install
 

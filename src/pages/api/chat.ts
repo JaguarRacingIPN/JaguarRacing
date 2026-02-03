@@ -24,7 +24,8 @@ IDIOMA: Responde en el mismo idioma del usuario (ES/EN).
 
 [KNOWLEDGE BASE - CONTACT & LOCATION]
 - EMAIL: jaguarteam.ipn@gmail.com
-- UBICACIÓN: Av. de las Granjas 682, Azcapotzalco, CDMX.
+- UBICACIÓN: Av. de las Granjas 682, Azcapotzalco, CDMX.ç
+- MAPA: https://maps.app.goo.gl/fLMraKBoP9kASJbZ9
 
 [KNOWLEDGE BASE - RECRUITMENT STATUS]
 - ESTADO ACTUAL: Convocatoria cerrada. Lista de Espera abierta para Agosto 2026.
@@ -53,7 +54,7 @@ IDIOMA: Responde en el mismo idioma del usuario (ES/EN).
 
 [KNOWLEDGE BASE - SPONSORSHIP]
 BENEFICIOS:
-1. Acceso a Talento Politécnico (+30 perfiles).
+1. Acceso a Talento Politécnico (+25 perfiles).
 2. Visibilidad de Marca (Coche, Uniformes, Web).
 3. Deducibilidad de impuestos (Donataria Autorizada).
 
