@@ -4,10 +4,16 @@ import { Image } from 'astro:assets';
 import chatIcon from '../../assets/logos/IMGChatv2.webp';
 ---
 
+{/* 
+  FACADE PATTERN: Lightweight trigger button renders immediately.
+  Full chat HTML and JavaScript only loads after first user interaction.
+  This reduces TTI by deferring heavy chat widget until needed.
+*/}
 <button 
     id="chat-trigger" 
     class="chat-trigger" 
     aria-label="Abrir asistente virtual"
+    data-chat-loaded="false"
 >
     <Image 
         src={chatIcon} 
@@ -16,40 +22,78 @@ import chatIcon from '../../assets/logos/IMGChatv2.webp';
         widths={[80, 120, 160]}
         sizes="80px"
         format="webp"
-        quality={100}
-        loading="eager"
+        quality={85}
+        loading="lazy"
         decoding="async"
     />
 </button>
 
-<div id="chat-window" class="chat-window">
-    <div class="chat-window__header">
-        <div class="chat-header__info">
-            <div class="chat-header__status-dot"></div>
-            <span class="chat-header__title">Asistente Jaguar</span>
-        </div>
-        <button id="chat-close-btn" class="chat-header__close" aria-label="Cerrar chat">&times;</button>
-    </div>
-
-    <div id="chat-messages" class="chat-window__messages">
-    </div>
-
-    <div id="typing-indicator" class="chat-window__typing">
-        Jaguar está escribiendo<span class="dot-flashing"></span>
-    </div>
-
-    <div id="suggestions-container" class="chat-window__suggestions"></div>
-
-    <div class="chat-window__input-area">
-        <input type="text" id="chat-input" class="chat-input__field" placeholder="Escribe tu duda..." autocomplete="off">
-        <button id="chat-send-btn" class="chat-input__send">Enviar</button>
-    </div>
-</div>
+{/* Chat window container - empty until user clicks trigger */}
+<div id="chat-window-container"></div>
 
 <script>
-    import { initChatWidget } from '../../scripts/chatWidget.js';
-
+    /**
+     * FACADE PATTERN IMPLEMENTATION
+     * Only loads full chat widget on first user interaction
+     * Reduces main thread blocking during initial page load
+     */
+    
+    let chatInitialized = false;
+    
+    function initChatFacade() {
+        const trigger = document.getElementById('chat-trigger');
+        if (!trigger || trigger.dataset.chatLoaded === 'true') return;
+        
+        trigger.addEventListener('click', async function handleFirstClick() {
+            if (chatInitialized) return;
+            chatInitialized = true;
+            
+            // Inject full chat window HTML on first click
+            const container = document.getElementById('chat-window-container');
+            if (container) {
+                container.innerHTML = `
+                    <div id="chat-window" class="chat-window">
+                        <div class="chat-window__header">
+                            <div class="chat-header__info">
+                                <div class="chat-header__status-dot"></div>
+                                <span class="chat-header__title">Asistente Jaguar</span>
+                            </div>
+                            <button id="chat-close-btn" class="chat-header__close" aria-label="Cerrar chat">&times;</button>
+                        </div>
+                        <div id="chat-messages" class="chat-window__messages"></div>
+                        <div id="typing-indicator" class="chat-window__typing">
+                            Jaguar está escribiendo<span class="dot-flashing"></span>
+                        </div>
+                        <div id="suggestions-container" class="chat-window__suggestions"></div>
+                        <div class="chat-window__input-area">
+                            <input type="text" id="chat-input" class="chat-input__field" placeholder="Escribe tu duda..." autocomplete="off">
+                            <button id="chat-send-btn" class="chat-input__send">Enviar</button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Dynamically import and initialize the chat widget
+            const { initChatWidget } = await import('../../scripts/chatWidget.js');
+            initChatWidget();
+            
+            // Mark as loaded
+            trigger.dataset.chatLoaded = 'true';
+            
+            // Auto-open the chat window after initialization
+            requestAnimationFrame(() => {
+                const chatWindow = document.getElementById('chat-window');
+                if (chatWindow) {
+                    chatWindow.classList.add('chat-window--open');
+                    trigger.classList.add('chat-trigger--active');
+                }
+            });
+        }, { once: true });
+    }
+    
+    // Initialize facade on page load
     document.addEventListener('astro:page-load', () => {
-        initChatWidget();
+        chatInitialized = false;
+        initChatFacade();
     });
 </script>

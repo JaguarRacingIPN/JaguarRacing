@@ -15,7 +15,10 @@
     border-top: 1px solid var(--jaguar-gold);
     position: relative;
     z-index: 10;
-    contain: content; 
+    contain: content;
+    /* PERFORMANCE: Defer rendering of footer until it's near viewport */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 350px;
 }
 
 .site-footer__content {
