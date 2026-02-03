@@ -2,7 +2,7 @@
    1. VARIABLES, RESET & BASE
    ============================================================================= */
 :root {
-    /* --- PALETA OFICIAL --- */
+    /* --- OFFICIAL PALETTE --- */
     --jaguar-gold: #A67C00;       
     --jaguar-light: #FFE878;      
     --jaguar-black: #000000;      
@@ -10,10 +10,10 @@
     --bg-black: #000000;
     --text-white: #ffffff;
 
-    /* --- FUENTE OFICIAL --- */
+    /* --- OFFICIAL SOURCE --- */
     --font-main: 'Montserrat', sans-serif;
 
-    /* --- SISTEMA DE TIPOGRAFÍA AJUSTADO --- */
+    /* --- ADJUSTED TYPOGRAPHY SYSTEM --- */
     --fs-hero: clamp(2.5rem, 10vw, 6rem);
     --fs-h2: clamp(1.5rem, 5vw, 2.5rem);
     --fs-h3: clamp(1.1rem, 3vw, 1.5rem);
