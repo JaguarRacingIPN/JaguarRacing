@@ -4,8 +4,8 @@ import { redis } from "../../../lib/redis";
 
 export const GET: APIRoute = async () => {
   try {
-    // Leemos de la V3
-    const rawData = await redis.zrange("leaderboard:feb2026_v3", 0, 9, { withScores: true }); 
+    // Leemos de la V4
+    const rawData = await redis.zrange("leaderboard:feb2026_v4", 0, 9, { withScores: true }); 
     
     const formattedRanking = [];
     for (let i = 0; i < rawData.length; i += 2) {
@@ -18,8 +18,8 @@ export const GET: APIRoute = async () => {
     return new Response(JSON.stringify(formattedRanking), { 
       status: 200,
       headers: {
-        // Cache agresivo en Edge (5 seg) + SWR (10 seg)
-        "Cache-Control": "public, s-maxage=5, stale-while-revalidate=10",
+        // Stale-While-Revalidate caching for Vercel Edge
+        "Cache-Control": "public, s-maxage=15, stale-while-revalidate=45",
         "Content-Type": "application/json"
       }
     });

@@ -14,21 +14,33 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: "Nombre inválido" }), { status: 400 });
     }
 
-    const currentScore = await redis.zscore("leaderboard:feb2026_v3", oldName);
-
-    if (currentScore === null) {
-      return new Response(JSON.stringify({ status: "ok", msg: "Nombre local actualizado" }), { status: 200 });
+    // Check if user metadata exists
+    const userExists = await redis.exists(`user:${oldName}`);
+    if (!userExists) {
+      return new Response(JSON.stringify({ error: "Usuario no encontrado" }), { status: 404 });
     }
 
-    const p = redis.pipeline();
+    // Check if new name is already taken
+    const newNameExists = await redis.exists(`user:${newName}`);
+    if (newNameExists) {
+      return new Response(JSON.stringify({ error: "Nombre ya existe" }), { status: 409 });
+    }
 
-    p.zadd("leaderboard:feb2026_v3", { score: currentScore, member: newName });
+    // Always migrate metadata first (regardless of score)
+    const renamed = await redis.renamenx(`user:${oldName}`, `user:${newName}`);
+    if (renamed === 0) {
+      return new Response(JSON.stringify({ error: "No se pudo renombrar" }), { status: 500 });
+    }
 
-    p.zrem("leaderboard:feb2026_v3", oldName);
+    // Only update sorted set if user has a score
+    const currentScore = await redis.zscore("leaderboard:feb2026_v4", oldName);
 
-    p.renamenx(`user:${oldName}`, `user:${newName}`);
-
-    await p.exec();
+    if (currentScore !== null) {
+      const p = redis.pipeline();
+      p.zadd("leaderboard:feb2026_v4", { score: currentScore, member: newName });
+      p.zrem("leaderboard:feb2026_v4", oldName);
+      await p.exec();
+    }
 
     return new Response(JSON.stringify({ status: "success", msg: "Identidad transferida" }), { status: 200 });
 
