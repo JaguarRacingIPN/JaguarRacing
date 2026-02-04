@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
 
     // C) Guardar Score
-    await redis.zadd("leaderboard:feb2026_v4", { 
+    await redis.zadd("leaderboard:feb2026_v5", { 
         lt: true 
     }, { 
         score: tiempoNumerico, 
@@ -46,7 +46,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
 
     // D) Obtener Posición
-    const rankIndex = await redis.zrank("leaderboard:feb2026_v4", nombre);
+    const rankIndex = await redis.zrank("leaderboard:feb2026_v5", nombre);
     
     const realPosition = (rankIndex !== null) ? rankIndex + 1 : null;
 
