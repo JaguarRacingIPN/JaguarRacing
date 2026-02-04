@@ -10,6 +10,7 @@ export function initGame() {
     const STORAGE_KEY_RECORD = 'jaguar_record_s2'; 
     const STORAGE_KEY_USER = 'jaguar_user_id_v2';     
     const STORAGE_KEY_SYNC = 'jaguar_s2_synced';
+    const MIN_VALID_REACTION_TIME = 80;
 
     // --- LOCAL STATE MANAGEMENT ---
     let gameTimeouts = [];
@@ -160,10 +161,20 @@ export function initGame() {
 
     function finishGame() {
         if (gameState !== 'green') return;
-        gameState = 'result';
         
         const endTime = performance.now();
         const reactionTime = Math.floor(endTime - startTime);
+        
+        // Anti-cheat: Detect anticipation (too fast to be human)
+        if (reactionTime < MIN_VALID_REACTION_TIME) {
+            gameState = 'fault';
+            triggerFault();
+            resultDisplay.textContent = "¡DEMASIADO RÁPIDO! Anticipación detectada";
+            resultDisplay.style.color = '#ff4444';
+            return;
+        }
+        
+        gameState = 'result';
         
         resultDisplay.textContent = `${reactionTime} ms`;
 
@@ -181,8 +192,8 @@ export function initGame() {
             rankDisplay.style.opacity = "1";
         }
 
-        // Backend Submission (Anti-cheat filter: 100ms - 5000ms)
-        if (reactionTime > 100 && reactionTime < 5000) {
+        // Backend Submission (Anti-cheat filter: valid reaction times only)
+        if (reactionTime >= MIN_VALID_REACTION_TIME && reactionTime < 5000) {
             submitScoreToRanking(reactionTime, currentGameId);
         }
 
