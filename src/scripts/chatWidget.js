@@ -137,13 +137,8 @@ class ChatWidget {
       typingIndicator: 'typing-indicator'
     };
 
-    const missingElements = [];
-    
     for (const [key, id] of Object.entries(selectors)) {
       this.elements[key] = document.getElementById(id);
-      if (!this.elements[key]) {
-        missingElements.push(id);
-      }
     }
 
     const requiredElements = ['trigger', 'chatWindow', 'chatMessages', 'input'];

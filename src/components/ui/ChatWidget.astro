@@ -126,7 +126,6 @@ import chatIcon from '../../assets/logos/IMGChatv2.webp';
             
             // CRITICAL FIX: Use widget's toggleChat() method to properly open the chat
             // This ensures internal state is updated and onOpen() is called (renders suggestions)
-            await waitForDOMReady();
             widget.toggleChat();
             
         }, { once: true });
