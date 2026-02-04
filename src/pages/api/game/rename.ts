@@ -33,12 +33,12 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Only update sorted set if user has a score
-    const currentScore = await redis.zscore("leaderboard:feb2026_v4", oldName);
+    const currentScore = await redis.zscore("leaderboard:feb2026_v5", oldName);
 
     if (currentScore !== null) {
       const p = redis.pipeline();
-      p.zadd("leaderboard:feb2026_v4", { score: currentScore, member: newName });
-      p.zrem("leaderboard:feb2026_v4", oldName);
+      p.zadd("leaderboard:feb2026_v5", { score: currentScore, member: newName });
+      p.zrem("leaderboard:feb2026_v5", oldName);
       await p.exec();
     }
 

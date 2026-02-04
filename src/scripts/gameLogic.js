@@ -7,9 +7,9 @@
 
 export function initGame() {
     // --- CONFIGURATION CONSTANTS ---
-    const STORAGE_KEY_RECORD = 'jaguar_record_v4'; 
-    const STORAGE_KEY_USER = 'jaguar_user_id_v4';     
-    const STORAGE_KEY_SYNC = 'jaguar_v4_synced';
+    const STORAGE_KEY_RECORD = 'jaguar_record_v5'; 
+    const STORAGE_KEY_USER = 'jaguar_user_id_v5';     
+    const STORAGE_KEY_SYNC = 'jaguar_v5_synced';
     const MIN_VALID_REACTION_TIME = 80;
 
     // --- LOCAL STATE MANAGEMENT ---
