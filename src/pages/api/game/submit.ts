@@ -18,8 +18,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     }
     
     const tiempoNumerico = Number(tiempo);
-    if (isNaN(tiempoNumerico) || tiempoNumerico < 0.1) { 
-        return new Response(JSON.stringify({ error: "Tiempo sospechoso" }), { status: 400 });
+    if (isNaN(tiempoNumerico) || tiempoNumerico < 0.08) { 
+        return new Response(JSON.stringify({ error: "Error de integridad" }), { status: 400 });
     }
 
     const ip = clientAddress || "127.0.0.1";
