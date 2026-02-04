@@ -7,9 +7,9 @@
 
 export function initGame() {
     // --- CONFIGURATION CONSTANTS ---
-    const STORAGE_KEY_RECORD = 'jaguar_record_v3'; 
-    const STORAGE_KEY_USER = 'jaguar_user_id_v3';     
-    const STORAGE_KEY_SYNC = 'jaguar_v3_synced';
+    const STORAGE_KEY_RECORD = 'jaguar_record_v4'; 
+    const STORAGE_KEY_USER = 'jaguar_user_id_v4';     
+    const STORAGE_KEY_SYNC = 'jaguar_v4_synced';
     const MIN_VALID_REACTION_TIME = 80;
 
     // --- LOCAL STATE MANAGEMENT ---
@@ -251,13 +251,13 @@ export function initGame() {
     async function loadLeaderboard() {
         if (!leaderboardContainer) return;
         try {
-            const res = await fetch('/api/game/ranking?t=' + Date.now());
+            const res = await fetch('/api/game/ranking');
             if (!res.ok) return;
             const top10 = await res.json();
 
             leaderboardContainer.innerHTML = '';
             if (!top10 || top10.length === 0) {
-                leaderboardContainer.innerHTML = '<div class="rank-row" style="text-align:center;">Temporada 3 Iniciada</div>';
+                leaderboardContainer.innerHTML = '<div class="rank-row" style="text-align:center;">Temporada 1 Iniciada</div>';
                 return;
             }
 
