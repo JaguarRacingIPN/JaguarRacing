@@ -141,8 +141,15 @@ class ChatWidget {
       this.elements[key] = document.getElementById(id);
     }
 
-    return !!(this.elements.trigger && this.elements.chatWindow && 
-              this.elements.chatMessages && this.elements.input);
+    const requiredElements = ['trigger', 'chatWindow', 'chatMessages', 'input'];
+    const missingRequired = requiredElements.filter(key => !this.elements[key]);
+    
+    if (missingRequired.length > 0) {
+      console.error('[ChatWidget] Missing required elements:', missingRequired.map(k => selectors[k]));
+      return false;
+    }
+
+    return true;
   }
 
   toggleProcessing(disable) {
@@ -370,15 +377,22 @@ class ChatWidget {
 }
 
 export function initChatWidget() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') return null;
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      const widget = new ChatWidget();
-      widget.init();
-    });
-  } else {
+  try {
+    // When called from Facade pattern, DOM is already ready
+    // No need to wait for DOMContentLoaded since HTML was just injected
     const widget = new ChatWidget();
-    widget.init();
+    const initialized = widget.init();
+    
+    if (!initialized) {
+      console.warn('[ChatWidget] Widget initialization returned false - elements may not be ready');
+      return null;
+    }
+    
+    return widget;
+  } catch (error) {
+    console.error('[ChatWidget] Initialization error:', error);
+    return null;
   }
 }

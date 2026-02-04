@@ -36,9 +36,24 @@ import chatIcon from '../../assets/logos/IMGChatv2.webp';
      * FACADE PATTERN IMPLEMENTATION
      * Only loads full chat widget on first user interaction
      * Reduces main thread blocking during initial page load
+     * 
+     * FIX: Race condition resolved by ensuring DOM is fully rendered
+     * before initializing chat widget using double requestAnimationFrame
      */
     
     let chatInitialized = false;
+    
+    /**
+     * Waits for the DOM to be fully rendered after injection
+     * Uses double requestAnimationFrame to ensure browser has painted
+     */
+    function waitForDOMReady() {
+        return new Promise((resolve) => {
+            requestAnimationFrame(() => {
+                requestAnimationFrame(resolve);
+            });
+        });
+    }
     
     function initChatFacade() {
         const trigger = document.getElementById('chat-trigger');
@@ -50,44 +65,69 @@ import chatIcon from '../../assets/logos/IMGChatv2.webp';
             
             // Inject full chat window HTML on first click
             const container = document.getElementById('chat-window-container');
-            if (container) {
-                container.innerHTML = `
-                    <div id="chat-window" class="chat-window">
-                        <div class="chat-window__header">
-                            <div class="chat-header__info">
-                                <div class="chat-header__status-dot"></div>
-                                <span class="chat-header__title">Asistente Jaguar</span>
-                            </div>
-                            <button id="chat-close-btn" class="chat-header__close" aria-label="Cerrar chat">&times;</button>
+            if (!container) {
+                console.error('[ChatWidget] Container not found');
+                chatInitialized = false;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div id="chat-window" class="chat-window">
+                    <div class="chat-window__header">
+                        <div class="chat-header__info">
+                            <div class="chat-header__status-dot"></div>
+                            <span class="chat-header__title">Asistente Jaguar</span>
                         </div>
-                        <div id="chat-messages" class="chat-window__messages"></div>
-                        <div id="typing-indicator" class="chat-window__typing">
-                            Jaguar está escribiendo<span class="dot-flashing"></span>
-                        </div>
-                        <div id="suggestions-container" class="chat-window__suggestions"></div>
-                        <div class="chat-window__input-area">
-                            <input type="text" id="chat-input" class="chat-input__field" placeholder="Escribe tu duda..." autocomplete="off">
-                            <button id="chat-send-btn" class="chat-input__send">Enviar</button>
-                        </div>
+                        <button id="chat-close-btn" class="chat-header__close" aria-label="Cerrar chat">&times;</button>
                     </div>
-                `;
+                    <div id="chat-messages" class="chat-window__messages"></div>
+                    <div id="typing-indicator" class="chat-window__typing">
+                        Jaguar está escribiendo<span class="dot-flashing"></span>
+                    </div>
+                    <div id="suggestions-container" class="chat-window__suggestions"></div>
+                    <div class="chat-window__input-area">
+                        <input type="text" id="chat-input" class="chat-input__field" placeholder="Escribe tu duda..." autocomplete="off">
+                        <button id="chat-send-btn" class="chat-input__send">Enviar</button>
+                    </div>
+                </div>
+            `;
+            
+            // CRITICAL FIX: Wait for DOM to be fully painted before initializing
+            // This ensures all elements are available when initChatWidget runs
+            await waitForDOMReady();
+            
+            // Verify critical elements exist before proceeding
+            const chatWindow = document.getElementById('chat-window');
+            const chatMessages = document.getElementById('chat-messages');
+            
+            if (!chatWindow || !chatMessages) {
+                console.error('[ChatWidget] Critical elements not found after injection');
+                chatInitialized = false;
+                return;
             }
             
             // Dynamically import and initialize the chat widget
-            const { initChatWidget } = await import('../../scripts/chatWidget.js');
-            initChatWidget();
+            let widget;
+            try {
+                const { initChatWidget } = await import('../../scripts/chatWidget.js');
+                widget = initChatWidget();
+                
+                if (!widget) {
+                    throw new Error('Widget initialization returned null');
+                }
+            } catch (error) {
+                console.error('[ChatWidget] Failed to initialize:', error);
+                chatInitialized = false;
+                return;
+            }
             
             // Mark as loaded
             trigger.dataset.chatLoaded = 'true';
             
-            // Auto-open the chat window after initialization
-            requestAnimationFrame(() => {
-                const chatWindow = document.getElementById('chat-window');
-                if (chatWindow) {
-                    chatWindow.classList.add('chat-window--open');
-                    trigger.classList.add('chat-trigger--active');
-                }
-            });
+            // CRITICAL FIX: Use widget's toggleChat() method to properly open the chat
+            // This ensures internal state is updated and onOpen() is called (renders suggestions)
+            widget.toggleChat();
+            
         }, { once: true });
     }
     
