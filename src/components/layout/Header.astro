@@ -33,11 +33,11 @@ const isMobileActive = (path: string) =>
     </div>
 
     <div class="main-navbar__links">
-        <a href="/" class={`nav-link ${isActive("/")}`}>INICIO</a>
-        <a href="/join" class={`nav-link ${isActive("/join")}`}>CONVOCATORIA</a>
-        <a href="/team" class={`nav-link ${isActive("/team")}`}>CONOCE AL EQUIPO</a>
-        <a href="/history" class={`nav-link ${isActive("/history")}`}>NUESTRA TRAYECTORIA</a>
-        <a href="/sponsors" class={`nav-link ${isActive("/sponsors")}`}>PATROCINIOS</a>
+        <a href="/" class={`nav-link ${isActive("/")}`} data-astro-prefetch="viewport">INICIO</a>
+        <a href="/join" class={`nav-link ${isActive("/join")}`} data-astro-prefetch="viewport">CONVOCATORIA</a>
+        <a href="/team" class={`nav-link ${isActive("/team")}`} data-astro-prefetch="viewport">CONOCE AL EQUIPO</a>
+        <a href="/history" class={`nav-link ${isActive("/history")}`} data-astro-prefetch="viewport">NUESTRA TRAYECTORIA</a>
+        <a href="/sponsors" class={`nav-link ${isActive("/sponsors")}`} data-astro-prefetch="viewport">PATROCINIOS</a>
     </div>
 
     <div class="main-navbar__actions">
@@ -57,11 +57,11 @@ const isMobileActive = (path: string) =>
     <div class="sidebar-content">
         <h4 class="mobile-nav__title">Menú</h4>
 
-        <a href="/" class={`mobile-nav__link ${isMobileActive("/")}`}>Inicio</a>
-        <a href="/join" class={`mobile-nav__link ${isMobileActive("/join")}`}>Convocatoria</a>
-        <a href="/team" class={`mobile-nav__link ${isMobileActive("/team")}`}>Conoce al equipo</a>
-        <a href="/history" class={`mobile-nav__link ${isMobileActive("/history")}`}>Nuestra Trayectoria</a>
-        <a href="/sponsors" class={`mobile-nav__link ${isMobileActive("/sponsors")}`}>Patrocinios</a>
+        <a href="/" class={`mobile-nav__link ${isMobileActive("/")}`} data-astro-prefetch="viewport">Inicio</a>
+        <a href="/join" class={`mobile-nav__link ${isMobileActive("/join")}`} data-astro-prefetch="viewport">Convocatoria</a>
+        <a href="/team" class={`mobile-nav__link ${isMobileActive("/team")}`} data-astro-prefetch="viewport">Conoce al equipo</a>
+        <a href="/history" class={`mobile-nav__link ${isMobileActive("/history")}`} data-astro-prefetch="viewport">Nuestra Trayectoria</a>
+        <a href="/sponsors" class={`mobile-nav__link ${isMobileActive("/sponsors")}`} data-astro-prefetch="viewport">Patrocinios</a>
     </div>
 </nav>
 
