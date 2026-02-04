@@ -14,7 +14,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: "Nombre inválido" }), { status: 400 });
     }
 
-    const currentScore = await redis.zscore("leaderboard:feb2026_v2", oldName);
+    const currentScore = await redis.zscore("leaderboard:feb2026_v3", oldName);
 
     if (currentScore === null) {
       return new Response(JSON.stringify({ status: "ok", msg: "Nombre local actualizado" }), { status: 200 });
@@ -22,9 +22,9 @@ export const POST: APIRoute = async ({ request }) => {
 
     const p = redis.pipeline();
 
-    p.zadd("leaderboard:feb2026_v2", { score: currentScore, member: newName });
+    p.zadd("leaderboard:feb2026_v3", { score: currentScore, member: newName });
 
-    p.zrem("leaderboard:feb2026_v2", oldName);
+    p.zrem("leaderboard:feb2026_v3", oldName);
 
     p.renamenx(`user:${oldName}`, `user:${newName}`);
 
