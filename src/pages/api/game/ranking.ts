@@ -4,15 +4,13 @@ import { redis } from "../../../lib/redis";
 
 export const GET: APIRoute = async () => {
   try {
-    // Obtenemos el TOP 10 (0 a 9)
-    // withScores: true nos da [nombre, tiempo, nombre, tiempo...]
-    const rawData = await redis.zrange("leaderboard:feb2026_v2", 0, 9, { withScores: true }); 
+    // Leemos de la V3
+    const rawData = await redis.zrange("leaderboard:feb2026_v3", 0, 9, { withScores: true }); 
     
     const formattedRanking = [];
     for (let i = 0; i < rawData.length; i += 2) {
       formattedRanking.push({
-        // Limpiamos el ID visualmente
-        member: String(rawData[i]).split('#')[0], 
+        member: String(rawData[i]), 
         score: Number(rawData[i + 1])
       });
     }

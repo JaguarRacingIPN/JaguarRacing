@@ -7,9 +7,9 @@
 
 export function initGame() {
     // --- CONFIGURATION CONSTANTS ---
-    const STORAGE_KEY_RECORD = 'jaguar_record_s2'; 
-    const STORAGE_KEY_USER = 'jaguar_user_id_v2';     
-    const STORAGE_KEY_SYNC = 'jaguar_s2_synced';
+    const STORAGE_KEY_RECORD = 'jaguar_record_v3'; 
+    const STORAGE_KEY_USER = 'jaguar_user_id_v3';     
+    const STORAGE_KEY_SYNC = 'jaguar_v3_synced';
     const MIN_VALID_REACTION_TIME = 80;
 
     // --- LOCAL STATE MANAGEMENT ---
@@ -257,7 +257,7 @@ export function initGame() {
 
             leaderboardContainer.innerHTML = '';
             if (!top10 || top10.length === 0) {
-                leaderboardContainer.innerHTML = '<div class="rank-row" style="text-align:center;">Temporada 1 Iniciada</div>';
+                leaderboardContainer.innerHTML = '<div class="rank-row" style="text-align:center;">Temporada 3 Iniciada</div>';
                 return;
             }
 
@@ -265,9 +265,23 @@ export function initGame() {
                 const rankPos = index + 1;
                 
                 if (userId && player.member === userId) {
-                    let localRecord = localStorage.getItem(STORAGE_KEY_RECORD);
-                    let displayTime = localRecord ? (parseFloat(localRecord)/1000) : player.score;
-                    showUserRow(displayTime, `#${rankPos}`);
+                    // Servidor es la fuente de verdad - sincronizar localStorage
+                    const serverTimeMs = player.score * 1000;
+                    const localRecord = localStorage.getItem(STORAGE_KEY_RECORD);
+                    
+                    if (localRecord) {
+                        const localTimeMs = parseFloat(localRecord);
+                        // Si hay discrepancia, el servidor tiene la verdad
+                        if (Math.abs(localTimeMs - serverTimeMs) > 1) {
+                            localStorage.setItem(STORAGE_KEY_RECORD, serverTimeMs);
+                        }
+                    } else {
+                        // Si no hay localStorage, sincronizar con servidor
+                        localStorage.setItem(STORAGE_KEY_RECORD, serverTimeMs);
+                    }
+                    
+                    // Siempre mostrar el tiempo del servidor
+                    showUserRow(player.score, `#${rankPos}`);
                 }
 
                 const row = document.createElement('div');
@@ -289,14 +303,6 @@ export function initGame() {
 
     async function submitScoreToRanking(tiempoMs, executionId) {
         const tiempoSegundos = tiempoMs / 1000;
-        
-        let currentBest = localStorage.getItem(STORAGE_KEY_RECORD);
-        let recordHistorico = currentBest ? (parseFloat(currentBest) / 1000) : Infinity;
-        
-        if (tiempoSegundos < recordHistorico) {
-            recordHistorico = tiempoSegundos;
-            localStorage.setItem(STORAGE_KEY_RECORD, recordHistorico * 1000);
-        }
 
         if (!userId) {
             setTimeout(async () => {
@@ -324,6 +330,15 @@ export function initGame() {
             
             const data = await res.json();
             if (res.ok) {
+                // Solo guardar en localStorage DESPUÉS de confirmación del servidor
+                let currentBest = localStorage.getItem(STORAGE_KEY_RECORD);
+                let recordHistorico = currentBest ? (parseFloat(currentBest) / 1000) : Infinity;
+                
+                if (tiempoSegundos < recordHistorico) {
+                    recordHistorico = tiempoSegundos;
+                    localStorage.setItem(STORAGE_KEY_RECORD, recordHistorico * 1000);
+                }
+                
                 localStorage.setItem(STORAGE_KEY_SYNC, 'true');
                 loadLeaderboard();
                 const rankText = data.new_rank ? `#${data.new_rank}` : "-";
