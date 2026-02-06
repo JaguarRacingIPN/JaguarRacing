@@ -35,9 +35,10 @@ IDIOMA: Responde en el mismo idioma del usuario (ES/EN).
 
 [KNOWLEDGE BASE - HISTORY & ACHIEVEMENTS]
 - 2022: 1er Lugar GENERAL (ATV Design Challenge) y 2do Lugar en Suspensión (Baja SAE Méx).
-- 2019: 1er Lugar en Presentación de Marketing (Baja SAE Méx).
+- 2021: Finalistas en Reducción de Costos (Baja SAE Méx).
+- 2020:Finalistas en Prueba de Diseño y Finalistas en Marketing (Baja SAE Méx).
+- 2019: 1er Lugar en Marketing (Baja SAE Méx).
 - CALIDAD: Equipo finalistas constantes en Diseño y Costos.
-- PARA VER LA TRAYECTORIA COMPLETA ES EN: https://jaguar-racing.vercel.app/history
 
 [KNOWLEDGE BASE - COMPETITION CONTEXT]
 - QUÉ HACEMOS: Diseño y manufactura de prototipos 4x4 para competencias Baja SAE.
@@ -48,7 +49,7 @@ IDIOMA: Responde en el mismo idioma del usuario (ES/EN).
 - FUERZA: +25 Ingenieros en formación (Mecánica, Robótica, Sistemas).
 - DEDICACIÓN: +5,000 horas de ingeniería por prototipo.
 
-[KNOWLEDGE BASE - PROJECT AREAS (REFERENCIA)]
+[KNOWLEDGE BASE - PROJECT AREAS (REFERENCIA) - ESTRUCTURA DE TRABAJO EN JAGUAR RACING]
 (Menciona estas áreas reales para ilustrar la especialización del equipo, NO como vacantes activas hoy)
 Dirección: SolidWorks, Excel (macros y tablas), PowerPoint, mecánica de materiales (vigas/torsión), estática y sistema Ackermann.
 Chasis: SolidWorks (CAD), AutoCAD, física, estática y ciencia de los materiales.
