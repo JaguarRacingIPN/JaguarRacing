@@ -71,9 +71,6 @@
     object-fit: contain;
     pointer-events: none;
     user-select: none;
-    
-    /* FORCE MONOCHROME WHITE REPRESENTATION */
-    filter: brightness(0) invert(1);
     opacity: 0.7;
     
     transition: opacity 0.4s ease, transform 0.4s ease;
@@ -91,7 +88,6 @@
     .sponsor-card:hover img {
         opacity: 1;
         transform: scale(1.08);
-        /* Note: Filter remains to keep logo white */
     }
 }
 
@@ -174,8 +170,6 @@
     }
 
     .sponsor-card img {
-        /* Enforce white color on mobile as well */
-        filter: brightness(0) invert(1) !important;
         opacity: 0.9 !important; /* Slightly higher opacity for visibility */
         
         max-width: 90%;
