@@ -19,16 +19,16 @@
       {
         "nombre": "Ignacio Jacob García Sánchez",
         "rol": "Capitán General",
-        "carrera": "Estudiante de Ing. Robótica Industrial",
-        "foto": "1.webp",
+        "carrera": "Estudiante de Ing. en Robótica Industrial",
+        "foto": "JacobF.webp",
         "linkedin": ""
       },
       {
         "nombre": "Lina Fernanda Torres Castro",
         "rol": "Capitana General",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/lina-fernanda-torres-castro-6a89ba393"
+        "foto": "LinaF.webp",
+        "linkedin": "https://www.linkedin.com/in/lina-fernanda-torres-castro-6a89ba393/"
       }
     ]
   },
@@ -38,7 +38,7 @@
       {
         "nombre": "Carlos Gabriel Zárate Ordoño",
         "rol": "Líder de Diseño",
-        "carrera": "Estudiante de Ing. Robótica Industrial",
+        "carrera": "Estudiante de Ing. en Robótica Industrial",
         "foto": "1.webp",
         "linkedin": ""
       },
@@ -46,28 +46,28 @@
         "nombre": "Carlos Adolfo Pérez Luna",
         "rol": "Líder de Marketing",
         "carrera": "Estudiante de Ing. Telemática",
-        "foto": "1.webp",
+        "foto": "Adolfo.webp",
         "linkedin": "https://www.linkedin.com/in/carlos-adolfo-p%C3%A9rez-luna-4b4921394/"
       },
       {
         "nombre": "Itzel Estrella Rojas Sánchez",
         "rol": "Líder de Costos",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/itzel-e-rojan-a9b67a222/"
+        "foto": "Itzel.webp",
+        "linkedin": "https://www.linkedin.com/in/itzel-e-rojas-a9b67a222/"
       },
       {
         "nombre": "Juan Benigno Guerrero Martínez",
         "rol": "Líder de Manufactura (Torno)",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Beni.webp",
         "linkedin": ""
       },
       {
         "nombre": "César Emilio Sánchez Rojas",
         "rol": "Líder de Manufactura (Taller)",
-        "carrera": "Ingeniería",
-        "foto": "1.webp",
+        "carrera": "Estudiante de Ing. Mecánica",
+        "foto": "Cesar.webp",
         "linkedin": "https://www.linkedin.com/in/s%C3%A1nchez-rojas-c%C3%A9sar-90a0213ab/"
       }
     ]
@@ -80,7 +80,7 @@
         "rol": "Líder de Suspensión",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/robertomarord"
+        "linkedin": "https://www.linkedin.com/in/robertomarord/"
       },
       {
         "nombre": "Ángel Rubén González Evangelista",
@@ -108,14 +108,14 @@
         "rol": "Líder de CAE",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/maximo-sanchez-8b1381350"
+        "linkedin": "https://www.linkedin.com/in/maximo-sanchez-8b1381350/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
       },
       {
         "nombre": "Gustavo Ambia Virgen",
         "rol": "Líder de Instrumentación",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/gustavo-ambia-virgen-2917563b0"
+        "linkedin": "https://www.linkedin.com/in/gustavo-ambia-virgen-29175b3b0/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
       },
       {
         "nombre": "Juan Ángel Chávez Lugo",
@@ -127,9 +127,9 @@
       {
         "nombre": "Luis Ángel Blanco Valtierra",
         "rol": "Líder de Ergonomía",
-        "carrera": "Estudiante de Ing. Mecánica",
+        "carrera": "Estudiante de Ing. en Robótica Industrial",
         "foto": "1.webp",
-        "linkedin": ""
+        "linkedin": "https://www.linkedin.com/in/blanco-valtierra-luis-angel-43a95138b/"
       }
     ]
   },
@@ -138,36 +138,36 @@
     "integrantes": [
       {
         "nombre": "Diego Emanuel Rivero Corella",
-        "rol": "Champ Suspensión",
+        "rol": "Especialista en Suspensión",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/rivero-corella-diego-emanuel-44038030b"
+        "linkedin": "https://www.linkedin.com/in/rivero-corella-diego-emanuel-44038030b/?utm_source=share_via&utm_content=profile&utm_medium=member_android"
       },
       {
         "nombre": "Jesus Navarro Vargas",
-        "rol": "Champ Suspensión",
+        "rol": "Especialista en Suspensión",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/jesus-navarro-a1765b3b0"
+        "linkedin": "https://www.linkedin.com/in/jes%C3%BAs-navarro-a1765b3b0/?utm_source=share_via&utm_content=profile&utm_medium=member_android"
       },
       {
         "nombre": "Emaus Morales Rayo",
-        "rol": "Champ Suspensión",
+        "rol": "Especialista en Suspensión",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/morales-rayo-emaus-5790393a4"
+        "linkedin": "https://www.linkedin.com/in/morales-rayo-emaus-5790393a4/?utm_source=share_via&utm_content=profile&utm_medium=member_ios"
       },
       {
         "nombre": "Edgar Rodrigo Luna Pérez",
-        "rol": "Champ Suspensión",
-        "carrera": "Ingeniería",
+        "rol": "Especialista en Suspensión",
+        "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": ""
       },
       {
         "nombre": "Angel Assiel López García",
-        "rol": "Champ Suspensión",
-        "carrera": "Ingeniería",
+        "rol": "Especialista en Suspensión",
+        "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": ""
       }
@@ -178,17 +178,17 @@
     "integrantes": [
       {
         "nombre": "Víctor Efrén Pérez Ruiz",
-        "rol": "Champ Frenos",
-        "carrera": "Estudiante de Ing. Sist. Automotrices",
+        "rol": "Especialista en Frenos",
+        "carrera": "Estudiante de Ing. en Sistemas Automotrices",
         "foto": "1.webp",
         "linkedin": ""
       },
       {
         "nombre": "Jorge Eduardo Herrera Gallardo",
-        "rol": "Champ Costos y Frenos",
-        "carrera": "Estudiante de Ing. en Sist. Automotrices",
+        "rol": "Especialista en Costos y Frenos",
+        "carrera": "Estudiante de Ing. en Sistemas Automotrices",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/jorge-eduardo-herrera-gallardo-b50a99344"
+        "linkedin": "https://www.linkedin.com/in/jorge-eduardo-herrera-gallardo-b50a99344/?utm_source=share_via&utm_content=profile&utm_medium=member_android"
       }
     ]
   },
@@ -197,15 +197,15 @@
     "integrantes": [
       {
         "nombre": "Sofía Fernanda Cerón Gutierrez",
-        "rol": "Champ Chasis",
+        "rol": "Especialista en Chasis",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": ""
       },
       {
         "nombre": "Bruno Kareb Aguila Juarez",
-        "rol": "Champ Chasis",
-        "carrera": "Ingeniería",
+        "rol": "Especialista en Chasis",
+        "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": ""
       }
@@ -216,29 +216,29 @@
     "integrantes": [
       {
         "nombre": "Diana Paola Luna García",
-        "rol": "Champ Powertrain",
-        "carrera": "Ingeniería",
+        "rol": "Especialista en Powertrain",
+        "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/diana-paola-luna-garc%C3%ADa-b8529369/"
+        "linkedin": "https://www.linkedin.com/in/diana-paola-luna-garc%C3%ADa-b852a9369/"
       },
       {
-        "nombre": "Víctor Manuel Lobera Gonzalez",
-        "rol": "Champ Powertrain",
-        "carrera": "Ingeniería",
+        "nombre": "Víctor Manuel Lovera González ",
+        "rol": "Especialista en Powertrain",
+        "carrera": "Estudiante de Ing. en Sistemas Automotrices",
         "foto": "1.webp",
-        "linkedin": "https://mx.linkedin.com/in/lovera-gonz%C3%A1lez-victor-manuel-73bb083aa"
+        "linkedin": "https://www.linkedin.com/in/lovera-gonz%C3%A1lez-victor-manuel-73bb083aa/"
       }
     ]
   },
   {
     "categoria": "EQUIPO DE MANUFACTURA",
-    "integrantes": [
+    "integrantes": [ 
       {
         "nombre": "Diego Gil Rodríguez",
-        "rol": "Champ Manufactura (CAM)",
-        "carrera": "Ingeniería",
+        "rol": "Especialista en Mecanizado CAM",
+        "carrera": "Estudiante de Ing. en Robótica Industrial",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/diego-gi-rodriguez-0240ba3b0"
+        "linkedin": "https://www.linkedin.com/in/diego-gil-rodriguez-0240ba3b0/"
       }
     ]
   },
@@ -247,17 +247,17 @@
     "integrantes": [
       {
         "nombre": "Pablo Adonai Moreno Yescas",
-        "rol": "Champ CAE",
+        "rol": "Analista CAE",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": "https://www.linkedin.com/in/moreno-yescas-pablo-adonai-36569835b"
       },
       {
         "nombre": "Julio Alcalá León",
-        "rol": "Champ CAE",
+        "rol": "Analista CAE",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/julio-alcala"
+        "linkedin": "https://www.linkedin.com/in/julio-alcala/"
       }
     ]
   },
@@ -265,18 +265,18 @@
     "categoria": "EQUIPO DE INSTRUMENTACIÓN",
     "integrantes": [
       {
-        "nombre": "Ashly Mishel Segura Hernández",
-        "rol": "Champ Instrumentación",
-        "carrera": "Estudiante de Ing. Robótica industrial",
+        "nombre": "Ashley Mishel Segura Hernández",
+        "rol": "Desarrollador de Instrumentación",
+        "carrera": "Estudiante de Ing. en Robótica industrial",
         "foto": "1.webp",
-        "linkedin": "https://mx.linkedin.com/in/mishel-hernandez-798a21360"
+        "linkedin": "https://www.linkedin.com/in/mishel-hernandez-798a213b0/"
       },
       {
         "nombre": "Emmanuel Jimenez Alatorre",
-        "rol": "Champ Instrumentación",
+        "rol": "Desarrollador de Instrumentación",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/emmanuel-jim%C3%A9nez-alatorre-4754a73ab"
+        "linkedin": "https://www.linkedin.com/in/emmanuel-jim%C3%A9nez-alatorre-4754a73ab/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
       }
     ]
   },
@@ -285,14 +285,14 @@
     "integrantes": [
       {
         "nombre": "Héctor Abolnik Avila",
-        "rol": "Champ Dirección",
+        "rol": "Especialista en Dirección",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": ""
       },
       {
         "nombre": "Gustavo Andrés Rivero Arellano",
-        "rol": "Champ Dirección",
+        "rol": "Especialista en Dirección",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": ""
@@ -304,8 +304,8 @@
     "integrantes": [
       {
         "nombre": "Yael Sloan Vivas Pérez",
-        "rol": "Champ Ergonomía",
-        "carrera": "Ingeniería",
+        "rol": "Especialista en Ergonomía",
+        "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": ""
       }
@@ -316,17 +316,17 @@
     "integrantes": [
       {
         "nombre": "Cierra Regina Ponce de Leon",
-        "rol": "Champ Marketing",
-        "carrera": "Ingeniería",
+        "rol": "Especialista en Marketing",
+        "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
         "linkedin": ""
       },
       {
         "nombre": "Erwin Rommel Vazquez Pérez",
-        "rol": "Champ Marketing",
+        "rol": "Especialista en Marketing",
         "carrera": "Estudiante de Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": "https://www.linkedin.com/in/erwin-rommel-vasquez-perez-50b1b43ab"
+        "linkedin": "https://www.linkedin.com/in/erwin-rommel-vasquez-perez-50b1b43ab/?trk=contact-info"
       }
     ]
   },
@@ -338,7 +338,7 @@
         "rol": "Alumni",
         "carrera": "Ing. Mecánica",
         "foto": "1.webp",
-        "linkedin": ""
+        "linkedin": "https://www.linkedin.com/in/jacob-jes%C3%BAs-varela-aab764146/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
       }
     ]
   }
