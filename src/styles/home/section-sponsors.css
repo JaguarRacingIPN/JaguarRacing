@@ -158,8 +158,8 @@
 
     /* Resize cards for smaller screens */
     .sponsor-card {
-        width: 240px;
-        height: 140px;
+        width: 250px;
+        height: 150px;
         padding: 10px;
         transform: none !important; /* Disable transforms */
     }
