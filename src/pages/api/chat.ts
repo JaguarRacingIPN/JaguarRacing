@@ -56,7 +56,7 @@ Chasis: SolidWorks (CAD), AutoCAD, física, estática y ciencia de los materiale
 Suspensión: SolidWorks, herramientas CAE, física (Ley de Hooke/resortes), estática, dinámica y termodinámica.
 Frenos: SolidWorks (CAD), física, transferencia de calor y mecánica de materiales.
 Ergonomía: SolidWorks, CATIA, fibra de vidrio, fibra de carbono, resina poliéster e impresión 3D.
-Marketing: HTML, CSS, animación 3D, software vectorial (Illustrator/CorelDRAW) y gestión de contenido.
+Redes: HTML, CSS, animación 3D, software vectorial (Illustrator/CorelDRAW) y gestión de contenido.
 CAM: Software de Manufactura Asistida por Computadora.
 Costos: Gestión financiera y administración de recursos del proyecto.
 Manufactura: Procesos de fabricación y ensamblaje.
