@@ -39,12 +39,12 @@
         "nombre": "Carlos Gabriel Zárate Ordoño",
         "rol": "Líder de Diseño",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
-        "linkedin": ""
+        "foto": "Carlos.webp",
+        "linkedin": "https://www.linkedin.com/in/carlos-z%C3%A1rate-3679ba1b7/"
       },
       {
         "nombre": "Carlos Adolfo Pérez Luna",
-        "rol": "Líder de Marketing",
+        "rol": "Líder de Redes",
         "carrera": "Estudiante de Ing. Telemática",
         "foto": "Adolfo.webp",
         "linkedin": "https://www.linkedin.com/in/carlos-adolfo-p%C3%A9rez-luna-4b4921394/"
@@ -79,56 +79,56 @@
         "nombre": "Roberto Martínez Ordoñez",
         "rol": "Líder de Suspensión",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Roberto.webp",
         "linkedin": "https://www.linkedin.com/in/robertomarord/"
       },
       {
         "nombre": "Ángel Rubén González Evangelista",
         "rol": "Líder de Frenos",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Ruben.webp",
         "linkedin": ""
       },
       {
         "nombre": "Germán Pérez García",
         "rol": "Líder de Chasis",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "German.webp",
         "linkedin": ""
       },
       {
         "nombre": "Jonatan Jesús Nava Méndez",
         "rol": "Líder de Powertrain y CAM",
         "carrera": "Estudiante de Ing. en Sistemas Automotrices",
-        "foto": "1.webp",
+        "foto": "Jonatan.webp",
         "linkedin": ""
       },
       {
         "nombre": "Máximo Jorge Arturo Sánchez Toledo",
         "rol": "Líder de CAE",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Max.webp",
         "linkedin": "https://www.linkedin.com/in/maximo-sanchez-8b1381350/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
       },
       {
         "nombre": "Gustavo Ambia Virgen",
         "rol": "Líder de Instrumentación",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "GustavoAmb.webp",
         "linkedin": "https://www.linkedin.com/in/gustavo-ambia-virgen-29175b3b0/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
       },
       {
         "nombre": "Juan Ángel Chávez Lugo",
         "rol": "Líder de Dirección",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
-        "linkedin": ""
+        "foto": "Chavez.webp",
+        "linkedin": "https://www.linkedin.com/in/juan-angel-chavez-lugo-7a37222a9/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
       },
       {
         "nombre": "Luis Ángel Blanco Valtierra",
         "rol": "Líder de Ergonomía",
         "carrera": "Estudiante de Ing. en Robótica Industrial",
-        "foto": "1.webp",
+        "foto": "Luis.webp",
         "linkedin": "https://www.linkedin.com/in/blanco-valtierra-luis-angel-43a95138b/"
       }
     ]
@@ -249,7 +249,7 @@
         "nombre": "Pablo Adonai Moreno Yescas",
         "rol": "Analista CAE",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Adonai.webp",
         "linkedin": "https://www.linkedin.com/in/moreno-yescas-pablo-adonai-36569835b"
       },
       {
@@ -266,16 +266,16 @@
     "integrantes": [
       {
         "nombre": "Ashley Mishel Segura Hernández",
-        "rol": "Desarrollador de Instrumentación",
+        "rol": "Desarrolladora de Instrumentación",
         "carrera": "Estudiante de Ing. en Robótica industrial",
-        "foto": "1.webp",
+        "foto": "Ashley.webp",
         "linkedin": "https://www.linkedin.com/in/mishel-hernandez-798a213b0/"
       },
       {
         "nombre": "Emmanuel Jimenez Alatorre",
         "rol": "Desarrollador de Instrumentación",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Emmanuel.webp",
         "linkedin": "https://www.linkedin.com/in/emmanuel-jim%C3%A9nez-alatorre-4754a73ab/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
       }
     ]
@@ -287,14 +287,14 @@
         "nombre": "Héctor Abolnik Avila",
         "rol": "Especialista en Dirección",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Hector.webp",
         "linkedin": ""
       },
       {
         "nombre": "Gustavo Andrés Rivero Arellano",
         "rol": "Especialista en Dirección",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "GustavoRiv.webp",
         "linkedin": ""
       }
     ]
@@ -312,20 +312,20 @@
     ]
   },
   {
-    "categoria": "EQUIPO DE MARKETING",
+    "categoria": "EQUIPO DE REDES",
     "integrantes": [
       {
         "nombre": "Cierra Regina Ponce de Leon",
-        "rol": "Especialista en Marketing",
+        "rol": "Especialista en Redes",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Regina.webp",
         "linkedin": ""
       },
       {
         "nombre": "Erwin Rommel Vazquez Pérez",
-        "rol": "Especialista en Marketing",
+        "rol": "Especialista en Redes",
         "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "1.webp",
+        "foto": "Erwin.webp",
         "linkedin": "https://www.linkedin.com/in/erwin-rommel-vasquez-perez-50b1b43ab/?trk=contact-info"
       }
     ]
