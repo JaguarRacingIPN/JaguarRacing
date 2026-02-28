@@ -131,6 +131,7 @@ const listaInfinita = [...patrocinadores, ...patrocinadores];
                         }
                         aria-hidden={isDuplicate ? "true" : undefined}
                         tabindex={isDuplicate ? "-1" : "0"}
+                        data-umami-event={`Outbound Sponsor - ${pat.nombre}`}
                     >
                         {logoImg ? (
                             <Image
@@ -155,7 +156,11 @@ const listaInfinita = [...patrocinadores, ...patrocinadores];
     </div>
 
     <div class="center-content">
-        <a href="/sponsors" class="boton-legendario">SER PATROCINADOR</a>
+        <a
+            href="/sponsors"
+            class="boton-legendario"
+            data-umami-event="Clic Landing Ser Patrocinador">SER PATROCINADOR</a
+        >
     </div>
 </section>
 

@@ -14,7 +14,7 @@ import "../styles/layout/header.css";
 import "../styles/layout/footer.css";
 import "../styles/base/global-utilities.css";
 import "../styles/ui/widget_chat.css";
-import '../styles/layout/animation.css';
+import "../styles/layout/animation.css";
 
 // --- COMPONENTES ESTRUCTURALES (Rutas Nuevas) ---
 // Ahora importamos desde las carpetas organizadas:
@@ -38,24 +38,20 @@ const siteUrl = "https://www.jaguarracing.tech";
 
 		<meta name="theme-color" content="#1a1a1a" />
 
-		{/* --- SEGURIDAD (CSP) --- */}
+		{/* --- SEGURIDAD (CSP) CORREGIDA --- */}
 		<meta
 			http-equiv="Content-Security-Policy"
 			content="
             default-src 'self'; 
             img-src 'self' https://www.jaguarracing.tech data:;
-            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com; 
+            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cloud.umami.is; 
             style-src 'self' 'unsafe-inline'; 
             font-src 'self' data:;
-            connect-src 'self' https://va.vercel-scripts.com;
+            connect-src 'self' https://cloud.umami.is https://api.umami.is;
           "
 		/>
 
-		<link
-			rel="icon"
-			type="image/webp"
-			href="/favicon.webp"
-		/>
+		<link rel="icon" type="image/webp" href="/favicon.webp" />
 
 		<title>{title}</title>
 		<meta
@@ -82,6 +78,11 @@ const siteUrl = "https://www.jaguarracing.tech";
 		<meta property="og:type" content="website" />
 
 		<ClientRouter />
+
+		<script
+			defer
+			src="https://cloud.umami.is/script.js"
+			data-website-id="e66805d9-1e3c-4915-ae39-01a694cea77b"></script>
 	</head>
 	<body>
 		{/* Header persistente (No recarga al navegar) */}
@@ -95,27 +96,29 @@ const siteUrl = "https://www.jaguarracing.tech";
 
 		{/* Widget de Chat persistente */}
 		<ChatWidget transition:persist />
-	</body><script>
-		import { initScrollAnimations } from "../scripts/scrollAnimations.js";
 
-		let cleanupScrollFx: (() => void) | undefined;
+		<script>
+			import { initScrollAnimations } from "../scripts/scrollAnimations.js";
 
-		document.addEventListener("astro:page-load", () => {
-			// Limpiar instancia anterior si existe
-			if (cleanupScrollFx) {
-				cleanupScrollFx();
-			}
+			let cleanupScrollFx: (() => void) | undefined;
 
-			// Inicializar y guardar función de limpieza
-			cleanupScrollFx = initScrollAnimations() as () => void;
-		});
+			document.addEventListener("astro:page-load", () => {
+				// Limpiar instancia anterior si existe
+				if (cleanupScrollFx) {
+					cleanupScrollFx();
+				}
 
-		document.addEventListener("astro:before-swap", () => {
-			// Cleanup antes de cambiar de página
-			if (cleanupScrollFx) {
-				cleanupScrollFx();
-				cleanupScrollFx = undefined;
-			}
-		});
-	</script>
+				// Inicializar y guardar función de limpieza
+				cleanupScrollFx = initScrollAnimations() as () => void;
+			});
+
+			document.addEventListener("astro:before-swap", () => {
+				// Cleanup antes de cambiar de página
+				if (cleanupScrollFx) {
+					cleanupScrollFx();
+					cleanupScrollFx = undefined;
+				}
+			});
+		</script>
+	</body>
 </html>
