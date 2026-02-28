@@ -128,58 +128,27 @@ const siteUrl = "https://www.jaguarracing.tech";
 		<ChatWidget transition:persist />
 
 		<script>
-            import { initScrollAnimations } from "../scripts/scrollAnimations.js";
+			import { initScrollAnimations } from "../scripts/scrollAnimations.js";
 
-            let cleanupScrollFx: (() => void) | undefined;
+			let cleanupScrollFx: (() => void) | undefined;
 
-            document.addEventListener("astro:page-load", () => {
-                
-                // --- 1. TRACKING A PRUEBA DE BALAS ---
-                const triggerUmami = () => {
-                    if (window.umami) {
-                        // Enviamos la visita normal. Umami ya sabe sacar la URL por su cuenta.
-                        window.umami.track((props: Record<string, string>) => ({
-                            ...props,
-                            url: window.location.pathname,
-                            title: document.title,
-                        }));
-                        console.log("🟢 Umami: Pageview enviado con éxito.");
-                    } else {
-                        console.warn("🟡 Umami: Aún no carga, reintentando en 300ms...");
-                        // Si no cargó, lo vuelve a intentar en un tercio de segundo
-                        setTimeout(triggerUmami, 300);
-                    }
-                };
-                
-                // Disparamos el rastreo inicial
-                triggerUmami();
+			document.addEventListener("astro:page-load", () => {
+				// Limpiar instancia anterior si existe
+				if (cleanupScrollFx) {
+					cleanupScrollFx();
+				}
 
-                // --- 2. BINDING DE EVENTOS (BOTONES) ---
-                const trackElements = document.querySelectorAll<HTMLElement>('[data-umami-event]');
-                trackElements.forEach((elem) => {
-                    if (elem.dataset.umamiListenerBound !== 'true') {
-                        elem.addEventListener('click', () => {
-                            const eventName = elem.getAttribute('data-umami-event');
-                            if (window.umami && eventName) {
-                                window.umami.track(eventName);
-                                console.log(`🟢 Umami: Evento '${eventName}' enviado.`);
-                            }
-                        });
-                        elem.dataset.umamiListenerBound = 'true';
-                    }
-                });
+				// Inicializar y guardar función de limpieza
+				cleanupScrollFx = initScrollAnimations() as () => void;
+			});
 
-                // --- 3. ANIMACIONES DE SCROLL ---
-                if (cleanupScrollFx) cleanupScrollFx();
-                cleanupScrollFx = initScrollAnimations() as () => void;
-            });
-
-            document.addEventListener("astro:before-swap", () => {
-                if (cleanupScrollFx) {
-                    cleanupScrollFx();
-                    cleanupScrollFx = undefined;
-                }
-            });
-        </script>
+			document.addEventListener("astro:before-swap", () => {
+				// Cleanup antes de cambiar de página
+				if (cleanupScrollFx) {
+					cleanupScrollFx();
+					cleanupScrollFx = undefined;
+				}
+			});
+		</script>
 	</body>
 </html>
