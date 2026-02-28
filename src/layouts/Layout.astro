@@ -90,13 +90,27 @@ const siteUrl = "https://www.jaguarracing.tech";
 			// data-auto-track="false" desactiva el tracking automático, y reenviamos
 			// el pageview en cada navegación suave de Astro.
 			document.addEventListener("astro:page-load", () => {
-				if (typeof window.umami !== "undefined") {
-					window.umami.track((props: Record<string, string>) => ({
-						...props,
-						url: window.location.pathname,
-						title: document.title,
-					}));
-				}
+				if (typeof window.umami === "undefined") return;
+
+				// 1. Pageview manual
+				window.umami.track((props: Record<string, string>) => ({
+					...props,
+					url: window.location.pathname,
+					title: document.title,
+				}));
+
+				// 2. Re-bind data-umami-event en cada navegación (View Transitions
+				//    reemplaza el DOM, así que los listeners antiguos se pierden)
+				document.querySelectorAll<HTMLElement>("[data-umami-event]").forEach((el) => {
+					// Evitar doble-binding si el elemento persiste entre navegaciones
+					if (el.dataset.umamiListenerBound) return;
+					el.dataset.umamiListenerBound = "1";
+
+					el.addEventListener("click", () => {
+						const event = el.dataset.umamiEvent!;
+						window.umami.track(event);
+					});
+				});
 			});
 		</script>
 	</head>
