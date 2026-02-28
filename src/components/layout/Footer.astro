@@ -37,6 +37,7 @@ import githubIcon from "../../assets/logos/github.webp";
                     <a
                         href="mailto:jaguarteam.ipn@gmail.com"
                         class="footer-email-link"
+                        data-umami-event="Clic Correo Directo"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +98,7 @@ import githubIcon from "../../assets/logos/github.webp";
                         loading="lazy"
                         decoding="async"
                     />
-                </a>  
+                </a>
                 <a
                     href="https://www.facebook.com/jaguar.racing.team/"
                     target="_blank"
@@ -155,11 +156,4 @@ import githubIcon from "../../assets/logos/github.webp";
             </nav>
         </div>
     </div>
-
-    <script>
-        import { inject } from "@vercel/analytics";
-        import { injectSpeedInsights } from "@vercel/speed-insights";
-        inject();
-        injectSpeedInsights();
-    </script>
 </footer>

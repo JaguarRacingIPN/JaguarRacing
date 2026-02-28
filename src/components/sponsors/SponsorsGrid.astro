@@ -92,6 +92,7 @@ const getLogoImage = (filename: string) => {
                         class="sponsor-card"
                         title={`Visitar sitio web de ${sponsor.nombre}`}
                         aria-label={`Logo de ${sponsor.nombre} - Patrocinador oficial`}
+                        data-umami-event={`Outbound Sponsor - ${sponsor.nombre}`}
                     >
                         {logoImg ? (
                             <Image
