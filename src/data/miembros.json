@@ -196,13 +196,6 @@
     "categoria": "EQUIPO DE CHASIS",
     "integrantes": [
       {
-        "nombre": "Sofía Fernanda Cerón Gutierrez",
-        "rol": "Especialista en Chasis",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "Sofia.webp",
-        "linkedin": ""
-      },
-      {
         "nombre": "Bruno Kareb Aguila Juarez",
         "rol": "Especialista en Chasis",
         "carrera": "Estudiante de Ing. Mecánica",
@@ -283,13 +276,6 @@
   {
     "categoria": "EQUIPO DE DIRECCIÓN",
     "integrantes": [
-      {
-        "nombre": "Héctor Abolnik Avila",
-        "rol": "Especialista en Dirección",
-        "carrera": "Estudiante de Ing. Mecánica",
-        "foto": "Hector.webp",
-        "linkedin": ""
-      },
       {
         "nombre": "Gustavo Andrés Rivero Arellano",
         "rol": "Especialista en Dirección",
