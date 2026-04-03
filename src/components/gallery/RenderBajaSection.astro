@@ -1,0 +1,475 @@
+---
+// RenderBajaSection.astro
+interface Props {
+    hideBackBtn?: boolean;
+}
+const { hideBackBtn = false } = Astro.props;
+---
+
+<section class="render-hero">
+    <div class="render-hero__bg-grid"></div>
+    <div class="render-hero__inner">
+        {!hideBackBtn && (
+            <a href="/gallery" class="render-back">
+                <span class="render-back__arrow">&#8592;</span>
+                <span>Galer&#237;a</span>
+            </a>
+        )}
+        <p class="render-hero__eyebrow">JAGUAR RACING &#8212; 2026</p>
+        <h1 class="render-hero__title">RENDER DEL BAJA</h1>
+        <div class="render-hero__divider"></div>
+        <p class="render-hero__desc">
+            Dise&#241;o 3D del chasis &#8212; Nuevo modelo en desarrollo.
+            Explora el prototipo interactivo.
+        </p>
+    </div>
+</section>
+
+<section class="render-viewer-section">
+    <div class="render-viewer-header">
+        <span class="render-viewer__label">VISOR INTERACTIVO 3D</span>
+        <h2 class="render-viewer__title">EXPLORA EL MODELO</h2>
+        <p class="render-viewer__hint">Arrastra para rotar &nbsp;&#183;&nbsp; Scroll para zoom &nbsp;&#183;&nbsp; Clic derecho para desplazar</p>
+    </div>
+
+    <div class="render-viewer-container">
+        <canvas id="render-canvas" class="render-canvas"></canvas>
+        <div class="render-viewer__loading" id="viewer-loading">
+            <div class="loading-spinner"></div>
+            <p>Cargando modelo 3D...</p>
+        </div>
+        <div class="render-viewer__controls">
+            <button class="viewer-ctrl active" id="ctrl-rotate" title="Rotaci&#243;n autom&#225;tica">&#8635;</button>
+            <button class="viewer-ctrl" id="ctrl-reset" title="Reiniciar vista">&#8857;</button>
+            <button class="viewer-ctrl" id="ctrl-wireframe" title="Vista wireframe">&#11041;</button>
+        </div>
+    </div>
+</section>
+
+<style>
+
+
+    /* HERO */
+    .render-hero {
+        background: #000;
+        position: relative;
+        padding: 8rem 4rem 5rem;
+        overflow: hidden;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .render-hero__bg-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(184,150,12,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(184,150,12,0.04) 1px, transparent 1px);
+        background-size: 50px 50px;
+        pointer-events: none;
+    }
+
+    .render-hero__inner {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+    }
+
+    .render-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        color: rgba(184,150,12,0.7);
+        text-decoration: none;
+        text-transform: uppercase;
+        margin-bottom: 2rem;
+        transition: color 0.2s ease;
+    }
+
+    .render-back:hover { color: #b8960c; }
+
+    .render-back__arrow {
+        font-size: 1.1rem;
+        transition: transform 0.2s ease;
+    }
+
+    .render-back:hover .render-back__arrow { transform: translateX(-4px); }
+
+    .render-hero__eyebrow {
+        font-weight: 500;
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        color: rgba(184,150,12,0.6);
+        text-transform: uppercase;
+        margin: 0 0 0.75rem;
+    }
+
+    .render-hero__title {
+        font-weight: 800;
+        font-size: clamp(2.5rem, 6vw, 5rem);
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0 0 1.5rem;
+        line-height: 1;
+    }
+
+    .render-hero__divider {
+        width: 60px;
+        height: 3px;
+        background: #b8960c;
+        margin-bottom: 1.5rem;
+    }
+
+    .render-hero__desc {
+        font-weight: 400;
+        font-size: 1rem;
+        color: rgba(255,255,255,0.5);
+        line-height: 1.8;
+        max-width: 600px;
+        margin: 0;
+    }
+
+    /* VIEWER */
+    .render-viewer-section {
+        background: #000;
+        padding: 5rem 0 6rem;
+        border-top: 1px solid rgba(255,255,255,0.04);
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .render-viewer-header {
+        text-align: center;
+        padding: 0 2rem 3rem;
+    }
+
+    .render-viewer__label {
+        font-weight: 600;
+        font-size: 0.65rem;
+        letter-spacing: 0.3em;
+        color: rgba(184,150,12,0.7);
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 0.75rem;
+    }
+
+    .render-viewer__title {
+        font-weight: 800;
+        font-size: clamp(1.5rem, 4vw, 3rem);
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin: 0 0 0.75rem;
+    }
+
+    .render-viewer__hint {
+        font-weight: 400;
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.3);
+        letter-spacing: 0.05em;
+        margin: 0;
+    }
+
+    .render-viewer-container {
+        position: relative;
+        width: 100%;
+        height: 65vh;
+        background: #030303;
+        border-top: 1px solid rgba(184,150,12,0.1);
+        border-bottom: 1px solid rgba(184,150,12,0.1);
+        overflow: hidden;
+    }
+
+    .render-canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+        outline: none;
+    }
+
+    .render-viewer__loading {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        background: #030303;
+        z-index: 10;
+        transition: opacity 0.5s ease;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+        font-size: 0.8rem;
+        letter-spacing: 0.15em;
+        color: rgba(255,255,255,0.35);
+        text-transform: uppercase;
+    }
+
+    .render-viewer__loading.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 2px solid rgba(184,150,12,0.15);
+        border-top-color: #b8960c;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .render-viewer__controls {
+        position: absolute;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        z-index: 5;
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .viewer-ctrl {
+        width: 40px;
+        height: 40px;
+        background: rgba(0,0,0,0.7);
+        border: 1px solid rgba(184,150,12,0.3);
+        color: rgba(184,150,12,0.7);
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(8px);
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .viewer-ctrl:hover,
+    .viewer-ctrl.active {
+        background: rgba(184,150,12,0.15);
+        border-color: #b8960c;
+        color: #b8960c;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .render-showcase {
+            grid-template-columns: 1fr;
+        }
+
+        .render-showcase__media { min-height: 50vw; }
+
+        .render-showcase__info {
+            border-left: none;
+            border-top: 1px solid rgba(184,150,12,0.08);
+            padding: 2.5rem 2rem;
+        }
+
+        .render-hero { padding: 6rem 1.5rem 3rem; }
+        .render-viewer-container { height: 50vh; }
+    }
+</style>
+
+<script>
+    import * as THREE from 'three';
+    import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
+
+    let cleanupViewer;
+
+    async function initRenderViewer() {
+        try {
+            console.log("Iniciando RenderBajaSection script...");
+            const canvas = document.getElementById('render-canvas');
+            if (!canvas) {
+                console.log("No se encontró render-canvas");
+                return;
+            }
+            const loadingEl = document.getElementById('viewer-loading');
+            const btnRotate  = document.getElementById('ctrl-rotate');
+            const btnReset   = document.getElementById('ctrl-reset');
+            const btnWireframe = document.getElementById('ctrl-wireframe');
+
+            console.log("Creando escena...");
+            // Scene
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x030303);
+            scene.fog = new THREE.FogExp2(0x030303, 0.008);
+
+            console.log("Creando cámara...");
+            // Camera
+            const rect = canvas.getBoundingClientRect();
+            const camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 1000);
+
+            console.log("Creando renderer WebGL...");
+            // Renderer
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(rect.width, rect.height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+
+            console.log("Añadiendo luces...");
+            // Lights
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+            const goldLight = new THREE.DirectionalLight(0xb8960c, 1.2);
+            goldLight.position.set(5, 8, 5);
+            goldLight.castShadow = true;
+            scene.add(goldLight);
+
+            const fillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+            fillLight.position.set(-5, 2, -5);
+            scene.add(fillLight);
+
+            console.log("Creando gridHelper y placeholder...");
+            // Grid helper
+            const gridHelper = new THREE.GridHelper(20, 20, 0x1a1500, 0x0d0d0d);
+            scene.add(gridHelper);
+
+            // Placeholder box
+            const placeholder = new THREE.Mesh(
+                new THREE.BoxGeometry(3, 1.5, 5),
+                new THREE.MeshStandardMaterial({ color: 0x1a1500, metalness: 0.9, roughness: 0.3 })
+            );
+            scene.add(placeholder);
+
+            // Intenta cargar OBJ real
+            let loadedModel = null;
+            let isWireframe = false;
+            let autoRotate = true;
+
+            const loader = new OBJLoader();
+            console.log("Iniciando loader.load de OBJ");
+
+        // Prueba manual
+        fetch('/models/baja-chasis-2026.obj')
+            .then(res => {
+                console.log("Fetch manual HTTP Status:", res.status);
+                return res.blob();
+            })
+            .then(blob => console.log("Fetch manual exitoso, tamaño:", blob.size))
+            .catch(err => console.error("Fetch manual error:", err));
+
+        loader.load(
+                '/models/baja-chasis-2026.obj',
+                (obj) => {
+                    console.log("OBJ Cargado exitosamente");
+                    scene.remove(placeholder);
+                    obj.traverse((child) => {
+                        if (child.isMesh) {
+                            child.material = new THREE.MeshStandardMaterial({ color: 0x888888, metalness: 0.8, roughness: 0.25 });
+                            child.castShadow = true;
+                        }
+                    });
+                    const box = new THREE.Box3().setFromObject(obj);
+                    const center = box.getCenter(new THREE.Vector3());
+                    const size = box.getSize(new THREE.Vector3());
+                    const scale = 4 / Math.max(size.x, size.y, size.z);
+                    obj.scale.setScalar(scale);
+                    obj.position.sub(center.multiplyScalar(scale));
+                    scene.add(obj);
+                    loadedModel = obj;
+                    loadingEl?.classList.add('hidden');
+                },
+                (xhr) => {
+                    console.log("Carga progreso:", (xhr.loaded / xhr.total * 100) + '%');
+                },
+                (error) => {
+                    console.error("Error cargando OBJLoader:", error);
+                    loadingEl?.classList.add('hidden');
+                }
+            );
+
+        // Orbit state
+        let isDragging = false;
+        let prevMouse = { x: 0, y: 0 };
+        let spherical = { theta: 0, phi: Math.PI / 4 };
+        let radius = 10;
+        const target = new THREE.Vector3(0, 0, 0);
+
+        canvas.addEventListener('mousedown', (e: MouseEvent) => { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; });
+        canvas.addEventListener('mousemove', (e: MouseEvent) => {
+            if (!isDragging) return;
+            spherical.theta -= (e.clientX - prevMouse.x) * 0.005;
+            spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi + (e.clientY - prevMouse.y) * 0.005));
+            prevMouse = { x: e.clientX, y: e.clientY };
+        });
+        canvas.addEventListener('mouseup', () => { isDragging = false; });
+        canvas.addEventListener('mouseleave', () => { isDragging = false; });
+        canvas.addEventListener('wheel', (e: WheelEvent) => { radius = Math.max(3, Math.min(25, radius + e.deltaY * 0.02)); }, { passive: true });
+
+        // Touch
+        let prevTouch = { x: 0, y: 0 };
+        canvas.addEventListener('touchstart', (e: TouchEvent) => { isDragging = true; prevTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }, { passive: true });
+        canvas.addEventListener('touchmove', (e: TouchEvent) => {
+            if (!isDragging) return;
+            spherical.theta -= (e.touches[0].clientX - prevTouch.x) * 0.005;
+            spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi + (e.touches[0].clientY - prevTouch.y) * 0.005));
+            prevTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }, { passive: true });
+        canvas.addEventListener('touchend', () => { isDragging = false; });
+
+        // Controls
+        btnRotate?.addEventListener('click', () => { autoRotate = !autoRotate; btnRotate.classList.toggle('active', autoRotate); });
+        btnReset?.addEventListener('click', () => { spherical = { theta: 0, phi: Math.PI / 4 }; radius = 10; });
+        btnWireframe?.addEventListener('click', () => {
+            isWireframe = !isWireframe;
+            btnWireframe.classList.toggle('active', isWireframe);
+            (loadedModel || placeholder).traverse((child) => { if (child.isMesh) child.material.wireframe = isWireframe; });
+        });
+
+        // Resize
+        const handleResize = () => {
+            const r = canvas.getBoundingClientRect();
+            camera.aspect = r.width / r.height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(r.width, r.height);
+        };
+        window.addEventListener('resize', handleResize);
+
+        // Animation loop
+        let animId: number;
+        const clock = new THREE.Clock();
+
+        const animate = () => {
+            animId = requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            if (autoRotate && !isDragging) spherical.theta += delta * 0.3;
+
+            camera.position.x = target.x + radius * Math.sin(spherical.phi) * Math.sin(spherical.theta);
+            camera.position.y = target.y + radius * Math.cos(spherical.phi);
+            camera.position.z = target.z + radius * Math.sin(spherical.phi) * Math.cos(spherical.theta);
+            camera.lookAt(target);
+            renderer.render(scene, camera);
+        };
+
+        animate();
+
+        return () => {
+            cancelAnimationFrame(animId);
+            window.removeEventListener('resize', handleResize);
+            renderer.dispose();
+        };
+        } catch(e) {
+            console.error("!!! ERROR CRITICO INIT !!!", e);
+        }
+    }
+
+    document.addEventListener('astro:page-load', async () => {
+        console.log("astro:page-load detectado");
+        if (cleanupViewer) cleanupViewer();
+        const canvas = document.getElementById('render-canvas');
+        if (canvas) {
+            const cleanup = await initRenderViewer();
+            if (cleanup) cleanupViewer = cleanup;
+        }
+    });
+
+    document.addEventListener('astro:before-swap', () => {
+        if (cleanupViewer) { cleanupViewer(); cleanupViewer = undefined; }
+    });
+</script>

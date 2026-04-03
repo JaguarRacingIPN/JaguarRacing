@@ -1,0 +1,33 @@
+---
+// src/pages/gallery/index.astro
+// Página principal de la Galería
+import HeroGallery from '../../components/gallery/HeroGallery.astro';
+import RenderBajaSection from '../../components/gallery/RenderBajaSection.astro';
+import GalleryGrid from '../../components/gallery/GalleryGrid.astro';
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Galería — Jaguar Racing">
+
+    <HeroGallery />
+    <RenderBajaSection hideBackBtn={true} />
+    <GalleryGrid />
+
+    <section class="gallery-bottom-banner">
+        <img src="/gallery/fondo-pagina.webp" alt="Fondo Jaguar Racing" loading="lazy" />
+    </section>
+
+</Layout>
+
+<style>
+    .gallery-bottom-banner {
+        width: 100%;
+        background: #000;
+    }
+    .gallery-bottom-banner img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+    }
+</style>

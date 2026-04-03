@@ -1,0 +1,340 @@
+---
+// GalleryGrid.astro
+---
+
+<section class="gallery-grid-section scroll-animate">
+
+    {/* ROW 2: CADS DEL BAJA + TEST DEL BAJA */}
+    <div class="gallery-row gallery-row--duo">
+
+        <a href="/gallery/cads-baja" class="gallery-card gallery-card--half">
+            <div class="gallery-card__media">
+                <img
+                    src="/gallery/cads-baja-thumb.webp"
+                    alt="CADs del Baja SAE"
+                    class="gallery-card__img"
+                    loading="lazy"
+                    decoding="async"
+                />
+                <div class="gallery-card__overlay"></div>
+            </div>
+            <div class="gallery-card__info">
+                <span class="gallery-card__label">CADS DEL BAJA</span>
+                <span class="gallery-card__date">01/04/2026</span>
+                <p class="gallery-card__desc">Dise&#241;os y modelados CAD de un veh&#237;culo Baja SAE</p>
+                <span class="gallery-card__cta">Ver dise&#241;os &#8594;</span>
+            </div>
+        </a>
+
+        <div class="gallery-card gallery-card--half gallery-card--soon">
+            <div class="gallery-card__media">
+                <img
+                    src="/gallery/test-baja-thumb.webp"
+                    alt="Test del Baja SAE"
+                    class="gallery-card__img"
+                    loading="lazy"
+                    decoding="async"
+                />
+                <div class="gallery-card__overlay gallery-card__overlay--heavy"></div>
+                <div class="gallery-card__soon-stamp">PR&#211;XIMAMENTE</div>
+            </div>
+            <div class="gallery-card__info">
+                <span class="gallery-card__label">TEST DEL BAJA</span>
+                <span class="gallery-card__date">FECHA POR CONFIRMAR</span>
+                <p class="gallery-card__desc">Pruebas en pista del prototipo</p>
+            </div>
+        </div>
+
+    </div>
+
+    {/* ROW 3: TEST GO KART + CADS GO KART */}
+    <div class="gallery-row gallery-row--duo">
+
+        <div class="gallery-card gallery-card--half gallery-card--soon">
+            <div class="gallery-card__media">
+                <img
+                    src="/gallery/test-gokart-thumb.webp"
+                    alt="Test del Go Kart"
+                    class="gallery-card__img"
+                    loading="lazy"
+                    decoding="async"
+                />
+                <div class="gallery-card__overlay gallery-card__overlay--heavy"></div>
+                <div class="gallery-card__soon-stamp">PR&#211;XIMAMENTE</div>
+            </div>
+            <div class="gallery-card__info">
+                <span class="gallery-card__label">TEST DEL GO KART</span>
+                <span class="gallery-card__date">FECHA POR CONFIRMAR</span>
+                <p class="gallery-card__desc">Pruebas del veh&#237;culo kart el&#233;ctrico</p>
+            </div>
+        </div>
+
+        <div class="gallery-card gallery-card--half gallery-card--soon">
+            <div class="gallery-card__media">
+                <img
+                    src="/gallery/cads-gokart-thumb.webp"
+                    alt="CADs del Go Kart"
+                    class="gallery-card__img"
+                    loading="lazy"
+                    decoding="async"
+                />
+                <div class="gallery-card__overlay gallery-card__overlay--heavy"></div>
+                <div class="gallery-card__soon-stamp">PR&#211;XIMAMENTE</div>
+            </div>
+            <div class="gallery-card__info">
+                <span class="gallery-card__label">CADS DEL GO KART</span>
+                <span class="gallery-card__date">FECHA POR CONFIRMAR</span>
+                <p class="gallery-card__desc">Modelado CAD del kart el&#233;ctrico</p>
+            </div>
+        </div>
+
+    </div>
+
+    {/* ROW 4: COMPETENCIAS + EVENTOS */}
+    <div class="gallery-row gallery-row--duo">
+
+        <div class="gallery-card gallery-card--half gallery-card--soon">
+            <div class="gallery-card__media">
+                <img
+                    src="/gallery/competencias-thumb.webp"
+                    alt="Competencias Jaguar Racing"
+                    class="gallery-card__img"
+                    loading="lazy"
+                    decoding="async"
+                />
+                <div class="gallery-card__overlay gallery-card__overlay--heavy"></div>
+                <div class="gallery-card__soon-stamp">PR&#211;XIMAMENTE</div>
+            </div>
+            <div class="gallery-card__info">
+                <span class="gallery-card__label">COMPETENCIAS</span>
+                <span class="gallery-card__date">FECHA POR CONFIRMAR</span>
+                <p class="gallery-card__desc">Momentos de nuestras competencias Baja SAE</p>
+            </div>
+        </div>
+
+        <div class="gallery-card gallery-card--half gallery-card--soon">
+            <div class="gallery-card__media">
+                <img
+                    src="/gallery/eventos-thumb.webp"
+                    alt="Eventos Jaguar Racing"
+                    class="gallery-card__img"
+                    loading="lazy"
+                    decoding="async"
+                />
+                <div class="gallery-card__overlay gallery-card__overlay--heavy"></div>
+                <div class="gallery-card__soon-stamp">PR&#211;XIMAMENTE</div>
+            </div>
+            <div class="gallery-card__info">
+                <span class="gallery-card__label">EVENTOS</span>
+                <span class="gallery-card__date">FECHA POR CONFIRMAR</span>
+                <p class="gallery-card__desc">Presentaciones, exposiciones y eventos del equipo</p>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<style>
+
+
+    .gallery-grid-section {
+        background: #000;
+        padding: 0 0 6rem;
+        font-family: 'Montserrat', sans-serif;
+        position: relative;
+    }
+
+    .gallery-row {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 2px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .gallery-row--feature { min-height: 55vh; }
+    .gallery-row--duo     { min-height: 42vh; }
+
+    .gallery-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        cursor: pointer;
+        text-decoration: none;
+        background: #0a0a0a;
+    }
+
+    .gallery-card--feature { flex: 1; min-height: 55vh; }
+    .gallery-card--half    { flex: 1; min-height: 42vh; }
+    .gallery-card--soon    { cursor: default; }
+
+    .gallery-card__media {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+    }
+
+    .gallery-card__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transform: scale(1.05);
+        transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+        filter: grayscale(20%);
+    }
+
+    .gallery-card:not(.gallery-card--soon):hover .gallery-card__img {
+        transform: scale(1.12);
+        filter: grayscale(0%) brightness(1.1);
+    }
+
+    .gallery-card__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.1) 100%);
+        transition: background 0.5s ease;
+    }
+
+    .gallery-card__overlay--heavy {
+        background: rgba(0,0,0,0.75);
+    }
+
+    .gallery-card__info {
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        z-index: 2;
+        padding: 2rem 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .gallery-card--feature .gallery-card__info {
+        padding: 2.5rem 3rem;
+    }
+
+    .gallery-card__label {
+        font-weight: 600;
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        color: #b8960c;
+        text-transform: uppercase;
+    }
+
+    .gallery-card__title {
+        font-weight: 800;
+        font-size: clamp(1.5rem, 3vw, 2.5rem);
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin: 0;
+        line-height: 1.1;
+    }
+
+    .gallery-card__meta {
+        font-weight: 500;
+        font-size: 0.8rem;
+        letter-spacing: 0.2em;
+        color: rgba(255,255,255,0.6);
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    .gallery-card__date {
+        font-weight: 500;
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        color: rgba(184,150,12,0.7);
+        text-transform: uppercase;
+    }
+
+    .gallery-card__desc {
+        font-weight: 400;
+        font-size: 0.875rem;
+        color: rgba(255,255,255,0.55);
+        margin: 0.25rem 0 0;
+        line-height: 1.5;
+    }
+
+    .gallery-card__cta {
+        font-weight: 600;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        color: #b8960c;
+        text-transform: uppercase;
+        margin-top: 0.5rem;
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .gallery-card:not(.gallery-card--soon):hover .gallery-card__cta {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .gallery-card:not(.gallery-card--soon)::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0;
+        width: 0;
+        height: 3px;
+        background: #b8960c;
+        transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 3;
+    }
+
+    .gallery-card:not(.gallery-card--soon):hover::after {
+        width: 100%;
+    }
+
+    .gallery-card__obj-badge {
+        position: absolute;
+        top: 1.5rem; right: 1.5rem;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(0,0,0,0.7);
+        border: 1px solid rgba(184,150,12,0.5);
+        padding: 0.4rem 0.8rem;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        color: #b8960c;
+        text-transform: uppercase;
+        backdrop-filter: blur(8px);
+    }
+
+    .gallery-card__soon-stamp {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%) rotate(-315deg);
+        z-index: 3;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        font-size: clamp(1.5rem, 3vw, 2.5rem);
+        letter-spacing: 0.08em;
+        color: #fff;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+        text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+    }
+
+    @media (max-width: 768px) {
+        .gallery-row--duo {
+            flex-direction: column;
+            min-height: auto;
+        }
+        .gallery-card--half    { min-height: 50vw; }
+        .gallery-card--feature { min-height: 65vw; }
+        .gallery-card__info { padding: 1.5rem; }
+        .gallery-card--feature .gallery-card__info { padding: 1.5rem; }
+        .gallery-card__title { font-size: 1.4rem; }
+    }
+</style>

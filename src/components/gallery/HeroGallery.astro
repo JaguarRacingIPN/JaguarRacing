@@ -1,0 +1,131 @@
+---
+// HeroGallery.astro
+---
+
+<header class="hero-gallery">
+    <div class="hero-gallery__bg-img"></div>
+    <div class="hero-gallery__bg-grid"></div>
+    <div class="hero-gallery__gradient"></div>
+
+    <div class="hero-gallery__content">
+        <p class="hero-gallery__eyebrow">JAGUAR RACING &#8212; ESIME AZCAPOTZALCO</p>
+        <h1 class="hero-gallery__title">GALER&#205;A</h1>
+        <p class="hero-gallery__subtitle">NUESTROS PROYECTOS EN IM&#193;GENES</p>
+        <div class="hero-gallery__divider"></div>
+        <p class="hero-gallery__desc">
+            Somos una escuder&#237;a universitaria que documenta cada paso de su evoluci&#243;n.
+            Dise&#241;o CAD, pruebas en pista, eventos y logros t&#233;cnicos.
+        </p>
+    </div>
+</header>
+
+<style>
+
+
+    .hero-gallery {
+        position: relative;
+        background: #000;
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 8rem 2rem 5rem;
+    }
+
+    .hero-gallery__bg-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(184,150,12,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(184,150,12,0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
+        animation: gridDrift 20s linear infinite;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .hero-gallery__bg-img {
+        position: absolute;
+        inset: 0;
+        background-image: url('/gallery/imagen-al-fondo.webp');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.45;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    @keyframes gridDrift {
+        0%   { background-position: 0 0; }
+        100% { background-position: 60px 60px; }
+    }
+
+    .hero-gallery__gradient {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(184,150,12,0.07) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .hero-gallery__content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .hero-gallery__eyebrow {
+        font-weight: 500;
+        font-size: 0.72rem;
+        letter-spacing: 0.28em;
+        color: rgba(184,150,12,0.75);
+        margin: 0 0 1rem;
+        text-transform: uppercase;
+    }
+
+    .hero-gallery__title {
+        font-weight: 800;
+        font-size: clamp(3rem, 8vw, 7rem);
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin: 0 0 0.5rem;
+        line-height: 1;
+    }
+
+    .hero-gallery__subtitle {
+        font-weight: 600;
+        font-size: clamp(0.75rem, 1.8vw, 1rem);
+        letter-spacing: 0.3em;
+        color: rgba(255,255,255,0.55);
+        margin: 0 0 1.5rem;
+        text-transform: uppercase;
+    }
+
+    .hero-gallery__divider {
+        width: 70px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #b8960c, transparent);
+        margin: 0 auto 1.5rem;
+    }
+
+    .hero-gallery__desc {
+        font-weight: 400;
+        font-size: clamp(0.85rem, 1.4vw, 0.95rem);
+        color: rgba(255,255,255,0.45);
+        max-width: 580px;
+        line-height: 1.9;
+        margin: 0;
+    }
+
+    @media (max-width: 640px) {
+        .hero-gallery {
+            min-height: 50vh;
+            padding: 7rem 1.5rem 4rem;
+        }
+    }
+</style>
