@@ -1,0 +1,203 @@
+---
+// Interfaz Educativa Jaguar Racing - Metodología y Fundamentos
+const areas = [
+    {
+        id: 'powertrain',
+        label: 'Powertrain',
+        title: 'TRANSFERENCIA DE POTENCIA',
+        desc: 'Análisis de la cadena cinemática desde el motor reglamentario hasta las ruedas. Diseño y calibración de la transmisión continuamente variable (CVT) y la caja reductora para optimizar el torque y la velocidad en terrenos irregulares.',
+        videoId: 'GxcOT25JrFg',
+    },
+    {
+        id: 'suspension',
+        label: 'Suspensión',
+        title: 'CINEMÁTICA Y AMORTIGUACIÓN',
+        desc: 'Estudio de la dinámica vehicular enfocado en absorber impactos extremos. Simulación de la geometría de doble horquilla para mantener el contacto óptimo del neumático, controlando el centro de balanceo y el recorrido total.',
+        videoId: 'ybZYU_3B3YA',
+    },
+    {
+        id: 'frenos',
+        label: 'Frenos',
+        title: 'SISTEMA DE FRENADO Y SEGURIDAD',
+        desc: 'Dimensionamiento hidráulico y térmico del sistema de detención. Cálculo de fuerzas de fricción y diseño de rotores para garantizar la máxima capacidad de frenado y disipación de calor bajo normativas estrictas de competencia.',
+        videoId: '3Q-YweQNpGo',
+    },
+    {
+        id: 'direccion',
+        label: 'Dirección',
+        title: 'GEOMETRÍA DE MANIOBRA',
+        desc: 'Diseño del mecanismo de piñón y cremallera para una respuesta táctil precisa. Análisis de la geometría de Ackermann para minimizar el radio de giro y optimizar el control del piloto en circuitos de alta exigencia técnica.',
+        videoId: 'yADSdZq8rU8',
+    },
+    {
+        id: 'cae',
+        label: 'CAE',
+        title: 'ANÁLISIS DE ELEMENTOS FINITOS',
+        desc: 'Validación virtual de la integridad estructural. Aplicación de metodologías CAE (Ingeniería Asistida por Computadora) para simular cargas dinámicas sobre el chasis y componentes críticos, optimizando la relación peso-resistencia.',
+        videoId: 'h_5hwpVpaSM',
+    },
+];
+---
+
+<section class="eng-section">
+    <nav class="eng-nav">
+        {areas.map((area, i) => (
+            <button 
+                class={`nav-item ${i === 0 ? 'is-active' : ''}`} 
+                data-tab={area.id}
+            >
+                {area.label}
+            </button>
+        ))}
+    </nav>
+
+    <div class="eng-content">
+        {areas.map((area, i) => (
+            <div 
+                class={`eng-panel ${i === 0 ? 'is-active' : ''}`} 
+                id={`panel-${area.id}`}
+                hidden={i !== 0}
+            >
+                <div class="panel-grid">
+                    <div class="video-container">
+                        <iframe
+                            src={`https://www.youtube.com/embed/${area.videoId}`}
+                            title={area.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                    <div class="info-container">
+                        <h2>{area.title}</h2>
+                        <p>{area.desc}</p>
+                    </div>
+                </div>
+            </div>
+        ))}
+    </div>
+</section>
+
+<script>
+    const initTabs = () => {
+        const tabs = document.querySelectorAll('.nav-item');
+        const panels = document.querySelectorAll('.eng-panel');
+        if (tabs.length === 0) return;
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = (tab as HTMLElement).dataset.tab;
+                tabs.forEach(t => t.classList.remove('is-active'));
+                tab.classList.add('is-active');
+                panels.forEach(p => {
+                    p.classList.remove('is-active');
+                    (p as HTMLElement).hidden = true;
+                });
+                const activePanel = document.getElementById(`panel-${target}`);
+                if (activePanel) {
+                    activePanel.hidden = false;
+                    requestAnimationFrame(() => activePanel.classList.add('is-active'));
+                }
+            });
+        });
+    };
+    document.addEventListener('astro:page-load', initTabs);
+</script>
+
+<style>
+    .eng-section {
+        background: var(--bg-black);
+        padding: 1rem clamp(1rem, 5vw, 4rem) 4rem; 
+    }
+
+    .eng-nav {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        overflow-x: auto;
+    }
+
+    .nav-item {
+        background: none;
+        border: none;
+        padding: 0.8rem 0;
+        color: var(--text-gray);
+        font-family: var(--font-main);
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        position: relative;
+        white-space: nowrap; 
+    }
+
+    .nav-item.is-active { color: var(--text-white); }
+    .nav-item.is-active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--jaguar-gold);
+    }
+
+    .panel-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 2.5rem;
+        align-items: flex-start;
+    }
+
+    .video-container {
+        position: relative;
+        padding-top: 56.25%;
+        background: #050505;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .video-container iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
+    .info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .info-container h2 {
+        text-align: left;
+        margin: 0;
+    }
+
+    .info-container p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .eng-panel {
+        opacity: 0;
+        transform: translateY(5px);
+        transition: all 0.3s ease;
+    }
+
+    .eng-panel.is-active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+        .panel-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        .info-container h2 { text-align: center; }
+    }
+</style>

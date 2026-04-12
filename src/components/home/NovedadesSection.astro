@@ -1,0 +1,199 @@
+---
+import { Image } from 'astro:assets';
+
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+    '/src/assets/**/*.{png,jpg,jpeg,webp,avif,svg}',
+    { eager: true }
+);
+
+function resolveImage(relativePath: string): ImageMetadata {
+    const key = `/src/assets/${relativePath}`;
+    const mod = allImages[key];
+    if (!mod) {
+        throw new Error(`[NovedadesSection] No existe: "${key}".`);
+    }
+    return mod.default;
+}
+
+const novedades = [
+    {
+        title: 'Render Interactivo',
+        date: '',
+        desc: 'Contenido educativo sobre el ensamble del vehículo y las áreas de ingeniería involucradas en el desarrollo del Baja.',
+        img: 'features/cad-chasis.webp', 
+        url: null,
+        badge: 'Próximamente',
+    },
+    {
+        title: 'Validación en Pista',
+        date: '',
+        desc: 'Registro de las primeras pruebas dinámicas del prototipo programadas para la próxima semana.',
+        img: 'features/Test.webp', 
+        url: null,
+        badge: 'Próximamente',
+    },
+    {
+        title: 'VISTA 360',
+        date: '',
+        desc: 'Explora nuestro taller y oficina, el lugar donde la ingeniería cobra vida y el Baja 2026 toma forma.',
+        img: 'features/oficina.webp',
+        url: null,
+        badge: 'Próximamente',
+    },
+    {
+        title: 'All Terrarian 2026',
+        date: '21 y 22 DE MAYO',
+        desc: 'El equipo se prepara para la competencia All Terrarian en Querétaro. ¡Sigue nuestra trayectoria en tiempo real!',
+        img: 'features/all.webp', 
+        url: null,
+        badge: 'Próximamente',
+    },
+];
+---
+
+<section class="novedades">
+    <h2>ACTUALIZACIONES</h2>
+
+    <div class="novedades__track">
+        {novedades.map((novedad) => {
+            const isProximamente = novedad.badge === 'Próximamente';
+            const Tag = isProximamente ? 'div' : 'a';
+            const imageMetadata = resolveImage(novedad.img);
+
+            return (
+                <Tag
+                    class={`novedades-card ${isProximamente ? 'novedades-card--static' : ''}`}
+                    href={isProximamente ? undefined : novedad.url}
+                >
+                    <article class="novedades-card__inner">
+                        <div class="novedades-card__media">
+                            <Image
+                                src={imageMetadata}
+                                alt={novedad.title}
+                                class={`novedades-card__img ${isProximamente ? 'is-disabled' : ''}`}
+                                widths={[400, 800]}
+                                sizes="350px"
+                            />
+                            <span class="novedades-card__badge">{novedad.badge}</span>
+                            <div class="novedades-card__overlay">
+                                <time class="novedades-card__date">{novedad.date}</time>
+                                <h3>{novedad.title}</h3>
+                                <p>{novedad.desc}</p>
+                            </div>
+                        </div>
+                    </article>
+                </Tag>
+            );
+        })}
+    </div>
+</section>
+
+<style>
+    .novedades {
+        padding: 2rem 0 0.0rem;
+        background: var(--bg-black);
+    }
+
+    .novedades__track {
+        display: flex;
+        gap: 1.5rem;
+        overflow-x: auto;
+        padding: 0 2rem 1rem;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        scroll-snap-type: x mandatory;
+    }
+
+    .novedades__track::-webkit-scrollbar { display: none; }
+
+    .novedades-card {
+        flex: 0 0 320px;
+        scroll-snap-align: start;
+        text-decoration: none;
+    }
+
+    .novedades-card__inner {
+        aspect-ratio: 1 / 1;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        background: #050505;
+        border: 1px solid rgba(166, 124, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .novedades-card:not(.novedades-card--static):hover .novedades-card__inner {
+        transform: translateY(-5px);
+    }
+
+    .novedades-card__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* Estado por defecto: oscurecido para legibilidad */
+        filter: brightness(0.6);
+        transition: filter 0.4s ease, transform 0.4s ease;
+    }
+
+    /* --- EFECTO BLANCO Y NEGRO PARA PRÓXIMAMENTE --- */
+    .novedades-card__img.is-disabled {
+        filter: grayscale(1) brightness(0.3) contrast(0.8);
+    }
+
+    /* Hover solo para tarjetas activas: recupera color y brillo */
+    .novedades-card:not(.novedades-card--static):hover .novedades-card__img {
+        filter: brightness(0.8) grayscale(0);
+        transform: scale(1.05);
+    }
+
+    .novedades-card__media::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    }
+
+    .novedades-card__badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: var(--jaguar-black);
+        color: var(--text-white);
+        padding: 0.3rem 0.6rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        border-radius: 4px;
+        z-index: 2;
+    }
+
+    .novedades-card__overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 1.5rem;
+        z-index: 2;
+        width: 100%;
+    }
+
+    .novedades-card__date {
+        display: block;
+        color: var(--text-gray);
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .novedades-card__overlay h3, 
+    .novedades-card__overlay p {
+        margin: 0;
+        text-align: left;
+    }
+
+    .novedades-card__overlay p {
+        margin-top: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
