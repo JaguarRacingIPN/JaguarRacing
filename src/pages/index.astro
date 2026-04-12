@@ -5,6 +5,7 @@ import Layout from '../layouts/Layout.astro';
 import HeroSlider from '../components/home/HeroSlider.astro';
 import MissionSection from '../components/home/MissionSection.astro';
 import BajaSection from '../components/home/BajaSection.astro';
+import NovedadesSection from '../components/home/NovedadesSection.astro';
 import RecruitmentCTA from '../components/home/RecruitmentCTA.astro';
 import SponsorsMarquee from '../components/home/SponsorsMarquee.astro';
 import TeamPreview from '../components/home/TeamPreview.astro';
@@ -21,22 +22,25 @@ const pageTitle = "Inicio";
         {/* 1. IMPACTO: El coche y la identidad visual */}
         <HeroSlider />
 
+        {/* 4. NOVEDADES: Actualizaciones recientes del proyecto */}
+        <NovedadesSection />
+
         {/* 2. IDENTIDAD: Quiénes somos (Jaguar Racing) */}
         <MissionSection />
 
         {/* 3. OBJETIVO: La competencia (Contexto para el visitante) */}
         <BajaSection />
 
-        {/* 4. ACCIÓN (Talento): Captura a los estudiantes interesados */}
-        <RecruitmentCTA />
-
-        {/* 5. VALIDACIÓN (Dinero): Muestra quién confía en ustedes antes de pedir más */}
+        {/* 6. VALIDACIÓN (Dinero): Muestra quién confía en ustedes antes de pedir más */}
         <SponsorsMarquee />
 
-        {/* 6. CONFIANZA: Caras reales del equipo (Humaniza la marca) */}
+        {/* 7. CONFIANZA: Caras reales del equipo (Humaniza la marca) */}
         <TeamPreview />
 
-        {/* 7. RETENCIÓN: El juego al final para que se queden un rato más */}
+                {/* 5. ACCIÓN (Talento): Captura a los estudiantes interesados */}
+        <RecruitmentCTA />
+
+        {/* 8. RETENCIÓN: El juego al final para que se queden un rato más */}
         <ReactionGame />
     </main>    
 </Layout>
