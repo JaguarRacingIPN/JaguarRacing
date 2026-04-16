@@ -1,178 +1,301 @@
 ---
-// Componente minimalista de visor 3D para Jaguar Racing - Compacto
+// Componente interactivo de visor 3D y panel educativo para Jaguar Racing
 ---
 
 <section class="render-hero">
     <div class="render-hero__inner">
-        <h1>Render Interactivo</h1>
+        <h1>Ingeniería Interactiva</h1>
         <p>
-            Explora los conceptos mecánicos y las áreas de ingeniería que conforman un vehículo Baja SAE. Los modelos y referencias a continuación ilustran nuestro proceso teórico de desarrollo y análisis.
+            Selecciona los sistemas en el modelo 3D para explorar la teoría de desarrollo, validación y manufactura detrás de nuestro vehículo Baja SAE.
         </p>
     </div>
 </section>
 
-<section class="render-viewer-section">
-    <div class="render-viewer-container">
-        <canvas id="render-canvas" class="render-canvas"></canvas>
+<section class="render-interactive-section">
+    <div class="split-layout">
         
-        <div class="render-viewer__loading" id="viewer-loading">
-            <div class="loading-spinner"></div>
-            <p>Sincronizando telemetría 3D...</p>
+        <div class="render-viewer-container" id="viewer-container">
+            <canvas id="render-canvas" class="render-canvas"></canvas>
+            
+            <div class="render-viewer__loading" id="viewer-loading">
+                <div class="loading-spinner"></div>
+                <p>Cargando ensamblajes...</p>
+            </div>
+
+            <div class="render-viewer__controls">
+                <button class="viewer-ctrl active" id="ctrl-rotate" title="Rotación automática">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><polyline points="21 3 21 8 16 8"></polyline></svg>
+                </button>
+                <button class="viewer-ctrl" id="ctrl-reset" title="Reiniciar vista">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+                <button class="viewer-ctrl" id="ctrl-wireframe" title="Vista wireframe">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                </button>
+            </div>
         </div>
 
-        <div class="render-viewer__controls">
-            <button class="viewer-ctrl active" id="ctrl-rotate" title="Rotación automática">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><polyline points="21 3 21 8 16 8"></polyline></svg>
-            </button>
-            <button class="viewer-ctrl" id="ctrl-reset" title="Reiniciar vista">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
-            </button>
-            <button class="viewer-ctrl" id="ctrl-wireframe" title="Vista wireframe">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-            </button>
-        </div>
+        <aside class="info-panel">
+            <div class="panel-content">
+                <div class="panel-header">
+                    <h2 id="panel-title">Inicia la Exploración</h2>
+                </div>
+                
+                <div class="panel-body">
+                    <p id="panel-desc">
+                        Gira el modelo y haz clic en las diferentes piezas del monoplaza para revelar cómo aplicamos los conceptos de ingeniería en Jaguar Racing y quiénes hacen posible su manufactura.
+                    </p>
+                    <a href="#detalles" id="panel-action-btn" class="panel-btn hidden">
+                        Ver análisis a detalle ↓
+                    </a>
+                </div>
+
+                <div class="panel-sponsors hidden" id="panel-sponsors">
+                    <span class="sponsor-label">Validado / Manufacturado con apoyo de:</span>
+                    <div class="sponsor-logos" id="sponsor-logos-container">
+                    </div>
+                </div>
+            </div>
+        </aside>
+
     </div>
 </section>
 
 <style>
-    /* ─── Hero Section (Minimalista Compacto) ──────────────────── */
+    /* ─── Variables y Reset Básico ─── */
+    :root {
+        --panel-bg: #111111;
+        --panel-border: rgba(166, 124, 0, 0.2);
+    }
+
     .render-hero {
         background: var(--bg-black);
-        padding: 6rem 2rem 1.5rem; 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        padding: 4rem 2rem 1rem; 
         text-align: center;
     }
 
-    .render-hero__inner {
-        position: relative;
-        z-index: 1;
-        max-width: 700px;
-    }
+    .render-hero h1 { margin-bottom: 0.5rem; }
+    .render-hero p { max-width: 600px; margin: 0 auto; color: var(--text-gray); }
 
-    .render-hero__inner p {
-        margin-top: 0.5rem;
-        margin-bottom: 0;
-        font-size: 0.9rem;
-    }
-
-    /* ─── Viewer Section ───────── */
-    .render-viewer-section {
+    /* ─── Split Layout ─── */
+    .render-interactive-section {
         background: var(--bg-black);
-        padding: 0 0 2rem; 
+        padding: 1rem 2rem 4rem;
     }
 
-    .render-viewer-container {
-        position: relative;
-        width: min(94%, 85rem);
+    .split-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        max-width: 1400px;
         margin: 0 auto;
-        
-        height: 60vh; 
-        max-height: 550px; 
-        min-height: 350px;
-        
-        background: #050505;
-        border: 1px solid rgba(166, 124, 0, 0.15);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     }
 
-    .render-canvas {
-        width: 100%;
-        height: 100%;
-        outline: none;
-        display: block;
-    }
-
-    /* ─── Loading State ────────────────────────────────────────── */
-    .render-viewer__loading {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg-black);
-        z-index: 10;
-        transition: opacity 0.5s ease;
-        color: var(--text-gray);
-    }
-
-    .render-viewer__loading.hidden {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .loading-spinner {
-        width: 45px;
-        height: 45px;
-        border: 3px solid rgba(166, 124, 0, 0.1);
-        border-top-color: var(--jaguar-gold);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 1.5rem;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ─── Controls ────────────────────────────────────────────── */
-    .render-viewer__controls {
-        position: absolute;
-        bottom: 1.5rem;
-        right: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.6rem;
-        z-index: 5;
-    }
-
-    .viewer-ctrl {
-        width: 44px;
-        height: 44px;
-        background: rgba(0, 0, 0, 0.85);
-        border: 1px solid rgba(166, 124, 0, 0.25);
-        color: var(--text-white);
-        border-radius: 8px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(8px);
-        transition: all 0.3s ease;
-    }
-
-    .viewer-ctrl:hover, .viewer-ctrl.active {
-        border-color: var(--jaguar-gold);
-        color: var(--jaguar-gold);
-        background: rgba(166, 124, 0, 0.1);
-        transform: scale(1.05);
-    }
-
-    /* ─── Responsive ───────────────────────────────────────────── */
-    @media (max-width: 900px) {
-        .render-hero { padding: 5rem 1.5rem 1rem; }
-        .render-viewer-section { padding: 0 0 1.5rem; }
-        .render-viewer-container { 
-            height: 55vh; 
-            aspect-ratio: auto; 
+    @media (min-width: 1024px) {
+        .split-layout {
+            flex-direction: row;
+            height: 65vh; 
+            min-height: 500px;
         }
     }
+
+    /* ─── Contenedor 3D ─── */
+    .render-viewer-container {
+        position: relative;
+        flex: 2; 
+        height: 60vh; 
+        background: #050505;
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    @media (min-width: 1024px) {
+        .render-viewer-container { height: 100%; }
+    }
+
+    .render-canvas { width: 100%; height: 100%; outline: none; display: block; cursor: crosshair; }
+
+    /* ─── Panel de Información (Derecha) ─── */
+    .info-panel {
+        flex: 1; 
+        background: var(--panel-bg);
+        border: 1px solid var(--panel-border);
+        border-radius: 12px;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .info-panel::-webkit-scrollbar { width: 6px; }
+    .info-panel::-webkit-scrollbar-track { background: transparent; }
+    .info-panel::-webkit-scrollbar-thumb { background: rgba(166, 124, 0, 0.3); border-radius: 10px; }
+    .info-panel::-webkit-scrollbar-thumb:hover { background: var(--jaguar-gold); }
+
+    .panel-header h2 {
+        margin: 0 0 1rem 0;
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+
+    .panel-body p {
+        color: #cccccc;
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+
+    /* ─── Botón de Salto ─── */
+    .panel-btn {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.8rem 1.5rem;
+        background: rgba(166, 124, 0, 0.1);
+        color: var(--jaguar-gold);
+        border: 1px solid var(--jaguar-gold);
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    .panel-btn:hover { background: var(--jaguar-gold); color: var(--bg-black); }
+    .panel-btn.hidden { display: none; }
+
+    /* ─── Patrocinadores ─── */
+    .panel-sponsors {
+        margin-top: auto;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .panel-sponsors.hidden { display: none; }
+
+    .sponsor-label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-gray);
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
+
+    .sponsor-logos {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    /*Mobile */
+    @media (max-width: 768px) {
+        .panel-sponsors {
+            text-align: center; 
+        }
+        .sponsor-logos {
+            justify-content: center; 
+        }
+    }
+
+    /* ─── Controles ─── */
+    .render-viewer__loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg-black); z-index: 10; transition: opacity 0.5s; }
+    .render-viewer__loading.hidden { opacity: 0; pointer-events: none; }
+    .loading-spinner { width: 40px; height: 40px; border: 3px solid rgba(166, 124, 0, 0.1); border-top-color: var(--jaguar-gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .render-viewer__controls { position: absolute; bottom: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; z-index: 5; }
+    .viewer-ctrl { width: 40px; height: 40px; background: rgba(0, 0, 0, 0.8); border: 1px solid var(--panel-border); color: white; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .viewer-ctrl:hover, .viewer-ctrl.active { border-color: var(--jaguar-gold); color: var(--jaguar-gold); background: rgba(166, 124, 0, 0.1); }
 </style>
 
 <script>
     import * as THREE from 'three';
-    // @ts-expect-error - No type definitions available for GLTFLoader
+    // @ts-expect-error
     import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
     import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-    let cleanupViewer: (() => void) | undefined;
+    import logoAltair from '../../assets/IMGpatrocinadores/altair.webp';
+    import logoHeydi from '../../assets/IMGpatrocinadores/heydi.webp';
+    import logoBimsa from '../../assets/IMGpatrocinadores/bimsa.webp';
+    import logoCopiisa from '../../assets/IMGpatrocinadores/copiisa.webp';
 
-    const getThemeColor = (variableName: string, fallback = ''): string => {
-        const value = getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
-        return value || fallback;
+    // ─── ESTILOS INLINE PARA LOGOS ───
+    const linkStyle = `
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: 150px;
+        height: 100px;
+        text-decoration: none;
+        cursor: pointer;
+        padding: 5px;
+    `;
+
+    const imgStyle = `
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 80px;
+        object-fit: contain;
+        opacity: 0.7;
+        pointer-events: none;
+        user-select: none;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+    `;
+
+    const sponsorLink = (href: string, umamiEvent: string, src: string, alt: string) =>
+        `<a href="${href}" target="_blank" rel="noopener noreferrer" class="panel-sponsor-link" data-umami-event="${umamiEvent}" style="${linkStyle}"><img src="${src}" alt="${alt}" style="${imgStyle}"></a>`;
+
+    // ─── DICCIONARIO DE DATOS ───
+    const dataDiccionario = {
+        "powertrain": {
+            title: "Tren Motriz y CVT",
+            desc: "Validación de la cadena cinemática desde el motor hasta las ruedas. Desplázate hacia abajo para ver el análisis de nuestra transmisión continua variable.",
+            sponsors: [
+                sponsorLink("https://altair.com", "Outbound Sponsor - Altair", logoAltair.src, "Altair"),
+                sponsorLink("https://www.facebook.com/ventasheydi/", "Outbound Sponsor - Heydi", logoHeydi.src, "Heydi"),
+            ],
+            sectionId: "#feature-powertrain"
+        },
+        "suspension": {
+            title: "Cinemática y Amortiguación",
+            desc: "Geometría de doble horquilla diseñada para absorber impactos extremos. Conoce el estudio del centro de balanceo en la sección detallada.",
+            sponsors: [
+                sponsorLink("https://altair.com", "Outbound Sponsor - Altair", logoAltair.src, "Altair"),
+            ],
+            sectionId: "#feature-suspension"
+        },
+        "frenos": {
+            title: "Sistema de Frenado",
+            desc: "Dimensionamiento hidráulico y térmico. Validados para garantizar la máxima capacidad de detención bajo la estricta normativa SAE.",
+            sponsors: [
+                sponsorLink("https://www.linkedin.com/company/bombas-internacionales-mexicanas-sa-cv", "Outbound Sponsor - BIMSA", logoBimsa.src, "Bimsa"),
+                sponsorLink("https://www.linkedin.com/company/copiisaoffshore/?originalSubdomain=mx", "Outbound Sponsor - Copiisa", logoCopiisa.src, "Copiisa"),
+            ],
+            sectionId: "#feature-frenos"
+        },
+        "direccion": {
+            title: "Sistema de Dirección",
+            desc: "Mecanismo de piñón y cremallera calibrado para respuesta inmediata. Revisa el análisis de la geometría de Ackermann debajo.",
+            sponsors: [],
+            sectionId: "#feature-direccion"
+        },
+        "chasis": {
+            title: "Chasis Tubular y CAE",
+            desc: "El corazón del monoplaza. Estructura optimizada sin sacrificar seguridad ante volcaduras e impactos frontales.",
+            sponsors: [
+                sponsorLink("https://altair.com", "Outbound Sponsor - Altair", logoAltair.src, "Altair"),
+            ],
+            sectionId: null
+        },
+        "default": {
+            title: "Componente Estructural",
+            desc: "Pieza crítica del ensamblaje del Baja SAE 2026. Estamos documentando los procesos técnicos específicos para esta área.",
+            sponsors: [],
+            sectionId: null
+        }
     };
+
+    let cleanupViewer: (() => void) | undefined;
 
     const disposeMaterial = (material: any): void => {
         if (Array.isArray(material)) {
@@ -191,118 +314,92 @@
 
     async function initRenderViewer() {
         const canvas = document.getElementById('render-canvas');
-        const container = document.querySelector('.render-viewer-container');
-        const loadingEl = document.getElementById('viewer-loading');
-        const btnRotate = document.getElementById('ctrl-rotate');
-        const btnReset = document.getElementById('ctrl-reset');
-        const btnWireframe = document.getElementById('ctrl-wireframe');
-
-        if (!canvas || !container) return undefined;
-
-        const bgDark = getThemeColor('--bg-black', 'black');
-        const gold = getThemeColor('--jaguar-gold', '#A67C00');
+        const container = document.getElementById('viewer-container');
+        if (!canvas || !container) return;
 
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(bgDark);
-        scene.fog = new THREE.FogExp2(bgDark, 0.008);
-
         const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
         camera.position.set(0, 1.8, 8);
-
         const renderer = new THREE.WebGLRenderer({ canvas: canvas as HTMLCanvasElement, antialias: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = true;
 
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.8;
-        controls.minDistance = 4;
-        controls.maxDistance = 16;
-        controls.target.set(0, 0, 0);
 
-        scene.add(new THREE.AmbientLight(0xffffff, 0.42));
-        const goldLight = new THREE.DirectionalLight(gold, 1.15);
-        goldLight.position.set(5, 8, 5);
-        scene.add(goldLight);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        const dirLight = new THREE.DirectionalLight('#A67C00', 1);
+        dirLight.position.set(5, 8, 5);
+        scene.add(dirLight);
 
-        const gridHelper = new THREE.GridHelper(20, 20, new THREE.Color(gold), new THREE.Color('rgb(22, 22, 22)'));
-        scene.add(gridHelper);
-
-        const placeholder = new THREE.Mesh(
-            new THREE.BoxGeometry(3, 1.5, 5),
-            new THREE.MeshStandardMaterial({ color: gold, metalness: 0.9, roughness: 0.3 })
-        );
-        scene.add(placeholder);
-
-        let loadedModel: any = null;
+        let loadedModel: THREE.Group | null = null;
+        
         let isWireframe = false;
-        let animId = 0;
-        let resizeObserver: ResizeObserver | undefined;
-
         const setWireframe = (root: any, enabled: boolean): void => {
             if (!root) return;
             root.traverse((child: any) => {
-                if (child.isMesh && child.material) child.material.wireframe = enabled;
+                if (child.isMesh && child.material) {
+                    child.material.wireframe = enabled;
+                }
             });
         };
 
-        const applySize = (): void => {
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height, false);
-        };
-
-        btnRotate?.addEventListener('click', () => {
-            controls.autoRotate = !controls.autoRotate;
-            btnRotate.classList.toggle('active', controls.autoRotate);
-        });
-
-        btnReset?.addEventListener('click', () => {
-            controls.reset();
-            controls.target.set(0, 0, 0);
-            controls.update();
-        });
-
-        btnWireframe?.addEventListener('click', () => {
-            isWireframe = !isWireframe;
-            btnWireframe.classList.toggle('active', isWireframe);
-            setWireframe(loadedModel ?? placeholder, isWireframe);
-        });
-
-        // Usamos el GLTFLoader para tu nuevo archivo
         const loader = new GLTFLoader();
         loader.load('/models/baja-chasis-2026.glb', (gltf: any) => {
-            scene.remove(placeholder);
-            
-            const model = gltf.scene; // Extrayendo la escena del contenedor gltf
+            const model = gltf.scene;
             
             model.traverse((child: any) => {
                 if (child.isMesh) {
-                    child.material = new THREE.MeshStandardMaterial({ color: gold, metalness: 0.8, roughness: 0.25 });
-                    child.castShadow = true;
+                    child.material = new THREE.MeshStandardMaterial({ color: '#A67C00', metalness: 0.8, roughness: 0.3 });
                 }
             });
             
             const box = new THREE.Box3().setFromObject(model);
-            const center = box.getCenter(new THREE.Vector3());
-            const size = box.getSize(new THREE.Vector3());
-            const scale = 4 / Math.max(size.x, size.y, size.z);
-            
+            const scale = 4 / Math.max(box.getSize(new THREE.Vector3()).x);
             model.scale.setScalar(scale);
-            model.position.sub(center.multiplyScalar(scale));
+            model.position.sub(box.getCenter(new THREE.Vector3()).multiplyScalar(scale));
             
             scene.add(model);
             loadedModel = model;
-            loadingEl?.classList.add('hidden');
-        }, undefined, () => loadingEl?.classList.add('hidden'));
+            document.getElementById('viewer-loading')?.classList.add('hidden');
+        });
 
-        resizeObserver = new ResizeObserver(applySize);
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+
+        container.addEventListener('pointerdown', (event) => {
+            if (!loadedModel) return;
+
+            controls.autoRotate = false;
+            document.getElementById('ctrl-rotate')?.classList.remove('active');
+
+            const rect = container.getBoundingClientRect();
+            pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            raycaster.setFromCamera(pointer, camera);
+            const intersects = raycaster.intersectObject(loadedModel, true);
+
+            if (intersects.length > 0) {
+                const clickedMesh = intersects[0].object;
+                
+                const eventData = new CustomEvent('updatePanel', { detail: clickedMesh.name.toLowerCase() });
+                document.dispatchEvent(eventData);
+
+                const originalColor = clickedMesh.material.color.clone();
+                clickedMesh.material.color.setHex(0xffffff);
+                setTimeout(() => clickedMesh.material.color.copy(originalColor), 150);
+            }
+        });
+
+        const resizeObserver = new ResizeObserver(() => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight, false);
+        });
         resizeObserver.observe(container);
-        applySize();
 
+        let animId = 0;
         const animate = () => {
             animId = requestAnimationFrame(animate);
             controls.update();
@@ -310,24 +407,108 @@
         };
         animate();
 
+        document.getElementById('ctrl-rotate')?.addEventListener('click', (e) => {
+            controls.autoRotate = !controls.autoRotate;
+            (e.currentTarget as HTMLElement).classList.toggle('active', controls.autoRotate);
+        });
+        document.getElementById('ctrl-reset')?.addEventListener('click', () => controls.reset());
+        
+        document.getElementById('ctrl-wireframe')?.addEventListener('click', (e) => {
+            isWireframe = !isWireframe;
+            (e.currentTarget as HTMLElement).classList.toggle('active', isWireframe);
+            setWireframe(loadedModel, isWireframe);
+        });
+
         return () => {
             cancelAnimationFrame(animId);
-            resizeObserver?.disconnect();
+            resizeObserver.disconnect();
             controls.dispose();
             disposeObject(scene);
             renderer.dispose();
         };
     }
 
+    const isMobileDevice = () => window.matchMedia('(max-width: 768px)').matches || window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+    function attachSponsorHover(logosContainer: HTMLElement) {
+        logosContainer.querySelectorAll('.panel-sponsor-link').forEach(link => {
+            const img = link.querySelector('img') as HTMLImageElement | null;
+            if (!img) return;
+
+            if (isMobileDevice()) {
+                img.style.opacity = '1';
+                return; 
+            }
+
+            link.addEventListener('mouseenter', () => {
+                img.style.opacity = '1';
+                img.style.transform = 'scale(1.08)';
+            });
+
+            link.addEventListener('mouseleave', () => {
+                img.style.opacity = '0.7';
+                img.style.transform = '';
+            });
+        });
+    }
+
+    document.addEventListener('updatePanel', (e: any) => {
+        const meshName = e.detail;
+        let selectedData = dataDiccionario["default"];
+
+        const idsPowertrain = ["prototipo_29", "prototipo_32"];
+        const idsSuspension = [
+            "prototipo_1", "prototipo_2", "prototipo_3", "prototipo_4", "prototipo_5", 
+            "prototipo_6", "prototipo_7", "prototipo_8", "prototipo_9", "prototipo_11", 
+            "prototipo_13", "prototipo_15", "prototipo_16", "prototipo_17", "prototipo_18", 
+            "prototipo_19", "prototipo_20", "prototipo_21", "prototipo_22", "prototipo_24", 
+            "prototipo_26", "prototipo_28"
+        ];
+        const idsFrenos = [
+            "prototipo_33", "prototipo_34", "prototipo_35", "prototipo_37", "prototipo_38", 
+            "prototipo_39", "prototipo_40", "prototipo_41", "prototipo_42", "prototipo_44", 
+            "prototipo_45", "prototipo_46"
+        ];
+        const idsDireccion = ["prototipo_30", "prototipo_31"];
+        const idsChasis: string[] = [];
+
+        if (idsPowertrain.includes(meshName)) {
+            selectedData = dataDiccionario["powertrain"];
+        } else if (idsSuspension.includes(meshName)) {
+            selectedData = dataDiccionario["suspension"];
+        } else if (idsFrenos.includes(meshName)) {
+            selectedData = dataDiccionario["frenos"];
+        } else if (idsDireccion.includes(meshName)) {
+            selectedData = dataDiccionario["direccion"];
+        } else if (idsChasis.includes(meshName)) {
+            selectedData = dataDiccionario["chasis"];
+        }
+
+        document.getElementById('panel-title')!.innerText = selectedData.title;
+        document.getElementById('panel-desc')!.innerText = selectedData.desc;
+
+        const btn = document.getElementById('panel-action-btn') as HTMLAnchorElement;
+        if (selectedData.sectionId) {
+            btn.href = selectedData.sectionId;
+            btn.classList.remove('hidden');
+        } else {
+            btn.classList.add('hidden');
+        }
+
+        const sponsorsContainer = document.getElementById('panel-sponsors');
+        const logosContainer = document.getElementById('sponsor-logos-container') as HTMLElement;
+
+        if (selectedData.sponsors.length > 0) {
+            logosContainer.innerHTML = selectedData.sponsors.join('');
+            sponsorsContainer!.classList.remove('hidden');
+            attachSponsorHover(logosContainer);
+        } else {
+            sponsorsContainer!.classList.add('hidden');
+        }
+    });
+
     document.addEventListener('astro:page-load', async () => {
         if (cleanupViewer) cleanupViewer();
         cleanupViewer = await initRenderViewer();
-    });
-
-    document.addEventListener('astro:before-swap', () => {
-        if (cleanupViewer) {
-            cleanupViewer();
-            cleanupViewer = undefined;
-        }
     });
 </script>

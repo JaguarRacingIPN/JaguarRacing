@@ -18,7 +18,7 @@ function resolveImage(relativePath: string): ImageMetadata {
 const novedades = [
     {
         title: 'Render Interactivo',
-        date: '',
+        date: '11/04/2026',
         desc: 'Contenido educativo sobre el ensamble del vehículo y las áreas de ingeniería involucradas en el desarrollo del Baja.',
         img: 'features/cad-chasis.webp', 
         url: null,
@@ -102,6 +102,10 @@ const novedades = [
         scrollbar-width: none;
         -ms-overflow-style: none;
         scroll-snap-type: x mandatory;
+
+        max-width: 1420px; 
+        margin: 0 auto;
+        width: 100%;
     }
 
     .novedades__track::-webkit-scrollbar { display: none; }

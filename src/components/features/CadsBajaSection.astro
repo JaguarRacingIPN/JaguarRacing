@@ -1,203 +1,180 @@
 ---
-// Interfaz Educativa Jaguar Racing - Metodología y Fundamentos
+// Interfaz Educativa Jaguar Racing - Metodología y Fundamentos (Z-Pattern Layout)
 const areas = [
     {
         id: 'powertrain',
-        label: 'Powertrain',
         title: 'TRANSFERENCIA DE POTENCIA',
+        subtitle: 'POWERTRAIN',
         desc: 'Análisis de la cadena cinemática desde el motor reglamentario hasta las ruedas. Diseño y calibración de la transmisión continuamente variable (CVT) y la caja reductora para optimizar el torque y la velocidad en terrenos irregulares.',
-        videoId: 'GxcOT25JrFg',
+        videoFile: 'F-GB.mp4', 
     },
     {
         id: 'suspension',
-        label: 'Suspensión',
         title: 'CINEMÁTICA Y AMORTIGUACIÓN',
+        subtitle: 'SUSPENSIÓN',
         desc: 'Estudio de la dinámica vehicular enfocado en absorber impactos extremos. Simulación de la geometría de doble horquilla para mantener el contacto óptimo del neumático, controlando el centro de balanceo y el recorrido total.',
-        videoId: 'ybZYU_3B3YA',
+        videoFile: 'Front susp der.mp4',
     },
     {
         id: 'frenos',
-        label: 'Frenos',
         title: 'SISTEMA DE FRENADO Y SEGURIDAD',
+        subtitle: 'FRENOS',
         desc: 'Dimensionamiento hidráulico y térmico del sistema de detención. Cálculo de fuerzas de fricción y diseño de rotores para garantizar la máxima capacidad de frenado y disipación de calor bajo normativas estrictas de competencia.',
-        videoId: '3Q-YweQNpGo',
+        videoFile: 'B-GB.mp4',
     },
     {
         id: 'direccion',
-        label: 'Dirección',
         title: 'GEOMETRÍA DE MANIOBRA',
+        subtitle: 'DIRECCIÓN',
         desc: 'Diseño del mecanismo de piñón y cremallera para una respuesta táctil precisa. Análisis de la geometría de Ackermann para minimizar el radio de giro y optimizar el control del piloto en circuitos de alta exigencia técnica.',
-        videoId: 'yADSdZq8rU8',
-    },
-    {
-        id: 'cae',
-        label: 'CAE',
-        title: 'ANÁLISIS DE ELEMENTOS FINITOS',
-        desc: 'Validación virtual de la integridad estructural. Aplicación de metodologías CAE (Ingeniería Asistida por Computadora) para simular cargas dinámicas sobre el chasis y componentes críticos, optimizando la relación peso-resistencia.',
-        videoId: 'h_5hwpVpaSM',
-    },
+        videoFile: 'Ensamble Housin JR25.mp4',
+    }
 ];
 ---
 
 <section class="eng-section">
-    <nav class="eng-nav">
+    <div class="eng-container">
         {areas.map((area, i) => (
-            <button 
-                class={`nav-item ${i === 0 ? 'is-active' : ''}`} 
-                data-tab={area.id}
-            >
-                {area.label}
-            </button>
-        ))}
-    </nav>
-
-    <div class="eng-content">
-        {areas.map((area, i) => (
-            <div 
-                class={`eng-panel ${i === 0 ? 'is-active' : ''}`} 
-                id={`panel-${area.id}`}
-                hidden={i !== 0}
-            >
-                <div class="panel-grid">
-                    <div class="video-container">
-                        <iframe
-                            src={`https://www.youtube.com/embed/${area.videoId}`}
-                            title={area.title}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                        ></iframe>
-                    </div>
-                    <div class="info-container">
-                        <h2>{area.title}</h2>
-                        <p>{area.desc}</p>
+            /* La clase 'is-reversed' se añade a los índices impares (1, 3, 5) para alternar el layout */
+            <article class={`eng-feature ${i % 2 !== 0 ? 'is-reversed' : ''}`} id={`feature-${area.id}`}>
+                <div class="feature-video-wrapper">
+                    <div class="video-frame">
+                        <video 
+                            src={`/public/actualizaciones/videos/${area.videoFile}`}
+                            class="cad-native-video"
+                            autoplay 
+                            loop 
+                            muted 
+                            playsinline
+                            disablepictureinpicture
+                        ></video>
                     </div>
                 </div>
-            </div>
+                
+                <div class="feature-info">
+                    <span class="feature-subtitle">{area.subtitle}</span>
+                    <h2 class="feature-title">{area.title}</h2>
+                    <p class="feature-desc">{area.desc}</p>
+                </div>
+            </article>
         ))}
     </div>
 </section>
 
-<script>
-    const initTabs = () => {
-        const tabs = document.querySelectorAll('.nav-item');
-        const panels = document.querySelectorAll('.eng-panel');
-        if (tabs.length === 0) return;
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const target = (tab as HTMLElement).dataset.tab;
-                tabs.forEach(t => t.classList.remove('is-active'));
-                tab.classList.add('is-active');
-                panels.forEach(p => {
-                    p.classList.remove('is-active');
-                    (p as HTMLElement).hidden = true;
-                });
-                const activePanel = document.getElementById(`panel-${target}`);
-                if (activePanel) {
-                    activePanel.hidden = false;
-                    requestAnimationFrame(() => activePanel.classList.add('is-active'));
-                }
-            });
-        });
-    };
-    document.addEventListener('astro:page-load', initTabs);
-</script>
-
 <style>
     .eng-section {
         background: var(--bg-black);
-        padding: 1rem clamp(1rem, 5vw, 4rem) 4rem; 
+        padding: 4rem clamp(1.5rem, 5vw, 4rem) 6rem;
     }
 
-    .eng-nav {
+    .eng-container {
+        max-width: 1200px;
+        margin: 0 auto;
         display: flex;
-        gap: 2rem;
-        margin-bottom: 2rem;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-        overflow-x: auto;
+        flex-direction: column;
+        gap: 6rem; /* Espacio generoso entre cada sección de ingeniería */
     }
 
-    .nav-item {
-        background: none;
-        border: none;
-        padding: 0.8rem 0;
-        color: var(--text-gray);
-        font-family: var(--font-main);
-        font-weight: 600;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        cursor: pointer;
-        transition: color 0.3s ease;
-        position: relative;
-        white-space: nowrap; 
-    }
-
-    .nav-item.is-active { color: var(--text-white); }
-    .nav-item.is-active::after {
-        content: '';
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: var(--jaguar-gold);
-    }
-
-    .panel-grid {
+    .eng-feature {
         display: grid;
-        grid-template-columns: 1.4fr 1fr;
-        gap: 2.5rem;
-        align-items: flex-start;
+        grid-template-columns: 1fr 1fr; /* Mitad video, mitad texto */
+        gap: 4rem;
+        align-items: center;
     }
 
-    .video-container {
+    /* Aquí está la magia: si tiene la clase is-reversed, el texto va a la izquierda y el video a la derecha */
+    .eng-feature.is-reversed {
+        direction: rtl; /* Invierte el orden del grid */
+    }
+
+    /* Como invertimos la dirección del grid, debemos devolverle la dirección normal al contenido */
+    .eng-feature.is-reversed > * {
+        direction: ltr; 
+    }
+
+    /* --- ESTILOS DEL VIDEO --- */
+    .feature-video-wrapper {
         position: relative;
-        padding-top: 56.25%;
-        background: #050505;
-        border-radius: 8px;
-        overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.08);
+        width: 100%;
     }
 
-    .video-container iframe {
+    .video-frame {
+        position: relative;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        background: #050505;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(166, 124, 0, 0.15);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    /* Pequeño efecto hover para que se sienta premium */
+    .video-frame:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 50px rgba(0,0,0,0.6);
+        border-color: rgba(166, 124, 0, 0.3);
+    }
+
+    .cad-native-video {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        border: none;
+        object-fit: cover; 
+        pointer-events: none; 
     }
 
-    .info-container {
+    /* --- ESTILOS DEL TEXTO --- */
+    .feature-info {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        justify-content: center;
     }
 
-    .info-container h2 {
-        text-align: left;
+    .feature-subtitle {
+        color: var( --text-gray);
+        font-family: var(--font-main);
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .feature-desc {
+        color: var(--text-gray);
+        line-height: 1.7;
         margin: 0;
+        max-width: 90%; /* Para que las líneas no se vean eternas */
     }
 
-    .info-container p {
-        margin: 0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-
-    .eng-panel {
-        opacity: 0;
-        transform: translateY(5px);
-        transition: all 0.3s ease;
-    }
-
-    .eng-panel.is-active {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
+    /* --- RESPONSIVE (MÓVILES) --- */
     @media (max-width: 900px) {
-        .panel-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-        .info-container h2 { text-align: center; }
+        .eng-container {
+            gap: 4rem; /* Menos espacio en móvil */
+        }
+
+        .eng-feature, 
+        .eng-feature.is-reversed {
+            grid-template-columns: 1fr; /* Apila uno sobre otro */
+            direction: ltr; /* Quita la inversión del grid en móvil */
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .feature-info {
+            align-items: center;
+        }
+
+        .feature-title {
+            text-align: center;
+        }
+
+        .feature-desc {
+            max-width: 100%;
+            text-align: center;
+        }
     }
 </style>
